@@ -1,11 +1,15 @@
-<% content_for :title, "New project" %>
+<% content_for :title, "New Project" %>
 
-<h1>New project</h1>
+<div class="container py-4 py-lg-5">
+  <div class="mb-4">
+    <%= link_to "Home", root_path, class: "btn btn-outline-secondary btn-sm" %>
+  </div>
 
-<%= render "form", project: @project %>
+  <h1 class="h2 fw-semibold mb-4">New Project</h1>
 
-<br>
-
-<div>
-  <%= link_to "Back to projects", projects_path %>
+  <div class="row justify-content-center mb-2">
+    <div class="col-12 col-lg-8 col-xl-7">
+      <%= render "form", project: @project %>
+    </div>
+  </div>
 </div>

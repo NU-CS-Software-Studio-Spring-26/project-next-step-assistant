@@ -1,22 +1,28 @@
-<div id="<%= dom_id project %>">
-  <div>
-    <strong>Name:</strong>
-    <%= project.name %>
-  </div>
+<div id="<%= dom_id project %>" class="card shadow-sm border-0">
+  <div class="card-body p-4">
+    <h2 class="card-title h5 mb-3 fw-semibold"><%= project.name %></h2>
 
-  <div>
-    <strong>Github link:</strong>
-    <%= project.github_link %>
-  </div>
+    <% skill_tags = project.skills.to_s.split(",").map(&:strip).reject(&:blank?) %>
+    <% if skill_tags.any? %>
+      <div class="d-flex flex-wrap gap-2 mb-3">
+        <% skill_tags.each do |skill| %>
+          <span class="badge rounded-pill text-bg-secondary"><%= skill %></span>
+        <% end %>
+      </div>
+    <% end %>
 
-  <div>
-    <strong>Description:</strong>
-    <%= project.description %>
-  </div>
+    <p class="card-text text-body-secondary mb-3 lh-base"><%= truncate(project.description.to_s, length: 120, separator: " ") %></p>
 
-  <div>
-    <strong>Skills:</strong>
-    <%= project.skills %>
-  </div>
+    <% if project.github_link.present? %>
+      <div class="mb-4">
+        <%= link_to "View GitHub", project.github_link, class: "btn btn-outline-primary btn-sm", target: "_blank", rel: "noopener noreferrer" %>
+      </div>
+    <% end %>
 
+    <div class="d-flex flex-wrap gap-2 pt-3 border-top">
+      <%= link_to "Show", project, class: "btn btn-primary btn-sm" %>
+      <%= link_to "Edit", edit_project_path(project), class: "btn btn-outline-secondary btn-sm" %>
+      <%= button_to "Delete", project, method: :delete, class: "btn btn-outline-danger btn-sm", form: { class: "d-inline" } %>
+    </div>
+  </div>
 </div>

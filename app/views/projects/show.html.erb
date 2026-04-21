@@ -1,10 +1,60 @@
-<p style="color: green"><%= notice %></p>
+<% content_for :title, @project.name %>
 
-<%= render @project %>
+<div class="container py-4 py-lg-5">
+  <% if notice.present? %>
+    <div class="alert alert-success mb-4" role="alert"><%= notice %></div>
+  <% end %>
 
-<div>
-  <%= link_to "Edit this project", edit_project_path(@project) %> |
-  <%= link_to "Back to projects", projects_path %>
+  <div class="mb-4">
+    <%= link_to "Home", root_path, class: "btn btn-outline-secondary btn-sm" %>
+  </div>
 
-  <%= button_to "Destroy this project", @project, method: :delete %>
+  <div class="card shadow-sm border-0">
+    <div class="card-body p-4 p-lg-5">
+      <h1 class="h2 mb-4 pb-3 border-bottom fw-semibold"><%= @project.name %></h1>
+
+      <dl class="row mb-0 gy-3">
+        <dt class="col-sm-3 text-body-secondary small text-uppercase fw-semibold">GitHub link</dt>
+        <dd class="col-sm-9 mb-0">
+          <% if @project.github_link.present? %>
+            <%= link_to @project.github_link, @project.github_link, class: "link-primary text-break", target: "_blank", rel: "noopener noreferrer" %>
+            <div class="mt-2">
+              <%= link_to "View GitHub", @project.github_link, class: "btn btn-outline-primary btn-sm", target: "_blank", rel: "noopener noreferrer" %>
+            </div>
+          <% else %>
+            <span class="text-body-secondary">—</span>
+          <% end %>
+        </dd>
+
+        <dt class="col-sm-3 text-body-secondary small text-uppercase fw-semibold">Description</dt>
+        <dd class="col-sm-9 mb-0">
+          <% if @project.description.present? %>
+            <div class="text-body lh-base"><%= simple_format(@project.description) %></div>
+          <% else %>
+            <span class="text-body-secondary">—</span>
+          <% end %>
+        </dd>
+
+        <dt class="col-sm-3 text-body-secondary small text-uppercase fw-semibold">Skills</dt>
+        <dd class="col-sm-9 mb-0">
+          <% skill_tags = @project.skills.to_s.split(",").map(&:strip).reject(&:blank?) %>
+          <% if skill_tags.any? %>
+            <div class="d-flex flex-wrap gap-2">
+              <% skill_tags.each do |skill| %>
+                <span class="badge rounded-pill text-bg-secondary"><%= skill %></span>
+              <% end %>
+            </div>
+          <% else %>
+            <span class="text-body-secondary">—</span>
+          <% end %>
+        </dd>
+      </dl>
+
+      <div class="d-flex flex-column flex-sm-row flex-wrap gap-2 mt-4 pt-4 border-top">
+        <%= link_to "Edit Project", edit_project_path(@project), class: "btn btn-primary" %>
+        <%= link_to "Back to Projects", projects_path, class: "btn btn-outline-secondary" %>
+        <%= button_to "Delete Project", @project, method: :delete, class: "btn btn-outline-danger", form: { class: "d-inline" } %>
+      </div>
+    </div>
+  </div>
 </div>

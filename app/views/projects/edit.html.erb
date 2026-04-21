@@ -1,12 +1,18 @@
-<% content_for :title, "Editing project" %>
+<% content_for :title, "Edit Project" %>
 
-<h1>Editing project</h1>
+<div class="container py-4 py-lg-5">
+  <div class="mb-4">
+    <%= link_to "Home", root_path, class: "btn btn-outline-secondary btn-sm" %>
+  </div>
 
-<%= render "form", project: @project %>
+  <div class="d-flex flex-column flex-md-row justify-content-between align-items-start gap-3 mb-4">
+    <h1 class="h2 fw-semibold mb-0">Edit Project</h1>
+    <%= link_to "View this project", @project, class: "btn btn-outline-primary btn-sm" %>
+  </div>
 
-<br>
-
-<div>
-  <%= link_to "Show this project", @project %> |
-  <%= link_to "Back to projects", projects_path %>
+  <div class="row justify-content-center mb-2">
+    <div class="col-12 col-lg-8 col-xl-7">
+      <%= render "form", project: @project %>
+    </div>
+  </div>
 </div>
