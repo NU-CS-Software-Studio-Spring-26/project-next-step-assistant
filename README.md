@@ -20,7 +20,7 @@ For each entity, users can create, view, edit, and delete entries from a clean B
 
 ## Deployment
 
-Live on Heroku: **[FILL IN — https://your-app.herokuapp.com]**
+Live on Heroku: **https://next-step-assistant-a4dab79f7e69.herokuapp.com/**
 
 ## Communication
 
