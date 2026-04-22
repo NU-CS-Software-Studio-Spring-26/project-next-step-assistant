@@ -13,9 +13,11 @@
 
     <p class="card-text text-body-secondary mb-3 lh-base"><%= truncate(project.description.to_s, length: 120, separator: " ") %></p>
 
-    <% if project.github_link.present? %>
+    <% github_url = project.github_link.to_s.strip %>
+    <% safe_github_url = github_url.match?(%r{\Ahttps?://[^\s]+\z}i) ? github_url : nil %>
+    <% if safe_github_url.present? %>
       <div class="mb-4">
-        <%= link_to "View GitHub", project.github_link, class: "btn btn-outline-primary btn-sm", target: "_blank", rel: "noopener noreferrer" %>
+        <%= link_to "View GitHub", safe_github_url, class: "btn btn-outline-primary btn-sm", target: "_blank", rel: "noopener noreferrer" %>
       </div>
     <% end %>
 

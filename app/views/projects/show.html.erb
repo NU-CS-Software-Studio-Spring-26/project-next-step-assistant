@@ -16,10 +16,12 @@
       <dl class="row mb-0 gy-3">
         <dt class="col-sm-3 text-body-secondary small text-uppercase fw-semibold">GitHub link</dt>
         <dd class="col-sm-9 mb-0">
-          <% if @project.github_link.present? %>
-            <%= link_to @project.github_link, @project.github_link, class: "link-primary text-break", target: "_blank", rel: "noopener noreferrer" %>
+          <% github_url = @project.github_link.to_s.strip %>
+          <% safe_github_url = github_url.match?(%r{\Ahttps?://[^\s]+\z}i) ? github_url : nil %>
+          <% if safe_github_url.present? %>
+            <%= link_to safe_github_url, safe_github_url, class: "link-primary text-break", target: "_blank", rel: "noopener noreferrer" %>
             <div class="mt-2">
-              <%= link_to "View GitHub", @project.github_link, class: "btn btn-outline-primary btn-sm", target: "_blank", rel: "noopener noreferrer" %>
+              <%= link_to "View GitHub", safe_github_url, class: "btn btn-outline-primary btn-sm", target: "_blank", rel: "noopener noreferrer" %>
             </div>
           <% else %>
             <span class="text-body-secondary">—</span>
