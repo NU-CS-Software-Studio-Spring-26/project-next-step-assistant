@@ -8,8 +8,9 @@ development:
   database: group_app_development
 
 test:
-  <<: *default
-  database: group_app_test
+  adapter: sqlite3
+  database: storage/test.sqlite3
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
 
 production:
   primary: &primary_production
