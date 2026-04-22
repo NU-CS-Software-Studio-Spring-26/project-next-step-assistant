@@ -1,11 +1,15 @@
-<% content_for :title, "New job" %>
+<% content_for :title, "New Job" %>
 
-<h1>New job</h1>
+<div class="container py-4 py-lg-5">
+  <div class="mb-4">
+    <%= link_to "Back to Jobs", jobs_path, class: "btn btn-outline-secondary btn-sm" %>
+  </div>
 
-<%= render "form", job: @job %>
+  <h1 class="h2 fw-semibold mb-4">New Job</h1>
 
-<br>
-
-<div>
-  <%= link_to "Back to jobs", jobs_path %>
+  <div class="row justify-content-center mb-2">
+    <div class="col-12 col-lg-9 col-xl-8">
+      <%= render "form", job: @job %>
+    </div>
+  </div>
 </div>
