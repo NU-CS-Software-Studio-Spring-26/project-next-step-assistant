@@ -1,4 +1,37 @@
-<h1>Welcome to Job Tracker</h1>
+<main class="home-page">
+	<section class="hero">
+		<p class="eyebrow">Next Step Assistant</p>
+		<h1>Track every application, interview, and follow-up in one place.</h1>
+		<p class="hero-copy">
+			Keep your search organized with a simple workflow for jobs and projects, so you can spend more time applying and less time hunting through notes.
+		</p>
 
-<%= link_to "Jobs", jobs_path %>
-<%= link_to "Projects", projects_path %>
+		<div class="hero-actions">
+			<%= link_to "View Jobs", jobs_path, class: "btn-primary-home" %>
+			<%= link_to "Browse Projects", projects_path, class: "btn-secondary-home" %>
+		</div>
+	</section>
+
+	<section class="home-grid" aria-label="Homepage highlights">
+		<article class="home-card">
+			<h2>Jobs Board</h2>
+			<p>Add openings, update statuses, and keep momentum with one focused list.</p>
+			<%= link_to "Go to Jobs", jobs_path, class: "card-link" %>
+		</article>
+
+		<article class="home-card accent">
+			<h2>Projects Hub</h2>
+			<p>Capture project work tied to your applications and present your strengths clearly.</p>
+			<%= link_to "Go to Projects", projects_path, class: "card-link" %>
+		</article>
+
+		<article class="home-card wide">
+			<h2>Simple, consistent workflow</h2>
+			<ul>
+				<li>Track applications and deadlines.</li>
+				<li>Organize portfolio projects by relevance.</li>
+				<li>Review progress quickly before interviews.</li>
+			</ul>
+		</article>
+	</section>
+</main>
