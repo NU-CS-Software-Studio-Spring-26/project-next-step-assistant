@@ -1,0 +1,15 @@
+<% content_for :title, "Add resume · #{@job.title.presence || 'Job'}" %>
+
+<div class="container py-4 py-lg-5">
+  <div class="mb-4">
+    <%= link_to "Back to job", @job, class: "btn btn-outline-secondary btn-sm" %>
+  </div>
+
+  <div class="card shadow-sm border-0" style="max-width: 36rem;">
+    <div class="card-body p-4">
+      <h1 class="h4 fw-semibold mb-3">Add resume</h1>
+      <p class="text-body-secondary small mb-4"><%= @job.title.presence || "Job" %> — <%= @job.organization_name.presence || "—" %></p>
+      <%= render "form", job: @job, resume: @resume %>
+    </div>
+  </div>
+</div>

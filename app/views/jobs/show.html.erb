@@ -52,6 +52,37 @@
         </dd>
       </dl>
 
+      <section class="mt-4 pt-4 border-top" aria-label="Resumes for this job">
+        <h2 class="h6 text-body-secondary text-uppercase fw-semibold mb-3">Resumes</h2>
+
+        <% if @job.resumes.any? %>
+          <ul class="list-group list-group-flush border rounded mb-3">
+            <% @job.resumes.order(created_at: :desc).each do |resume| %>
+              <li class="list-group-item d-flex flex-column flex-sm-row justify-content-between align-items-start gap-3">
+                <div class="flex-grow-1 min-w-0">
+                  <% if resume.file.attached? %>
+                    <div class="fw-medium text-break"><%= resume.file.filename %></div>
+                    <%= link_to "Download resume", resume.file, class: "btn btn-sm btn-outline-primary mt-2" %>
+                  <% else %>
+                    <span class="text-body-secondary small">No file attached</span>
+                  <% end %>
+                </div>
+                <%= button_to "Delete", [@job, resume], method: :delete, class: "btn btn-sm btn-outline-danger flex-shrink-0 align-self-sm-center", form: { class: "d-inline", data: { turbo_confirm: "Remove this resume?" } } %>
+              </li>
+            <% end %>
+          </ul>
+        <% else %>
+          <p class="text-body-secondary small mb-3">No resumes recorded yet.</p>
+        <% end %>
+
+        <div class="card bg-body-tertiary border-0">
+          <div class="card-body p-3">
+            <p class="small fw-semibold mb-2">Add a resume</p>
+            <%= render "resumes/form", job: @job, resume: Resume.new %>
+          </div>
+        </div>
+      </section>
+
       <div class="d-flex flex-column flex-sm-row flex-wrap gap-2 mt-4 pt-4 border-top">
         <%= link_to "Edit Job", edit_job_path(@job), class: "btn btn-primary" %>
         <%= link_to "Back to Jobs", jobs_path, class: "btn btn-outline-secondary" %>

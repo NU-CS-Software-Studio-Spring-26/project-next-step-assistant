@@ -17,11 +17,57 @@
     <%= link_to "New Job", new_job_path, class: "btn btn-primary" %>
   </header>
 
+  <div class="mb-4">
+    <%= form_with url: jobs_path, method: :get, class: "row g-2 g-sm-3 align-items-end" do %>
+      <% if @status.present? %>
+        <%= hidden_field_tag :status, @status %>
+      <% end %>
+      <div class="col-12 col-sm">
+        <label for="jobs_search_query" class="form-label small text-body-secondary mb-1">Search</label>
+        <%= text_field_tag :query, params[:query], class: "form-control", id: "jobs_search_query", placeholder: "Title or organization…", autocomplete: "off" %>
+      </div>
+      <div class="col-12 col-sm-auto">
+        <label class="form-label small text-body-secondary mb-1 d-none d-sm-block">&nbsp;</label>
+        <div class="d-flex flex-wrap gap-2">
+          <%= submit_tag "Search", class: "btn btn-primary w-100 w-sm-auto" %>
+          <% if @query.present? %>
+            <%= link_to "Clear", jobs_path, class: "btn btn-outline-secondary w-100 w-sm-auto" %>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+  <% status_options = %w[Saved Applied Interviewing Offer Accepted Rejected Withdrawn] %>
+  <% jobs_filter_path = lambda do |status: nil|
+       p = {}
+       p[:query] = @query if @query.present?
+       p[:status] = status if status.present?
+       jobs_path(p)
+     end %>
+  <div class="mb-4">
+    <p class="small text-body-secondary mb-2">Status</p>
+    <div class="d-flex flex-wrap gap-2 align-items-center">
+      <%= link_to "All", jobs_filter_path.call, class: "btn btn-sm #{@status.blank? ? "btn-primary" : "btn-outline-primary"}" %>
+      <% status_options.each do |st| %>
+        <%= link_to st, jobs_filter_path.call(status: st), class: "btn btn-sm #{@status == st ? "btn-primary" : "btn-outline-primary"}" %>
+      <% end %>
+    </div>
+  </div>
+
   <% if @jobs.any? %>
     <div id="jobs" class="vstack gap-3">
       <% @jobs.each do |job| %>
         <%= render job %>
       <% end %>
+    </div>
+  <% elsif @query.present? || @status.present? %>
+    <div class="card shadow-sm border-0">
+      <div class="card-body p-4 p-lg-5 text-center">
+        <h2 class="h5 fw-semibold mb-2">No matching jobs</h2>
+        <p class="text-body-secondary mb-4">Nothing matched your current search or status filter. <%= link_to "Clear all filters", jobs_path, class: "link-primary" %>.</p>
+        <%= link_to "View all jobs", jobs_path, class: "btn btn-outline-primary" %>
+      </div>
     </div>
   <% else %>
     <div class="card shadow-sm border-0">

@@ -14,9 +14,40 @@
     <%= link_to "New Project", new_project_path, class: "btn btn-primary" %>
   </header>
 
-  <div id="projects" class="vstack gap-3">
-    <% @projects.each do |project| %>
-      <%= render project %>
+  <div class="mb-4">
+    <%= form_with url: projects_path, method: :get, class: "row g-2 g-sm-3 align-items-end" do %>
+      <div class="col-12 col-sm">
+        <label for="projects_search_query" class="form-label small text-body-secondary mb-1">Search</label>
+        <%= text_field_tag :query, params[:query], class: "form-control", id: "projects_search_query", placeholder: "Name or skills…", autocomplete: "off" %>
+      </div>
+      <div class="col-12 col-sm-auto">
+        <label class="form-label small text-body-secondary mb-1 d-none d-sm-block">&nbsp;</label>
+        <div class="d-flex flex-wrap gap-2">
+          <%= submit_tag "Search", class: "btn btn-primary w-100 w-sm-auto" %>
+          <% if @query.present? %>
+            <%= link_to "Clear", projects_path, class: "btn btn-outline-secondary w-100 w-sm-auto" %>
+          <% end %>
+        </div>
+      </div>
     <% end %>
   </div>
+
+  <% if @projects.any? %>
+    <div id="projects" class="vstack gap-3">
+      <% @projects.each do |project| %>
+        <%= render project %>
+      <% end %>
+    </div>
+  <% elsif @query.present? %>
+    <div class="card shadow-sm border-0">
+      <div class="card-body p-4 p-lg-5 text-center">
+        <h2 class="h5 fw-semibold mb-2">No matching projects</h2>
+        <p class="text-body-secondary mb-4">Nothing matched “<%= @query %>”. Try different keywords or <%= link_to "clear the search", projects_path, class: "link-primary" %>.</p>
+        <%= link_to "View all projects", projects_path, class: "btn btn-outline-primary" %>
+      </div>
+    </div>
+  <% else %>
+    <div id="projects" class="vstack gap-3">
+    </div>
+  <% end %>
 </div>

@@ -1,0 +1,20 @@
+<%= form_with model: [job, resume], html: { multipart: true } do |f| %>
+  <% if resume.errors.any? %>
+    <div class="alert alert-danger" role="alert">
+      <p class="fw-semibold mb-1"><%= pluralize(resume.errors.count, "error") %> prevented saving:</p>
+      <ul class="mb-0 small">
+        <% resume.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="mb-3">
+    <%= f.label :file, "Resume (PDF)", class: "form-label" %>
+    <%= f.file_field :file, class: "form-control", accept: "application/pdf,.pdf" %>
+    <div class="form-text">Upload a PDF file only.</div>
+  </div>
+
+  <%= f.submit "Upload resume", class: "btn btn-primary" %>
+<% end %>

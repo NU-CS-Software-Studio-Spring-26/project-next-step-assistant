@@ -3,7 +3,17 @@ class ProjectsController < ApplicationController
 
   # GET /projects or /projects.json
   def index
+    @query = params[:query].to_s.strip
     @projects = Project.all
+
+    if @query.present?
+      term = "%#{ActiveRecord::Base.sanitize_sql_like(@query)}%"
+      @projects = @projects.where(
+        "LOWER(projects.name) LIKE LOWER(?) OR LOWER(projects.skills) LIKE LOWER(?)",
+        term,
+        term
+      )
+    end
   end
 
   # GET /projects/1 or /projects/1.json

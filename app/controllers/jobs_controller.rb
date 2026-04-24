@@ -3,7 +3,22 @@ class JobsController < ApplicationController
 
   # GET /jobs or /jobs.json
   def index
-    @jobs = Job.order(Arel.sql("deadline IS NULL, deadline ASC, created_at DESC"))
+    @query = params[:query].to_s.strip
+    @status = params[:status]
+    @jobs = Job.order(deadline: :asc)
+
+    if @query.present?
+      term = "%#{ActiveRecord::Base.sanitize_sql_like(@query)}%"
+      @jobs = @jobs.where(
+        "LOWER(jobs.title) LIKE LOWER(?) OR LOWER(jobs.organization_name) LIKE LOWER(?)",
+        term,
+        term
+      )
+    end
+
+    if @status.present?
+      @jobs = @jobs.where(status: @status)
+    end
   end
 
   # GET /jobs/1 or /jobs/1.json
