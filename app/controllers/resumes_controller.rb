@@ -32,6 +32,6 @@ class ResumesController < ApplicationController
   end
 
   def resume_params
-    params.expect(resume: [:file])
+    params.expect(resume: [ :file ])
   end
 end
