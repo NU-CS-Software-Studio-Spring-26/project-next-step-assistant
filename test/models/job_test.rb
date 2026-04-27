@@ -1,89 +1,64 @@
 require "test_helper"
 
 class JobTest < ActiveSupport::TestCase
-  test "fixtures are loaded" do
-    assert Job.exists?(jobs(:one).id)
-    assert Job.exists?(jobs(:two).id)
+  def valid_attrs(overrides = {})
+    {
+      title: "Software Engineer Intern",
+      organization_name: "Acme Corp",
+      status: "applied"
+    }.merge(overrides)
   end
 
-  test "fixture one has expected attributes" do
-    job = jobs(:one)
-
-    assert_equal "MyString", job.title
-    assert_equal "MyString", job.organization_name
-    assert_equal "MyText", job.description
-    assert_equal "MyString", job.status
+  test "is valid with required attributes" do
+    assert Job.new(valid_attrs).valid?
   end
 
-  test "can create a job with all attributes" do
-    assert_difference("Job.count", 1) do
-      Job.create!(
-        title: "Backend Engineer",
-        organization_name: "Acme Corp",
-        deadline: Date.new(2026, 5, 15),
-        start_date: Date.new(2026, 6, 1),
-        description: "Build and maintain APIs",
-        status: "Applied"
-      )
-    end
+  test "requires title" do
+    job = Job.new(valid_attrs(title: nil))
+    assert_not job.valid?
+    assert_includes job.errors[:title], "can't be blank"
   end
 
-  test "can create a job with nil optional attributes" do
-    assert_difference("Job.count", 1) do
-      job = Job.create!(title: nil, organization_name: nil, deadline: nil, start_date: nil, description: nil, status: nil)
-      assert_nil job.title
-      assert_nil job.deadline
-    end
+  test "requires organization_name" do
+    job = Job.new(valid_attrs(organization_name: nil))
+    assert_not job.valid?
+    assert_includes job.errors[:organization_name], "can't be blank"
   end
 
-  test "can update title" do
-    job = jobs(:one)
-    job.update!(title: "Senior Engineer")
-
-    assert_equal "Senior Engineer", job.reload.title
+  test "rejects title longer than 200 characters" do
+    job = Job.new(valid_attrs(title: "x" * 201))
+    assert_not job.valid?
+    assert_includes job.errors[:title].join, "200"
   end
 
-  test "can update organization name" do
-    job = jobs(:one)
-    job.update!(organization_name: "New Org")
-
-    assert_equal "New Org", job.reload.organization_name
+  test "rejects organization_name longer than 200 characters" do
+    job = Job.new(valid_attrs(organization_name: "x" * 201))
+    assert_not job.valid?
   end
 
-  test "can update status" do
-    job = jobs(:one)
-    job.update!(status: "Interview")
-
-    assert_equal "Interview", job.reload.status
+  test "rejects description longer than 5000 characters" do
+    job = Job.new(valid_attrs(description: "x" * 5_001))
+    assert_not job.valid?
   end
 
-  test "can update start and deadline dates" do
-    job = jobs(:one)
-    new_start = Date.new(2026, 7, 1)
-    new_deadline = Date.new(2026, 6, 20)
-
-    job.update!(start_date: new_start, deadline: new_deadline)
-
-    assert_equal new_start, job.reload.start_date
-    assert_equal new_deadline, job.reload.deadline
+  test "defaults status to saved" do
+    assert_equal "saved", Job.new.status
   end
 
-  test "can destroy a job" do
-    job = jobs(:two)
-
-    assert_difference("Job.count", -1) do
-      job.destroy
-    end
+  test "raises on invalid status assignment" do
+    assert_raises(ArgumentError) { Job.new(status: "bogus") }
   end
 
-  test "start date can be after deadline" do
-    job = Job.create!(
-      title: "Ordering Test",
-      deadline: Date.new(2026, 6, 1),
-      start_date: Date.new(2026, 6, 10)
-    )
+  test "applied scope returns only applied jobs" do
+    Job.delete_all
+    applied = Job.create!(valid_attrs(status: "applied"))
+    Job.create!(valid_attrs(title: "Other", status: "saved"))
+    assert_equal [ applied ], Job.applied.to_a
+  end
 
-    assert_equal Date.new(2026, 6, 10), job.start_date
-    assert_equal Date.new(2026, 6, 1), job.deadline
+  test "predicate methods reflect status" do
+    job = Job.new(valid_attrs(status: "interviewing"))
+    assert job.interviewing?
+    assert_not job.applied?
   end
 end

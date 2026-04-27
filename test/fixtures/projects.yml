@@ -1,13 +1,13 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  name: MyString
-  github_link: MyString
-  description: MyText
-  skills: MyString
+  name: Sample Project
+  github_link: https://github.com/example/one
+  description: First example project for tests.
+  skills: Ruby, Rails
 
 two:
-  name: MyString
-  github_link: MyString
-  description: MyText
-  skills: MyString
+  name: Another Project
+  github_link: https://github.com/example/two
+  description: Second example project for tests.
+  skills: Python, Django

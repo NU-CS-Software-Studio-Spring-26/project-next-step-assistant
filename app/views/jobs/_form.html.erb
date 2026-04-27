@@ -25,8 +25,7 @@
 
         <div class="col-12 col-md-4">
           <%= form.label :status, class: "form-label" %>
-          <% status_options = (JobsHelper::JOB_STATUSES + [job.status].compact).uniq %>
-          <%= form.select :status, status_options, { include_blank: "Select status" }, class: "form-select" %>
+          <%= form.select :status, job_status_options, { include_blank: "Select status" }, class: "form-select" %>
         </div>
 
         <div class="col-6 col-md-4">

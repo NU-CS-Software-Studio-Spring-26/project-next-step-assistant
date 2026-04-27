@@ -11,7 +11,7 @@ jobs = [
     deadline: Date.new(2026, 5, 15),
     start_date: Date.new(2026, 6, 22),
     description: "Summer internship on the Search Infrastructure team. Build distributed systems in Go and C++.",
-    status: "Applied"
+    status: "applied"
   },
   {
     title: "Frontend Developer Intern",
@@ -19,7 +19,7 @@ jobs = [
     deadline: Date.new(2026, 5, 1),
     start_date: Date.new(2026, 6, 15),
     description: "Work on Instagram Web. React, TypeScript, GraphQL. Must be a rising junior or senior.",
-    status: "Interviewing"
+    status: "interviewing"
   },
   {
     title: "Backend Engineer Intern",
@@ -27,7 +27,7 @@ jobs = [
     deadline: Date.new(2026, 4, 30),
     start_date: Date.new(2026, 6, 8),
     description: "Payments infrastructure. Ruby on Rails and Scala. Strong systems background preferred.",
-    status: "Offer"
+    status: "offer"
   },
   {
     title: "Product Engineering Intern",
@@ -35,7 +35,7 @@ jobs = [
     deadline: Date.new(2026, 5, 20),
     start_date: Date.new(2026, 7, 1),
     description: "Small team, high ownership. Ship features end-to-end across the issue tracking product.",
-    status: "Saved"
+    status: "saved"
   },
   {
     title: "Data Science Intern",
@@ -43,7 +43,7 @@ jobs = [
     deadline: Date.new(2026, 5, 10),
     start_date: Date.new(2026, 6, 15),
     description: "Recommendations team. Python, SQL, experience with large-scale ML preferred.",
-    status: "Applied"
+    status: "applied"
   },
   {
     title: "iOS Developer Intern",
@@ -51,7 +51,7 @@ jobs = [
     deadline: Date.new(2026, 5, 25),
     start_date: Date.new(2026, 6, 22),
     description: "Native iOS development in Swift. Help build the host experience.",
-    status: "Saved"
+    status: "saved"
   },
   {
     title: "Machine Learning Intern",
@@ -59,7 +59,7 @@ jobs = [
     deadline: Date.new(2026, 4, 28),
     start_date: Date.new(2026, 6, 1),
     description: "Research engineering on safety-focused LLM systems. Strong Python and ML fundamentals.",
-    status: "Interviewing"
+    status: "interviewing"
   },
   {
     title: "Full Stack Developer",
@@ -67,7 +67,7 @@ jobs = [
     deadline: Date.new(2026, 6, 1),
     start_date: Date.new(2026, 8, 15),
     description: "New grad role on the Next.js team. Open source contribution experience a plus.",
-    status: "Applied"
+    status: "applied"
   },
   {
     title: "Software Engineer New Grad",
@@ -75,7 +75,7 @@ jobs = [
     deadline: Date.new(2026, 5, 5),
     start_date: Date.new(2026, 7, 10),
     description: "Observability platform. Multiple teams hiring across backend, frontend, and infrastructure.",
-    status: "Rejected"
+    status: "rejected"
   },
   {
     title: "DevOps Engineer Intern",
@@ -83,7 +83,7 @@ jobs = [
     deadline: Date.new(2026, 5, 30),
     start_date: Date.new(2026, 6, 22),
     description: "CI/CD and platform reliability. Kubernetes, Terraform, Go.",
-    status: "Saved"
+    status: "saved"
   },
   {
     title: "Research Intern",
@@ -91,7 +91,7 @@ jobs = [
     deadline: Date.new(2026, 4, 25),
     start_date: Date.new(2026, 6, 1),
     description: "12-week paid research internship. Open to PhD and exceptional undergrad candidates.",
-    status: "Withdrawn"
+    status: "withdrawn"
   },
   {
     title: "Game Developer Intern",
@@ -99,7 +99,7 @@ jobs = [
     deadline: Date.new(2026, 5, 15),
     start_date: Date.new(2026, 6, 15),
     description: "Work on Valorant systems team. C++ experience required.",
-    status: "Applied"
+    status: "applied"
   }
 ]
 

@@ -1,13 +1,11 @@
 module JobsHelper
-  JOB_STATUSES = [
-    "Saved",
-    "Applied",
-    "Interviewing",
-    "Offer",
-    "Accepted",
-    "Rejected",
-    "Withdrawn"
-  ].freeze
+  def job_status_options
+    Job.statuses.keys.map { |key| [ key.titleize, key ] }
+  end
+
+  def job_status_label(status)
+    status.to_s.titleize
+  end
 
   def job_status_badge_class(status)
     case status.to_s.strip.downcase

@@ -1,17 +1,17 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  title: MyString
-  organization_name: MyString
+  title: Software Engineer Intern
+  organization_name: Acme Corp
   deadline: 2026-04-20
-  start_date: 2026-04-20
-  description: MyText
-  status: MyString
+  start_date: 2026-06-01
+  description: First example job for tests.
+  status: applied
 
 two:
-  title: MyString
-  organization_name: MyString
-  deadline: 2026-04-20
-  start_date: 2026-04-20
-  description: MyText
-  status: MyString
+  title: Backend Engineer
+  organization_name: Globex
+  deadline: 2026-05-15
+  start_date: 2026-07-01
+  description: Second example job for tests.
+  status: saved
