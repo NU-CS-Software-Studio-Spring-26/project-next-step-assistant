@@ -12,10 +12,15 @@
   <% end %>
 
   <div class="mb-3">
-    <%= f.label :file, "Resume (PDF)", class: "form-label" %>
-    <%= f.file_field :file, class: "form-control", accept: "application/pdf,.pdf" %>
-    <div class="form-text">Upload a PDF file only.</div>
+    <%= f.label :name, "Resume name", class: "form-label" %>
+    <%= f.text_field :name, class: "form-control", placeholder: "e.g. Software Resume" %>
   </div>
 
-  <%= f.submit "Upload resume", class: "btn btn-primary" %>
+  <div class="mb-3">
+    <%= f.label :file, "Resume (PDF)", class: "form-label" %>
+    <%= f.file_field :file, class: "form-control", accept: "application/pdf,.pdf" %>
+    <div class="form-text"><%= resume.persisted? ? "Upload a new PDF only if you want to replace the current file." : "Upload a PDF file only." %></div>
+  </div>
+
+  <%= f.submit(resume.persisted? ? "Update resume" : "Upload resume", class: "btn btn-primary") %>
 <% end %>

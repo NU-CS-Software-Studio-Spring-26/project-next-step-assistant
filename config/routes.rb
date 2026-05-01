@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   root "home#index"
-  resources :resumes, only: [:index, :new, :create, :destroy]
+  resources :resumes, only: [:index, :show, :new, :create, :edit, :update, :destroy]
   resources :jobs do
     resources :resumes, only: %i[new create destroy]
   end

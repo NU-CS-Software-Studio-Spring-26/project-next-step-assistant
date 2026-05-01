@@ -1,13 +1,19 @@
 class ResumesController < ApplicationController
   before_action :set_job, if: :nested_job_request?
-  before_action :set_resume, only: %i[destroy]
+  before_action :set_resume, only: %i[show edit update destroy]
 
   def index
     @resumes = Resume.with_attached_file.order(created_at: :desc)
   end
 
+  def show
+  end
+
   def new
     @resume = Resume.new
+  end
+
+  def edit
   end
 
   def create
@@ -18,6 +24,14 @@ class ResumesController < ApplicationController
       redirect_to nested_job_request? ? @job : resumes_path, notice: "Resume was added."
     else
       render :new, status: :unprocessable_entity
+    end
+  end
+
+  def update
+    if @resume.update(resume_params)
+      redirect_to @resume, notice: "Resume updated successfully."
+    else
+      render :edit, status: :unprocessable_entity
     end
   end
 
@@ -41,7 +55,7 @@ class ResumesController < ApplicationController
   end
 
   def resume_params
-    params.expect(resume: [ :file ])
+    params.expect(resume: [ :name, :file ])
   end
 
   def nested_job_request?

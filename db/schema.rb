@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_01_193000) do
+ActiveRecord::Schema[8.1].define(version: 2026_05_01_195400) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -67,6 +67,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_01_193000) do
   create_table "resumes", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.bigint "job_id"
+    t.string "name", default: "Resume", null: false
     t.datetime "updated_at", null: false
     t.index ["job_id"], name: "index_resumes_on_job_id"
   end

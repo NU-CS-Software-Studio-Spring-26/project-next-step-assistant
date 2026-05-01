@@ -3,14 +3,16 @@ class Resume < ApplicationRecord
 
   has_one_attached :file, dependent: :purge_later
 
+  validates :name, presence: true
+
   validate :file_must_be_attached
   validate :file_must_be_pdf
 
   def display_name
     if file.attached?
-      "#{file.filename} (#{created_at.strftime('%b %d')})"
+      "#{name} — #{file.filename} (#{created_at.strftime('%b %d')})"
     else
-      "Resume #{id}"
+      name.presence || "Resume #{id}"
     end
   end
 
