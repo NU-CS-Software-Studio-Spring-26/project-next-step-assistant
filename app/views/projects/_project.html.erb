@@ -24,7 +24,7 @@
     <div class="d-flex flex-wrap gap-2 pt-3 border-top">
       <%= link_to "Show", project, class: "btn btn-primary btn-sm" %>
       <%= link_to "Edit", edit_project_path(project), class: "btn btn-outline-secondary btn-sm" %>
-      <%= button_to "Delete", project, method: :delete, class: "btn btn-outline-danger btn-sm", form: { class: "d-inline" } %>
+      <%= button_to "Delete", project, method: :delete, class: "btn btn-outline-danger btn-sm", form: { class: "d-inline", data: { turbo_confirm: "Delete this project? This cannot be undone." } } %>
     </div>
   </div>
 </div>

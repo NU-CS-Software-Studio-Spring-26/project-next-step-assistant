@@ -8,7 +8,7 @@
         <% end %>
       </div>
       <% if job.status.present? %>
-        <span class="badge rounded-pill <%= job_status_badge_class(job.status) %>"><%= job.status %></span>
+        <span class="badge rounded-pill <%= job_status_badge_class(job.status) %>"><%= job_status_label(job.status) %></span>
       <% end %>
     </div>
 
@@ -30,7 +30,7 @@
     <div class="d-flex flex-wrap gap-2 pt-3 border-top">
       <%= link_to "Show", job, class: "btn btn-primary btn-sm" %>
       <%= link_to "Edit", edit_job_path(job), class: "btn btn-outline-secondary btn-sm" %>
-      <%= button_to "Delete", job, method: :delete, class: "btn btn-outline-danger btn-sm", form: { class: "d-inline" } %>
+      <%= button_to "Delete", job, method: :delete, class: "btn btn-outline-danger btn-sm", form: { class: "d-inline", data: { turbo_confirm: "Delete this job? This cannot be undone." } } %>
     </div>
   </div>
 </div>

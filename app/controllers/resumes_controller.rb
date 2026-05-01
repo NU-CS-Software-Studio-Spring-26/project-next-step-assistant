@@ -41,7 +41,7 @@ class ResumesController < ApplicationController
   end
 
   def resume_params
-    params.expect(resume: [:file])
+    params.expect(resume: [ :file ])
   end
 
   def nested_job_request?
