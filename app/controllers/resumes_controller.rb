@@ -1,16 +1,21 @@
 class ResumesController < ApplicationController
-  before_action :set_job
+  before_action :set_job, if: :nested_job_request?
   before_action :set_resume, only: %i[destroy]
 
+  def index
+    @resumes = Resume.with_attached_file.order(created_at: :desc)
+  end
+
   def new
-    @resume = @job.resumes.build
+    @resume = Resume.new
   end
 
   def create
-    @resume = @job.resumes.build(resume_params)
+    @resume = Resume.new(resume_params)
+    @resume.job_id = @job.id if nested_job_request?
 
     if @resume.save
-      redirect_to @job, notice: "Resume was added."
+      redirect_to nested_job_request? ? @job : resumes_path, notice: "Resume was added."
     else
       render :new, status: :unprocessable_entity
     end
@@ -18,7 +23,7 @@ class ResumesController < ApplicationController
 
   def destroy
     @resume.destroy!
-    redirect_to @job, notice: "Resume was removed.", status: :see_other
+    redirect_to nested_job_request? ? @job : resumes_path, notice: "Resume was removed.", status: :see_other
   end
 
   private
@@ -28,10 +33,18 @@ class ResumesController < ApplicationController
   end
 
   def set_resume
-    @resume = @job.resumes.find(params.expect(:id))
+    @resume = if nested_job_request?
+      @job.resumes.find(params.expect(:id))
+    else
+      Resume.find(params.expect(:id))
+    end
   end
 
   def resume_params
     params.expect(resume: [:file])
+  end
+
+  def nested_job_request?
+    params[:job_id].present?
   end
 end

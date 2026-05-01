@@ -39,6 +39,16 @@
           <%= form.date_field :start_date, class: "form-control" %>
         </div>
 
+        <div class="col-12 col-md-8">
+          <%= form.label :resume_id, "Resume", class: "form-label" %>
+          <%= form.collection_select :resume_id,
+                                     Resume.with_attached_file.order(created_at: :desc),
+                                     :id,
+                                     :display_name,
+                                     { include_blank: "Select Resume" },
+                                     class: "form-select" %>
+        </div>
+
         <div class="col-12">
           <%= form.label :description, class: "form-label" %>
           <%= form.textarea :description, rows: 6, class: "form-control", placeholder: "Notes, links, requirements, contacts…" %>

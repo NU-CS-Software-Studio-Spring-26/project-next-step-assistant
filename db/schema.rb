@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_24_220725) do
+ActiveRecord::Schema[8.1].define(version: 2026_05_01_193000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -47,10 +47,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_24_220725) do
     t.date "deadline"
     t.text "description"
     t.string "organization_name"
+    t.bigint "resume_id"
     t.date "start_date"
     t.string "status"
     t.string "title"
     t.datetime "updated_at", null: false
+    t.index ["resume_id"], name: "index_jobs_on_resume_id"
   end
 
   create_table "projects", force: :cascade do |t|
@@ -64,12 +66,13 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_24_220725) do
 
   create_table "resumes", force: :cascade do |t|
     t.datetime "created_at", null: false
-    t.bigint "job_id", null: false
+    t.bigint "job_id"
     t.datetime "updated_at", null: false
     t.index ["job_id"], name: "index_resumes_on_job_id"
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "jobs", "resumes"
   add_foreign_key "resumes", "jobs"
 end

@@ -50,6 +50,15 @@
             <span class="text-body-secondary">—</span>
           <% end %>
         </dd>
+
+        <dt class="col-sm-3 text-body-secondary small text-uppercase fw-semibold">Selected resume</dt>
+        <dd class="col-sm-9 mb-0">
+          <% if @job.resume&.file&.attached? %>
+            <%= link_to "Download Resume", @job.resume.file, class: "btn btn-sm btn-outline-primary" %>
+          <% else %>
+            <span class="text-body-secondary">—</span>
+          <% end %>
+        </dd>
       </dl>
 
       <section class="mt-4 pt-4 border-top" aria-label="Resumes for this job">
