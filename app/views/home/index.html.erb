@@ -18,7 +18,7 @@
 				<h2 class="h5 mb-0 fw-semibold">Deadline tracker</h2>
 				<p class="text-body-secondary small mb-0 mt-1">Jobs and projects sorted by due date.</p>
 			</div>
-			<% if @deadline_items.any? %>
+			<% if @deadline_items.present? %>
 				<ul class="deadline-list list-unstyled mb-0">
 					<% @deadline_items.each do |item| %>
 						<li class="deadline-list-item">
