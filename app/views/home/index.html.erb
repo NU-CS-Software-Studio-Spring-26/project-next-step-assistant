@@ -19,23 +19,32 @@
 				<p class="text-body-secondary small mb-0 mt-1">Jobs and projects sorted by due date.</p>
 			</div>
 			<% if @deadline_items.present? %>
-				<ul class="deadline-list list-unstyled mb-0">
-					<% @deadline_items.each do |item| %>
-						<li class="deadline-list-item">
-							<%= link_to item[:path], class: "deadline-item-link" do %>
-								<span class="deadline-icon <%= deadline_icon_class(item[:deadline]) %>" aria-hidden="true"></span>
-								<div class="deadline-item-main">
-									<div class="deadline-item-kind"><%= item[:kind] %></div>
-									<div class="deadline-item-title"><%= item[:title] %></div>
-									<div class="deadline-item-subtitle"><%= item[:subtitle] %></div>
-								</div>
-								<div class="deadline-item-meta text-sm-end">
-									<div class="deadline-item-date"><%= item[:deadline].present? ? l(item[:deadline], format: :long) : "No due date" %></div>
-									<div class="deadline-item-status"><%= deadline_status_text(item[:deadline]) %></div>
-								</div>
-							<% end %>
-						</li>
-					<% end %>
+				<ul class="list-group list-group-flush">
+				<% @deadline_items.each do |item| %>
+					<li class="list-group-item d-flex justify-content-between align-items-center py-3">
+					<div>
+						<div class="small text-muted"><%= item[:kind] %></div>
+						<div class="fw-semibold">
+						<%= link_to item[:title], item[:path], class: "text-decoration-none text-dark" %>
+						</div>
+						<div class="small text-muted"><%= item[:subtitle] %></div>
+					</div>
+
+					<div class="text-end">
+						<div class="small fw-semibold">
+						<%= item[:deadline].present? ? l(item[:deadline], format: :long) : "No due date" %>
+						</div>
+
+						<% if item[:deadline].present? && item[:deadline] < Date.today %>
+						<span class="badge bg-danger"><%= deadline_status_text(item[:deadline]) %></span>
+						<% elsif item[:deadline].present? && item[:deadline] <= Date.today + 7.days %>
+						<span class="badge bg-warning text-dark"><%= deadline_status_text(item[:deadline]) %></span>
+						<% else %>
+						<span class="badge bg-success"><%= deadline_status_text(item[:deadline]) %></span>
+						<% end %>
+					</div>
+					</li>
+				<% end %>
 				</ul>
 			<% else %>
 				<div class="card-body text-body-secondary small">
