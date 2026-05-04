@@ -16,73 +16,32 @@
 		<div class="card border-0 shadow-sm overflow-hidden">
 			<div class="card-header bg-white border-bottom py-3 px-3 px-md-4">
 				<h2 class="h5 mb-0 fw-semibold">Deadline tracker</h2>
-				<p class="text-body-secondary small mb-0 mt-1">Applications sorted by due date.</p>
+				<p class="text-body-secondary small mb-0 mt-1">Jobs and projects sorted by due date.</p>
 			</div>
-			<% if @deadline_jobs.any? %>
-				<ul class="list-group list-group-flush">
-					<% today = Date.current %>
-					<% @deadline_jobs.each do |job| %>
-						<% days_remaining = (job.deadline - today).to_i %>
-						<% urgency_class, urgency_style =
-							if days_remaining <= 1
-								["list-group-item-danger", nil]
-							elsif days_remaining <= 3
-								["list-group-item", "background-color: rgba(253, 126, 20, 0.22);"]
-							elsif days_remaining <= 7
-								["list-group-item-warning", nil]
-							else
-								["list-group-item-success", nil]
-							end %>
-						<li class="list-group-item <%= urgency_class %> px-3 px-md-4 py-3"<% if urgency_style %> style="<%= urgency_style %>"<% end %>>
-							<div class="d-flex flex-column flex-sm-row flex-sm-wrap justify-content-between align-items-start gap-2">
-								<div>
-									<div class="fw-semibold"><%= job.title %></div>
-									<div class="small text-body-secondary"><%= job.organization_name.presence || "—" %></div>
-									<div class="small mt-1"><span class="text-body-secondary">Deadline:</span> <%= l(job.deadline, format: :long) %></div>
+			<% if @deadline_items.any? %>
+				<ul class="deadline-list list-unstyled mb-0">
+					<% @deadline_items.each do |item| %>
+						<li class="deadline-list-item">
+							<%= link_to item[:path], class: "deadline-item-link" do %>
+								<span class="deadline-icon <%= deadline_icon_class(item[:deadline]) %>" aria-hidden="true"></span>
+								<div class="deadline-item-main">
+									<div class="deadline-item-kind"><%= item[:kind] %></div>
+									<div class="deadline-item-title"><%= item[:title] %></div>
+									<div class="deadline-item-subtitle"><%= item[:subtitle] %></div>
 								</div>
-								<div class="text-sm-end">
-									<% if days_remaining.negative? %>
-										<span class="badge rounded-pill text-bg-danger">Overdue <%= pluralize(days_remaining.abs, "day") %></span>
-									<% elsif days_remaining.zero? %>
-										<span class="badge rounded-pill text-bg-danger">Due today</span>
-									<% else %>
-										<span class="badge rounded-pill <%= days_remaining <= 1 ? "text-bg-danger" : (days_remaining <= 3 ? "text-bg-warning text-dark" : (days_remaining <= 7 ? "text-bg-warning text-dark" : "text-bg-success")) %>">
-											<%= pluralize(days_remaining, "day") %> left
-										</span>
-									<% end %>
+								<div class="deadline-item-meta text-sm-end">
+									<div class="deadline-item-date"><%= item[:deadline].present? ? l(item[:deadline], format: :long) : "No due date" %></div>
+									<div class="deadline-item-status"><%= deadline_status_text(item[:deadline]) %></div>
 								</div>
-							</div>
+							<% end %>
 						</li>
 					<% end %>
 				</ul>
 			<% else %>
 				<div class="card-body text-body-secondary small">
-					No jobs with deadlines yet. <%= link_to "Add deadlines on the Jobs page", jobs_path, class: "link-primary" %>.
+					No jobs or projects yet. <%= link_to "Add a job", new_job_path, class: "link-primary" %> or <%= link_to "create a project", new_project_path, class: "link-primary" %>.
 				</div>
 			<% end %>
 		</div>
-	</section>
-
-	<section class="home-grid" aria-label="Homepage highlights">
-		<article class="home-card">
-			<h2>Jobs Board</h2>
-			<p>Add openings, update statuses, and keep momentum with one focused list.</p>
-			<%= link_to "Go to Jobs", jobs_path, class: "card-link" %>
-		</article>
-
-		<article class="home-card accent">
-			<h2>Projects Hub</h2>
-			<p>Capture project work tied to your applications and present your strengths clearly.</p>
-			<%= link_to "Go to Projects", projects_path, class: "card-link" %>
-		</article>
-
-		<article class="home-card wide">
-			<h2>Simple, consistent workflow</h2>
-			<ul>
-				<li>Track applications and deadlines.</li>
-				<li>Organize portfolio projects by relevance.</li>
-				<li>Review progress quickly before interviews.</li>
-			</ul>
-		</article>
 	</section>
 </main>
