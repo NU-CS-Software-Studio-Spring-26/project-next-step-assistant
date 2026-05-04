@@ -22,7 +22,7 @@ class ResumesController < ApplicationController
     @resume.job_id = @job.id if nested_job_request?
 
     if @resume.save
-      redirect_to nested_job_request? ? @job : resumes_path, notice: "Resume was added."
+      redirect_to(nested_job_request? ? job_path(@job) : resumes_path, notice: "Resume was added.")
     else
       render :new, status: :unprocessable_entity
     end
@@ -33,7 +33,7 @@ class ResumesController < ApplicationController
     attrs = attrs.except(:file) if attrs[:file].blank?
 
     if @resume.update(attrs)
-      redirect_to @resume, notice: "Resume updated successfully."
+      redirect_to resume_path(@resume), notice: "Resume updated successfully."
     else
       render :edit, status: :unprocessable_entity
     end
@@ -41,10 +41,10 @@ class ResumesController < ApplicationController
 
   def destroy
     if @resume.jobs.exists?
-      redirect_to(nested_job_request? ? @job : resumes_path, alert: "Cannot delete resume that is used by jobs.")
+      redirect_to(nested_job_request? ? job_path(@job) : resumes_path, alert: "Cannot delete resume that is used by jobs.")
     else
       @resume.destroy
-      redirect_to(nested_job_request? ? @job : resumes_path, notice: "Resume deleted.")
+      redirect_to(nested_job_request? ? job_path(@job) : resumes_path, notice: "Resume deleted.")
     end
   end
 

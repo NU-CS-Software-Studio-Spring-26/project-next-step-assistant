@@ -42,7 +42,7 @@ class JobsController < ApplicationController
 
     respond_to do |format|
       if @job.save
-        format.html { redirect_to @job, notice: "Job was successfully created." }
+        format.html { redirect_to job_path(@job), notice: "Job was successfully created." }
         format.json { render :show, status: :created, location: @job }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -55,7 +55,7 @@ class JobsController < ApplicationController
   def update
     respond_to do |format|
       if @job.update(job_params)
-        format.html { redirect_to @job, notice: "Job was successfully updated.", status: :see_other }
+        format.html { redirect_to job_path(@job), notice: "Job was successfully updated.", status: :see_other }
         format.json { render :show, status: :ok, location: @job }
       else
         format.html { render :edit, status: :unprocessable_entity }
