@@ -17,38 +17,59 @@
 			<div class="card-header bg-white border-bottom py-3 px-3 px-md-4">
 				<h2 class="h5 mb-0 fw-semibold">Deadline tracker</h2>
 				<p class="text-body-secondary small mb-0 mt-1">Jobs and projects sorted by due date.</p>
+
+				<%= form_with url: root_path, method: :get, local: true, class: "row g-2 mt-3 align-items-end" do %>
+					<div class="col-md-4">
+						<%= label_tag :start_date, "From", class: "form-label small fw-semibold" %>
+						<%= date_field_tag :start_date, @start_date, class: "form-control" %>
+					</div>
+
+					<div class="col-md-4">
+						<%= label_tag :end_date, "To", class: "form-label small fw-semibold" %>
+						<%= date_field_tag :end_date, @end_date, class: "form-control" %>
+					</div>
+
+					<div class="col-md-4 d-flex gap-2">
+						<%= submit_tag "Filter", class: "btn btn-primary" %>
+						<%= link_to "Reset", root_path, class: "btn btn-outline-secondary" %>
+					</div>
+				<% end %>
 			</div>
+
 			<% if @deadline_items.present? %>
 				<ul class="list-group list-group-flush">
-				<% @deadline_items.each do |item| %>
-					<li class="list-group-item d-flex justify-content-between align-items-center py-3">
-					<div>
-						<div class="small text-muted"><%= item[:kind] %></div>
-						<div class="fw-semibold">
-						<%= link_to item[:title], item[:path], class: "text-decoration-none text-dark" %>
-						</div>
-						<div class="small text-muted"><%= item[:subtitle] %></div>
-					</div>
+					<% @deadline_items.each do |item| %>
+						<li class="deadline-row <%= deadline_row_class(item[:deadline]) %>">
+							<div>
+								<div class="small text-muted"><%= item[:kind] %></div>
+								<div class="fw-semibold">
+									<%= link_to item[:title], item[:path], class: "text-decoration-none text-dark" %>
+								</div>
+								<div class="small text-muted"><%= item[:subtitle] %></div>
+							</div>
 
-					<div class="text-end">
-						<div class="small fw-semibold">
-						<%= item[:deadline].present? ? l(item[:deadline], format: :long) : "No due date" %>
-						</div>
+							<div class="text-end">
+								<div class="small fw-semibold">
+									<%= item[:deadline].present? ? l(item[:deadline], format: :long) : "No due date" %>
+								</div>
 
-						<% if item[:deadline].present? && item[:deadline] < Date.today %>
-						<span class="badge bg-danger"><%= deadline_status_text(item[:deadline]) %></span>
-						<% elsif item[:deadline].present? && item[:deadline] <= Date.today + 7.days %>
-						<span class="badge bg-warning text-dark"><%= deadline_status_text(item[:deadline]) %></span>
-						<% else %>
-						<span class="badge bg-success"><%= deadline_status_text(item[:deadline]) %></span>
-						<% end %>
-					</div>
-					</li>
-				<% end %>
+								<% if item[:deadline].present? && item[:deadline] < Date.today %>
+									<span class="badge bg-danger"><%= deadline_status_text(item[:deadline]) %></span>
+								<% elsif item[:deadline].present? && item[:deadline] <= Date.today + 7.days %>
+									<span class="badge bg-warning text-dark"><%= deadline_status_text(item[:deadline]) %></span>
+								<% else %>
+									<span class="badge bg-success"><%= deadline_status_text(item[:deadline]) %></span>
+								<% end %>
+							</div>
+						</li>
+					<% end %>
 				</ul>
 			<% else %>
 				<div class="card-body text-body-secondary small">
-					No jobs or projects yet. <%= link_to "Add a job", new_job_path, class: "link-primary" %> or <%= link_to "create a project", new_project_path, class: "link-primary" %>.
+					No jobs or projects in this date range.
+					<%= link_to "Add a job", new_job_path, class: "link-primary" %>
+					or
+					<%= link_to "create a project", new_project_path, class: "link-primary" %>.
 				</div>
 			<% end %>
 		</div>
