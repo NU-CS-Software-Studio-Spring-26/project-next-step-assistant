@@ -2,6 +2,18 @@
 # development, test). The code here should be idempotent so that it can be executed at any point in every environment.
 # The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
 
+puts "Ensuring seed user..."
+seed_user = User.find_or_initialize_by(email: "seed@example.com")
+if seed_user.new_record?
+  seed_user.password = "password123"
+  seed_user.password_confirmation = "password123"
+  seed_user.save!
+elsif seed_user.encrypted_password.blank?
+  seed_user.password = "password123"
+  seed_user.password_confirmation = "password123"
+  seed_user.save!
+end
+
 puts "Seeding jobs..."
 
 jobs = [
@@ -104,9 +116,10 @@ jobs = [
 ]
 
 jobs.each do |attrs|
-  Job.find_or_create_by!(title: attrs[:title], organization_name: attrs[:organization_name]) do |j|
-    j.assign_attributes(attrs)
-  end
+  job = Job.find_or_initialize_by(title: attrs[:title], organization_name: attrs[:organization_name])
+  job.assign_attributes(attrs)
+  job.user = seed_user
+  job.save!
 end
 
 puts "  Created #{Job.count} jobs"
@@ -177,9 +190,10 @@ projects = [
 ]
 
 projects.each do |attrs|
-  Project.find_or_create_by!(name: attrs[:name]) do |p|
-    p.assign_attributes(attrs)
-  end
+  project = Project.find_or_initialize_by(name: attrs[:name])
+  project.assign_attributes(attrs)
+  project.user = seed_user
+  project.save!
 end
 
 puts "  Created #{Project.count} projects"

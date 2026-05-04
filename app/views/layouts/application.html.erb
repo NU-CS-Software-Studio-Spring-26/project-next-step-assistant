@@ -31,14 +31,28 @@
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="mainNavbar">
-          <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+          <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-lg-center">
             <li class="nav-item"><%= link_to "Jobs", jobs_path, class: "nav-link" %></li>
             <li class="nav-item"><%= link_to "Projects", projects_path, class: "nav-link" %></li>
             <li class="nav-item"><%= link_to "Resumes", resumes_path, class: "nav-link" %></li>
+            <% if user_signed_in? %>
+              <li class="nav-item"><%= button_to "Log out", destroy_user_session_path, method: :delete, class: "btn btn-link nav-link" %></li>
+            <% else %>
+              <li class="nav-item"><%= link_to "Log in", new_user_session_path, class: "nav-link" %></li>
+              <li class="nav-item"><%= link_to "Sign up", new_user_registration_path, class: "nav-link" %></li>
+            <% end %>
           </ul>
         </div>
       </div>
     </nav>
+    <div class="container mt-3">
+      <% if notice.present? %>
+        <div class="alert alert-info alert-dismissible fade show" role="alert"><%= notice %><button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>
+      <% end %>
+      <% if alert.present? %>
+        <div class="alert alert-warning alert-dismissible fade show" role="alert"><%= alert %><button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>
+      <% end %>
+    </div>
     <%= yield %>
   </body>
 </html>

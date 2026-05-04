@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_01_195400) do
+ActiveRecord::Schema[8.1].define(version: 2026_05_04_170303) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -52,17 +52,20 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_01_195400) do
     t.string "status"
     t.string "title"
     t.datetime "updated_at", null: false
+    t.bigint "user_id"
     t.index ["resume_id"], name: "index_jobs_on_resume_id"
+    t.index ["user_id"], name: "index_jobs_on_user_id"
   end
 
   create_table "projects", force: :cascade do |t|
     t.datetime "created_at", null: false
-    t.date "deadline"
     t.text "description"
     t.string "github_link"
     t.string "name"
     t.string "skills"
     t.datetime "updated_at", null: false
+    t.bigint "user_id"
+    t.index ["user_id"], name: "index_projects_on_user_id"
   end
 
   create_table "resumes", force: :cascade do |t|
@@ -70,11 +73,28 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_01_195400) do
     t.bigint "job_id"
     t.string "name", default: "Resume", null: false
     t.datetime "updated_at", null: false
+    t.bigint "user_id"
     t.index ["job_id"], name: "index_resumes_on_job_id"
+    t.index ["user_id"], name: "index_resumes_on_user_id"
+  end
+
+  create_table "users", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "email", default: "", null: false
+    t.string "encrypted_password", default: "", null: false
+    t.datetime "remember_created_at"
+    t.datetime "reset_password_sent_at"
+    t.string "reset_password_token"
+    t.datetime "updated_at", null: false
+    t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "jobs", "resumes"
+  add_foreign_key "jobs", "users"
+  add_foreign_key "projects", "users"
   add_foreign_key "resumes", "jobs"
+  add_foreign_key "resumes", "users"
 end

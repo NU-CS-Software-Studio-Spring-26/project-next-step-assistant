@@ -1,6 +1,7 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
+  user: one
   title: Software Engineer Intern
   organization_name: Acme Corp
   deadline: 2026-04-20
@@ -9,6 +10,7 @@ one:
   status: applied
 
 two:
+  user: one
   title: Backend Engineer
   organization_name: Globex
   deadline: 2026-05-15

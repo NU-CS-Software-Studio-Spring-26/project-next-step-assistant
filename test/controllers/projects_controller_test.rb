@@ -3,6 +3,7 @@ require "test_helper"
 class ProjectsControllerTest < ActionDispatch::IntegrationTest
   setup do
     @project = projects(:one)
+    sign_in users(:one)
   end
 
   test "should get index" do

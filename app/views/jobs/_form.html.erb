@@ -41,7 +41,7 @@
         <div class="col-12 col-md-8">
           <%= form.label :resume_id, "Resume", class: "form-label" %>
           <%= form.collection_select :resume_id,
-                                     Resume.with_attached_file.order(created_at: :desc),
+                                     current_user.resumes.with_attached_file.order(created_at: :desc),
                                      :id,
                                      :display_name,
                                      { include_blank: "Select Resume" },

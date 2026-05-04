@@ -1,23 +1,24 @@
 class ResumesController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_job, if: :nested_job_request?
   before_action :set_resume, only: %i[show edit update destroy]
 
   def index
-    @resumes = Resume.with_attached_file.order(created_at: :desc)
+    @resumes = current_user.resumes.with_attached_file.order(created_at: :desc)
   end
 
   def show
   end
 
   def new
-    @resume = Resume.new
+    @resume = current_user.resumes.build
   end
 
   def edit
   end
 
   def create
-    @resume = Resume.new(resume_params)
+    @resume = current_user.resumes.build(resume_params)
     @resume.job_id = @job.id if nested_job_request?
 
     if @resume.save
@@ -28,7 +29,10 @@ class ResumesController < ApplicationController
   end
 
   def update
-    if @resume.update(resume_params)
+    attrs = resume_params
+    attrs = attrs.except(:file) if attrs[:file].blank?
+
+    if @resume.update(attrs)
       redirect_to @resume, notice: "Resume updated successfully."
     else
       render :edit, status: :unprocessable_entity
@@ -43,14 +47,14 @@ class ResumesController < ApplicationController
   private
 
   def set_job
-    @job = Job.find(params.expect(:job_id))
+    @job = current_user.jobs.find(params.expect(:job_id))
   end
 
   def set_resume
     @resume = if nested_job_request?
       @job.resumes.find(params.expect(:id))
     else
-      Resume.find(params.expect(:id))
+      current_user.resumes.find(params.expect(:id))
     end
   end
 

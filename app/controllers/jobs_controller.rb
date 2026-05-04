@@ -1,11 +1,12 @@
 class JobsController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_job, only: %i[ show edit update destroy ]
 
   # GET /jobs or /jobs.json
   def index
     @query = params[:query].to_s.strip
     @status = params[:status]
-    @jobs = Job.order(deadline: :asc)
+    @jobs = current_user.jobs.order(deadline: :asc)
 
     if @query.present?
       term = "%#{ActiveRecord::Base.sanitize_sql_like(@query)}%"
@@ -27,7 +28,7 @@ class JobsController < ApplicationController
 
   # GET /jobs/new
   def new
-    @job = Job.new
+    @job = current_user.jobs.build
   end
 
   # GET /jobs/1/edit
@@ -36,7 +37,7 @@ class JobsController < ApplicationController
 
   # POST /jobs or /jobs.json
   def create
-    @job = Job.new(job_params)
+    @job = current_user.jobs.build(job_params)
 
     respond_to do |format|
       if @job.save
@@ -75,11 +76,16 @@ class JobsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_job
-      @job = Job.find(params.expect(:id))
+      @job = current_user.jobs.find(params.expect(:id))
     end
 
     # Only allow a list of trusted parameters through.
     def job_params
-      params.expect(job: [ :title, :organization_name, :deadline, :start_date, :description, :status, :resume_id ])
+      permitted = params.expect(job: [ :title, :organization_name, :deadline, :start_date, :description, :status, :resume_id ])
+      if permitted[:resume_id].present?
+        rid = permitted[:resume_id].to_i
+        permitted[:resume_id] = current_user.resumes.exists?(rid) ? rid : nil
+      end
+      permitted
     end
 end

@@ -1,11 +1,12 @@
 class Resume < ApplicationRecord
+  belongs_to :user, optional: true
   has_many :jobs, dependent: :nullify
 
   has_one_attached :file, dependent: :purge_later
 
   validates :name, presence: true
 
-  validate :file_must_be_attached
+  validate :file_must_be_attached, on: :create
   validate :file_must_be_pdf
 
   def display_name

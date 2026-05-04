@@ -1,4 +1,6 @@
 class Project < ApplicationRecord
+  belongs_to :user, optional: true
+
   validates :name, presence: true, length: { maximum: 200 }
   validates :description, length: { maximum: 5_000 }, allow_blank: true
   validates :github_link,
