@@ -1,15 +1,15 @@
 module HomeHelper
-  def deadline_icon_class(deadline)
-    return "deadline-neutral" if deadline.blank?
+  def deadline_row_class(deadline)
+    return "deadline-row-neutral" if deadline.blank?
 
     days_left = (deadline.to_date - Date.current).to_i
 
     if days_left < 0
-      "deadline-overdue"
+      "deadline-row-danger"
     elsif days_left <= 7
-      "deadline-soon"
+      "deadline-row-warning"
     else
-      "deadline-safe"
+      "deadline-row-success"
     end
   end
 
@@ -19,11 +19,11 @@ module HomeHelper
     days_left = (deadline.to_date - Date.current).to_i
 
     if days_left < 0
-      "Overdue #{days_left.abs} days"
+      "Overdue"
     elsif days_left == 0
       "Due today"
-    elsif days_left == 1
-      "1 day left"
+    elsif days_left <= 7
+      "Due soon"
     else
       "#{days_left} days left"
     end
