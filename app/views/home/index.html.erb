@@ -37,7 +37,7 @@
 			</div>
 
 			<% if @deadline_items.present? %>
-				<ul class="list-group list-group-flush">
+				<ul class="deadline-list list-unstyled mb-0">
 					<% @deadline_items.each do |item| %>
 						<li class="deadline-row <%= deadline_row_class(item[:deadline]) %>">
 							<div>

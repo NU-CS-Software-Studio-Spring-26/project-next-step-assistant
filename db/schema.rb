@@ -57,6 +57,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_01_195400) do
 
   create_table "projects", force: :cascade do |t|
     t.datetime "created_at", null: false
+    t.date "deadline"
     t.text "description"
     t.string "github_link"
     t.string "name"

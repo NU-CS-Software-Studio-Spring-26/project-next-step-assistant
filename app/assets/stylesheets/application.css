@@ -8,3 +8,28 @@
  *
  * Consider organizing styles into separate files for maintainability.
  */
+.deadline-list {
+  margin: 0;
+  padding: 0;
+}
+
+.deadline-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 18px;
+  min-height: 72px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.deadline-row-danger {
+  background-color: #f8d7da;
+}
+
+.deadline-row-warning {
+  background-color: #fff3cd;
+}
+
+.deadline-row-success {
+  background-color: #d1e7dd;
+}
