@@ -1,13 +1,18 @@
 <% content_for :title, @resume.name.presence || "Resume" %>
 
 <div class="container py-4 py-lg-5">
-  <div class="mb-4 d-flex gap-2">
+  <div class="mb-4 d-flex flex-wrap gap-2">
     <%= link_to "Back to Resume Library", resumes_path, class: "btn btn-outline-secondary btn-sm" %>
+    <%= link_to "Edit", edit_resume_path(@resume), class: "btn btn-outline-primary btn-sm" %>
   </div>
 
   <div class="card shadow-sm border-0" style="max-width: 46rem;">
     <div class="card-body p-4 p-lg-5">
       <h1 class="h3 fw-semibold mb-3"><%= @resume.name %></h1>
+
+      <p class="text-body-secondary mb-4">
+        Used by <%= pluralize(@resume.jobs.count, "job") %>
+      </p>
 
       <dl class="row mb-4 gy-3">
         <dt class="col-sm-4 text-body-secondary small text-uppercase fw-semibold">File name</dt>

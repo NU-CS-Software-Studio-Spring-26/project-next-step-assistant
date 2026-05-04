@@ -11,7 +11,8 @@ class Resume < ApplicationRecord
 
   def display_name
     if file.attached?
-      "#{name} — #{file.filename} (#{created_at.strftime('%b %d')})"
+      filename = file.filename.to_s.presence || "file"
+      "#{name} — #{filename} (#{created_at.strftime('%b %d')})"
     else
       name.presence || "Resume #{id}"
     end

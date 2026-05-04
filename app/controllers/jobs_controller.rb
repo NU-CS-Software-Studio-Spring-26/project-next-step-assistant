@@ -24,6 +24,7 @@ class JobsController < ApplicationController
 
   # GET /jobs/1 or /jobs/1.json
   def show
+    @job_resumes = current_user.resumes.where(job_id: @job.id).order(created_at: :desc)
   end
 
   # GET /jobs/new

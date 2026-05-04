@@ -40,8 +40,12 @@ class ResumesController < ApplicationController
   end
 
   def destroy
-    @resume.destroy!
-    redirect_to nested_job_request? ? @job : resumes_path, notice: "Resume was removed.", status: :see_other
+    if @resume.jobs.exists?
+      redirect_to(nested_job_request? ? @job : resumes_path, alert: "Cannot delete resume that is used by jobs.")
+    else
+      @resume.destroy
+      redirect_to(nested_job_request? ? @job : resumes_path, notice: "Resume deleted.")
+    end
   end
 
   private
@@ -52,7 +56,7 @@ class ResumesController < ApplicationController
 
   def set_resume
     @resume = if nested_job_request?
-      @job.resumes.find(params.expect(:id))
+      current_user.resumes.where(job_id: @job.id).find(params.expect(:id))
     else
       current_user.resumes.find(params.expect(:id))
     end

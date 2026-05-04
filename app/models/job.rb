@@ -13,8 +13,6 @@ class Job < ApplicationRecord
 
   enum :status, STATUSES, default: :saved
 
-  has_many :resumes
-
   validates :title, presence: true, length: { maximum: 200 }
   validates :organization_name, presence: true, length: { maximum: 200 }
   validates :status, presence: true
