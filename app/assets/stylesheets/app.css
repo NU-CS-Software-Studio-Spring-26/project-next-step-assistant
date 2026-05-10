@@ -5,12 +5,17 @@
 	--home-bg: #f5f1e8;
 	--home-surface: #fffaf2;
 	--home-ink: #1f2430;
-	--home-muted: #4b5563;
+	/* was #4b5563 — darker for WCAG AA on cream hero/cards */
+	--home-muted: #3d4555;
 	--home-primary: #126d6a;
 	--home-primary-deep: #0d5350;
 	--home-accent: #f49f0a;
 	--home-border: #e8dcc8;
 	--home-shadow: 0 14px 40px rgba(20, 36, 51, 0.12);
+	/* Bootstrap 5.3: stronger body-secondary & links on light backgrounds */
+	--bs-secondary-rgb: 55, 65, 81;
+	--bs-link-color: #0a5855;
+	--bs-link-hover-color: #073d3a;
 }
 
 body {
@@ -58,7 +63,7 @@ body {
 	font-weight: 700;
 	text-transform: uppercase;
 	letter-spacing: 0.08em;
-	color: var(--home-primary);
+	color: var(--home-primary-deep);
 	font-size: 0.78rem;
 }
 
@@ -179,7 +184,7 @@ body {
 	display: inline-flex;
 	align-items: center;
 	gap: 0.35rem;
-	color: var(--home-primary);
+	color: var(--home-primary-deep);
 	font-weight: 700;
 	text-decoration: none;
 }
@@ -191,7 +196,7 @@ body {
 }
 
 .card-link:hover {
-	color: var(--home-primary-deep);
+	color: #062e2c;
 }
 
 .card-link:hover::after {
@@ -219,4 +224,43 @@ body {
 		flex-direction: column;
 		align-items: stretch;
 	}
+}
+
+/* WCAG: navbar links & brand on bg-body-tertiary (Bootstrap default contrast is often borderline) */
+.navbar.bg-body-tertiary .navbar-brand {
+	color: #1a202c;
+}
+
+.navbar.bg-body-tertiary .navbar-brand:hover,
+.navbar.bg-body-tertiary .navbar-brand:focus {
+	color: #0d1117;
+}
+
+.navbar.bg-body-tertiary .navbar-nav .nav-link {
+	color: #2d3740;
+}
+
+.navbar.bg-body-tertiary .navbar-nav .nav-link:hover,
+.navbar.bg-body-tertiary .navbar-nav .nav-link:focus {
+	color: #111827;
+}
+
+.navbar.bg-body-tertiary .navbar-nav .btn-link.nav-link {
+	color: #2d3740;
+	text-decoration: none;
+}
+
+.navbar.bg-body-tertiary .navbar-nav .btn-link.nav-link:hover,
+.navbar.bg-body-tertiary .navbar-nav .btn-link.nav-link:focus {
+	color: #111827;
+}
+
+/* Slightly darker primary buttons for text/background contrast on inner pages */
+.btn-primary {
+	--bs-btn-bg: #0b5ed7;
+	--bs-btn-border-color: #0a58ca;
+	--bs-btn-hover-bg: #0a58ca;
+	--bs-btn-hover-border-color: #0a53be;
+	--bs-btn-active-bg: #0a58ca;
+	--bs-btn-active-border-color: #0a53be;
 }
