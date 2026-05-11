@@ -25,6 +25,7 @@
   </head>
 
   <body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
     <nav class="navbar navbar-expand-lg bg-body-tertiary border-bottom">
       <div class="container">
         <%= link_to "Next Step Assistant", root_path, class: "navbar-brand fw-semibold" %>
@@ -46,7 +47,7 @@
         </div>
       </div>
     </nav>
-    <div class="container mt-3">
+    <div id="main-content" class="container mt-3">
       <% if notice.present? %>
         <div class="alert alert-info alert-dismissible fade show" role="alert"><%= notice %><button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>
       <% end %>

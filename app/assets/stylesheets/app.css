@@ -103,14 +103,14 @@ body {
 }
 
 .btn-primary-home {
-	background: var(--home-primary);
+	background: var(--home-primary-deep);
 	color: #fff;
 	border: 1px solid transparent;
 	box-shadow: 0 8px 20px rgba(18, 109, 106, 0.26);
 }
 
 .btn-primary-home:hover {
-	background: var(--home-primary-deep);
+	background: #08403e;
 	color: #fff;
 	transform: translateY(-1px);
 }
@@ -118,7 +118,7 @@ body {
 .btn-secondary-home {
 	color: var(--home-primary-deep);
 	background: #ffffff;
-	border: 1px solid var(--home-border);
+	border: 1px solid var(--home-primary-deep);
 }
 
 .btn-secondary-home:hover {
@@ -362,7 +362,7 @@ body {
 .auth-btn {
 	width: 100%;
 	padding: 0.75rem;
-	background: var(--home-primary);
+	background: var(--home-primary-deep);
 	color: #fff;
 	border: none;
 	border-radius: 999px;
@@ -370,13 +370,13 @@ body {
 	font-size: 1rem;
 	font-weight: 600;
 	cursor: pointer;
-	box-shadow: 0 8px 20px rgba(18, 109, 106, 0.26);
+	box-shadow: 0 8px 20px rgba(13, 83, 80, 0.32);
 	transition: background-color 180ms ease, transform 180ms ease;
 	margin-bottom: 1.2rem;
 }
 
 .auth-btn:hover {
-	background: var(--home-primary-deep);
+	background: #08403e;
 	transform: translateY(-1px);
 }
 
@@ -400,12 +400,104 @@ body {
 	margin: 0 0.5rem;
 }
 
-/* Slightly darker primary buttons for text/background contrast on inner pages */
+/* Darker primary buttons for AAA contrast (7:1 white-on-bg) */
 .btn-primary {
-	--bs-btn-bg: #0b5ed7;
-	--bs-btn-border-color: #0a58ca;
-	--bs-btn-hover-bg: #0a58ca;
-	--bs-btn-hover-border-color: #0a53be;
-	--bs-btn-active-bg: #0a58ca;
-	--bs-btn-active-border-color: #0a53be;
+	--bs-btn-bg: #0a4ba9;
+	--bs-btn-border-color: #094399;
+	--bs-btn-hover-bg: #08408f;
+	--bs-btn-hover-border-color: #073a82;
+	--bs-btn-active-bg: #08408f;
+	--bs-btn-active-border-color: #073a82;
+}
+
+/* === WCAG AA contrast overrides === */
+
+/* Bootstrap text-muted / text-body-secondary default to translucent grays
+   that fail AA on light cream backgrounds — use a solid darker color. */
+.text-muted,
+.text-body-secondary {
+	color: #4a5260 !important;
+}
+
+/* Navbar links: stronger contrast on bg-body-tertiary (#f8f9fa) */
+.navbar.bg-body-tertiary .navbar-brand,
+.navbar.bg-body-tertiary .navbar-brand:hover,
+.navbar.bg-body-tertiary .navbar-brand:focus {
+	color: #0d1117;
+}
+
+.navbar.bg-body-tertiary .navbar-nav .nav-link {
+	color: #1a202c;
+}
+
+.navbar.bg-body-tertiary .navbar-nav .nav-link:hover,
+.navbar.bg-body-tertiary .navbar-nav .nav-link:focus {
+	color: #000;
+}
+
+.navbar.bg-body-tertiary .navbar-nav .btn-link.nav-link {
+	color: #1a202c;
+}
+
+.navbar.bg-body-tertiary .navbar-nav .btn-link.nav-link:hover,
+.navbar.bg-body-tertiary .navbar-nav .btn-link.nav-link:focus {
+	color: #000;
+}
+
+/* Outline secondary buttons: darker text and stronger border for AA */
+.btn-outline-secondary {
+	--bs-btn-color: #2d3740;
+	--bs-btn-border-color: #4a5260;
+	--bs-btn-hover-color: #fff;
+	--bs-btn-hover-bg: #2d3740;
+	--bs-btn-hover-border-color: #2d3740;
+	--bs-btn-active-color: #fff;
+	--bs-btn-active-bg: #2d3740;
+	--bs-btn-active-border-color: #2d3740;
+}
+
+/* link-primary: darker teal for AA on cream backgrounds */
+.link-primary {
+	--bs-link-color-rgb: 8, 71, 68;
+	--bs-link-hover-color-rgb: 6, 50, 48;
+}
+
+/* Small/muted text inside the pastel deadline-row backgrounds — pastel
+   bg + Bootstrap gray fails AA. Force a dark ink color in those rows. */
+.deadline-row .small,
+.deadline-row .text-muted,
+.deadline-row .small.text-muted {
+	color: #2d3740 !important;
+}
+
+/* Skip-to-main-content link (WCAG 2.4.1 Bypass Blocks) — visible on focus */
+.skip-link {
+	position: absolute;
+	top: -100px;
+	left: 0;
+	background: #0a4744;
+	color: #fff;
+	padding: 0.75rem 1rem;
+	z-index: 9999;
+	text-decoration: none;
+	font-weight: 600;
+	border-radius: 0 0 8px 0;
+}
+
+.skip-link:focus {
+	top: 0;
+	color: #fff;
+	outline: 2px solid #f49f0a;
+	outline-offset: 2px;
+}
+
+/* Visible keyboard focus indicators (WCAG 2.4.7) */
+a:focus-visible,
+button:focus-visible,
+.btn:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+	outline: 2px solid #0a5855;
+	outline-offset: 2px;
 }
