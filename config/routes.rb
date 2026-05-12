@@ -1,9 +1,9 @@
 Rails.application.routes.draw do
   devise_for :users
   root "home#index"
-  resources :resumes, only: [:index, :show, :new, :create, :edit, :update, :destroy]
+  resources :resumes, only: [ :index, :show, :new, :create, :edit, :update, :destroy ]
   resources :jobs do
-    resources :resumes, only: %i[new create destroy]
+    resources :resumes, only: %i[ new create destroy ]
   end
   resources :projects
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
