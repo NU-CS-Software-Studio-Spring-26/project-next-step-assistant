@@ -497,7 +497,54 @@ button:focus-visible,
 .btn:focus-visible,
 input:focus-visible,
 select:focus-visible,
-textarea:focus-visible {
+textarea:focus-visible,
+[tabindex]:focus-visible {
 	outline: 2px solid #0a5855;
 	outline-offset: 2px;
+}
+
+/* Hide outline on programmatic focus of main landmark (skip-link target) */
+main:focus {
+	outline: none;
+}
+
+/* Site footer landmark */
+.site-footer {
+	margin-top: 3rem;
+	padding: 1.5rem 0;
+	background: #0d1117;
+	color: #f5f1e8;
+	border-top: 1px solid var(--home-border);
+}
+
+.site-footer .container {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+	gap: 1rem;
+}
+
+.footer-copy {
+	margin: 0;
+	font-size: 0.9rem;
+}
+
+.footer-nav {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 1.25rem;
+}
+
+.footer-nav a {
+	color: #f5f1e8;
+	text-decoration: none;
+	font-size: 0.9rem;
+	font-weight: 500;
+}
+
+.footer-nav a:hover,
+.footer-nav a:focus {
+	color: #fff;
+	text-decoration: underline;
 }

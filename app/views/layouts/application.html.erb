@@ -93,34 +93,49 @@
       </div>
     </nav>
 
-    <div class="container mt-3">
-      <% if notice.present? %>
-        <div class="alert alert-info alert-dismissible fade show" role="alert">
-          <%= notice %>
+    <main id="main-content" tabindex="-1">
+      <div class="container mt-3" role="region" aria-label="Notifications">
+        <% if notice.present? %>
+          <div class="alert alert-info alert-dismissible fade show" role="alert">
+            <%= notice %>
 
-          <button
-            type="button"
-            class="btn-close"
-            data-bs-dismiss="alert"
-            aria-label="Close">
-          </button>
-        </div>
-      <% end %>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="alert"
+              aria-label="Close">
+            </button>
+          </div>
+        <% end %>
 
-      <% if alert.present? %>
-        <div class="alert alert-warning alert-dismissible fade show" role="alert">
-          <%= alert %>
+        <% if alert.present? %>
+          <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            <%= alert %>
 
-          <button
-            type="button"
-            class="btn-close"
-            data-bs-dismiss="alert"
-            aria-label="Close">
-          </button>
-        </div>
-      <% end %>
-    </div>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="alert"
+              aria-label="Close">
+            </button>
+          </div>
+        <% end %>
+      </div>
 
-    <%= yield %>
+      <%= yield %>
+    </main>
+
+    <footer class="site-footer" role="contentinfo">
+      <div class="container">
+        <p class="footer-copy">
+          &copy; <%= Date.today.year %> Next Step Assistant
+        </p>
+        <nav class="footer-nav" aria-label="Footer">
+          <%= link_to "Jobs", jobs_path %>
+          <%= link_to "Projects", projects_path %>
+          <%= link_to "Resumes", resumes_path %>
+        </nav>
+      </div>
+    </footer>
   </body>
 </html>
