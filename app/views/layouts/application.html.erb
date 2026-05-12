@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title><%= content_for(:title) || "Group App" %></title>
+    <title><%= content_for(:title).presence || "Next Step Assistant" %></title>
+
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="application-name" content="Group App">
+    <meta name="application-name" content="Next Step Assistant">
     <meta name="mobile-web-app-capable" content="yes">
+
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
@@ -21,40 +23,104 @@
     <%# Includes all stylesheet files in app/assets/stylesheets %>
     <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" defer></script>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+      defer>
+    </script>
   </head>
 
   <body>
-    <a href="#main-content" class="skip-link">Skip to main content</a>
+    <a href="#main-content" class="skip-link">
+      Skip to main content
+    </a>
+
     <nav class="navbar navbar-expand-lg bg-body-tertiary border-bottom">
       <div class="container">
-        <%= link_to "Next Step Assistant", root_path, class: "navbar-brand fw-semibold" %>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
+        <%= link_to "Next Step Assistant", root_path,
+            class: "navbar-brand fw-semibold" %>
+
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#mainNavbar"
+          aria-controls="mainNavbar"
+          aria-expanded="false"
+          aria-label="Toggle navigation">
+
           <span class="navbar-toggler-icon"></span>
         </button>
+
         <div class="collapse navbar-collapse" id="mainNavbar">
           <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-lg-center">
-            <li class="nav-item"><%= link_to "Jobs", jobs_path, class: "nav-link" %></li>
-            <li class="nav-item"><%= link_to "Projects", projects_path, class: "nav-link" %></li>
-            <li class="nav-item"><%= link_to "Resumes", resumes_path, class: "nav-link" %></li>
+
+            <li class="nav-item">
+              <%= link_to "Jobs", jobs_path, class: "nav-link" %>
+            </li>
+
+            <li class="nav-item">
+              <%= link_to "Projects", projects_path, class: "nav-link" %>
+            </li>
+
+            <li class="nav-item">
+              <%= link_to "Resumes", resumes_path, class: "nav-link" %>
+            </li>
+
             <% if user_signed_in? %>
-              <li class="nav-item"><%= button_to "Log out", destroy_user_session_path, method: :delete, class: "btn btn-link nav-link" %></li>
+              <li class="nav-item">
+                <%= button_to "Log out",
+                    destroy_user_session_path,
+                    method: :delete,
+                    class: "btn btn-link nav-link" %>
+              </li>
             <% else %>
-              <li class="nav-item"><%= link_to "Log in", new_user_session_path, class: "nav-link" %></li>
-              <li class="nav-item"><%= link_to "Sign up", new_user_registration_path, class: "nav-link" %></li>
+              <li class="nav-item">
+                <%= link_to "Log in",
+                    new_user_session_path,
+                    class: "nav-link" %>
+              </li>
+
+              <li class="nav-item">
+                <%= link_to "Sign up",
+                    new_user_registration_path,
+                    class: "nav-link" %>
+              </li>
             <% end %>
+
           </ul>
         </div>
       </div>
     </nav>
-    <div id="main-content" class="container mt-3">
+
+    <div class="container mt-3">
       <% if notice.present? %>
-        <div class="alert alert-info alert-dismissible fade show" role="alert"><%= notice %><button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>
+        <div class="alert alert-info alert-dismissible fade show" role="alert">
+          <%= notice %>
+
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="alert"
+            aria-label="Close">
+          </button>
+        </div>
       <% end %>
+
       <% if alert.present? %>
-        <div class="alert alert-warning alert-dismissible fade show" role="alert"><%= alert %><button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+          <%= alert %>
+
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="alert"
+            aria-label="Close">
+          </button>
+        </div>
       <% end %>
     </div>
+
     <%= yield %>
   </body>
 </html>
