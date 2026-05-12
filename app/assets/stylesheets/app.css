@@ -5,7 +5,6 @@
 	--home-bg: #f5f1e8;
 	--home-surface: #fffaf2;
 	--home-ink: #1f2430;
-	/* was #4b5563 — darker for WCAG AA on cream hero/cards */
 	--home-muted: #3d4555;
 	--home-primary: #126d6a;
 	--home-primary-deep: #0d5350;
@@ -63,7 +62,7 @@ body {
 	font-weight: 700;
 	text-transform: uppercase;
 	letter-spacing: 0.08em;
-	color: var(--home-primary-deep);
+	color: #062e2c;
 	font-size: 0.78rem;
 }
 
@@ -73,13 +72,14 @@ body {
 	line-height: 1.05;
 	margin: 0;
 	max-width: 18ch;
+	color: #0d1117;
 }
 
 .hero-copy {
 	margin-top: 1rem;
 	margin-bottom: 0;
 	max-width: 66ch;
-	color: var(--home-muted);
+	color: #1a202c;
 	font-size: clamp(1rem, 1.5vw, 1.15rem);
 }
 
@@ -103,26 +103,26 @@ body {
 }
 
 .btn-primary-home {
-	background: var(--home-primary-deep);
+	background: #062e2c;
 	color: #fff;
 	border: 1px solid transparent;
 	box-shadow: 0 8px 20px rgba(18, 109, 106, 0.26);
 }
 
 .btn-primary-home:hover {
-	background: #08403e;
+	background: #041d1c;
 	color: #fff;
 	transform: translateY(-1px);
 }
 
 .btn-secondary-home {
-	color: var(--home-primary-deep);
+	color: #062e2c;
 	background: #ffffff;
-	border: 1px solid var(--home-primary-deep);
+	border: 1px solid #062e2c;
 }
 
 .btn-secondary-home:hover {
-	color: var(--home-primary-deep);
+	color: #062e2c;
 	transform: translateY(-1px);
 	box-shadow: 0 8px 18px rgba(20, 36, 51, 0.12);
 }
@@ -400,23 +400,23 @@ body {
 	margin: 0 0.5rem;
 }
 
-/* Darker primary buttons for AAA contrast (7:1 white-on-bg) */
+/* Darker primary buttons for AAA contrast (white-on-bg well above 7:1) */
 .btn-primary {
-	--bs-btn-bg: #0a4ba9;
-	--bs-btn-border-color: #094399;
-	--bs-btn-hover-bg: #08408f;
-	--bs-btn-hover-border-color: #073a82;
-	--bs-btn-active-bg: #08408f;
-	--bs-btn-active-border-color: #073a82;
+	--bs-btn-bg: #07358a;
+	--bs-btn-border-color: #062c75;
+	--bs-btn-hover-bg: #062c75;
+	--bs-btn-hover-border-color: #052461;
+	--bs-btn-active-bg: #062c75;
+	--bs-btn-active-border-color: #052461;
 }
 
-/* === WCAG AA contrast overrides === */
+/* === WCAG AAA contrast overrides === */
 
 /* Bootstrap text-muted / text-body-secondary default to translucent grays
-   that fail AA on light cream backgrounds — use a solid darker color. */
+   that fail on light cream backgrounds — use a much darker color (AAA 7:1+). */
 .text-muted,
 .text-body-secondary {
-	color: #4a5260 !important;
+	color: #1a202c !important;
 }
 
 /* Navbar links: stronger contrast on bg-body-tertiary (#f8f9fa) */
@@ -444,22 +444,22 @@ body {
 	color: #000;
 }
 
-/* Outline secondary buttons: darker text and stronger border for AA */
+/* Outline secondary buttons: very dark text and stronger border (AAA) */
 .btn-outline-secondary {
-	--bs-btn-color: #2d3740;
-	--bs-btn-border-color: #4a5260;
+	--bs-btn-color: #0d1117;
+	--bs-btn-border-color: #1a202c;
 	--bs-btn-hover-color: #fff;
-	--bs-btn-hover-bg: #2d3740;
-	--bs-btn-hover-border-color: #2d3740;
+	--bs-btn-hover-bg: #1a202c;
+	--bs-btn-hover-border-color: #1a202c;
 	--bs-btn-active-color: #fff;
-	--bs-btn-active-bg: #2d3740;
-	--bs-btn-active-border-color: #2d3740;
+	--bs-btn-active-bg: #1a202c;
+	--bs-btn-active-border-color: #1a202c;
 }
 
-/* link-primary: darker teal for AA on cream backgrounds */
+/* link-primary: very dark teal for AAA contrast on cream/white backgrounds */
 .link-primary {
-	--bs-link-color-rgb: 8, 71, 68;
-	--bs-link-hover-color-rgb: 6, 50, 48;
+	--bs-link-color-rgb: 4, 35, 33;
+	--bs-link-hover-color-rgb: 2, 20, 19;
 }
 
 /* Small/muted text inside the pastel deadline-row backgrounds — pastel
