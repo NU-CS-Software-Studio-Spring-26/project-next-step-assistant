@@ -1,5 +1,6 @@
 class Resume < ApplicationRecord
   NAME_MAX_LENGTH = 200
+  FILE_MAX_SIZE = 5.megabytes
 
   belongs_to :user, optional: true
   has_many :jobs, dependent: :nullify
@@ -10,6 +11,7 @@ class Resume < ApplicationRecord
 
   validate :file_must_be_attached, on: :create
   validate :file_must_be_pdf
+  validate :file_size_within_limit
 
   def display_name
     if file.attached?
@@ -33,5 +35,14 @@ class Resume < ApplicationRecord
     return if type == "application/pdf"
 
     errors.add(:file, "must be a PDF")
+  end
+
+  def file_size_within_limit
+    return unless file.attached?
+
+    size = file.blob&.byte_size.to_i
+    return if size <= FILE_MAX_SIZE
+
+    errors.add(:file, "must be #{FILE_MAX_SIZE / 1.megabyte} MB or smaller")
   end
 end

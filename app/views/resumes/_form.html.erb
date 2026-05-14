@@ -19,7 +19,7 @@
   <div class="mb-3">
     <%= f.label :file, "Resume (PDF)", class: "form-label" %>
     <%= f.file_field :file, class: "form-control", accept: "application/pdf,.pdf" %>
-    <div class="form-text"><%= resume.persisted? ? "Upload a new PDF only if you want to replace the current file." : "Upload a PDF file only." %></div>
+    <div class="form-text"><%= resume.persisted? ? "Upload a new PDF only if you want to replace the current file." : "Upload a PDF file only." %> Max file size: <%= Resume::FILE_MAX_SIZE / 1.megabyte %> MB.</div>
   </div>
 
   <%= f.submit(resume.persisted? ? "Update resume" : "Upload resume", class: "btn btn-primary") %>
