@@ -18,12 +18,12 @@
 
       <div class="auth-field">
         <%= f.label :email, class: "auth-label" %>
-        <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "auth-input" %>
+        <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "auth-input", maxlength: User::EMAIL_MAX_LENGTH %>
       </div>
 
       <div class="auth-field">
         <%= f.label :password, class: "auth-label" %>
-        <%= f.password_field :password, autocomplete: "new-password", class: "auth-input" %>
+        <%= f.password_field :password, autocomplete: "new-password", class: "auth-input", maxlength: User::PASSWORD_MAX_LENGTH %>
         <% if @minimum_password_length %>
           <p class="auth-hint"><%= @minimum_password_length %> characters minimum</p>
         <% end %>
@@ -31,7 +31,7 @@
 
       <div class="auth-field">
         <%= f.label :password_confirmation, "Confirm password", class: "auth-label" %>
-        <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "auth-input" %>
+        <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "auth-input", maxlength: User::PASSWORD_MAX_LENGTH %>
       </div>
 
       <%= f.submit "Sign up", class: "auth-btn" %>

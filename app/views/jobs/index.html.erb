@@ -23,7 +23,7 @@
       <% end %>
       <div class="col-12 col-sm">
         <label for="jobs_search_query" class="form-label small text-body-secondary mb-1">Search</label>
-        <%= text_field_tag :query, params[:query], class: "form-control", id: "jobs_search_query", placeholder: "Title or organization…", autocomplete: "off" %>
+        <%= text_field_tag :query, params[:query], class: "form-control", id: "jobs_search_query", placeholder: "Title or organization…", autocomplete: "off", maxlength: JobsController::SEARCH_QUERY_MAX_LENGTH %>
       </div>
       <div class="col-12 col-sm-auto">
         <label class="form-label small text-body-secondary mb-1 d-none d-sm-block">&nbsp;</label>

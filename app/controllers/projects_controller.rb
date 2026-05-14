@@ -1,10 +1,12 @@
 class ProjectsController < ApplicationController
+  SEARCH_QUERY_MAX_LENGTH = 100
+
   before_action :authenticate_user!
   before_action :set_project, only: %i[ show edit update destroy ]
 
   # GET /projects or /projects.json
   def index
-    @query = params[:query].to_s.strip
+    @query = params[:query].to_s.strip.first(SEARCH_QUERY_MAX_LENGTH)
     @projects = current_user.projects.all
 
     if @query.present?

@@ -1,4 +1,8 @@
 class Job < ApplicationRecord
+  TITLE_MAX_LENGTH = 200
+  ORGANIZATION_NAME_MAX_LENGTH = 200
+  DESCRIPTION_MAX_LENGTH = 5_000
+
   belongs_to :user, optional: true
   belongs_to :resume, optional: true
   STATUSES = {
@@ -13,8 +17,8 @@ class Job < ApplicationRecord
 
   enum :status, STATUSES, default: :saved
 
-  validates :title, presence: true, length: { maximum: 200 }
-  validates :organization_name, presence: true, length: { maximum: 200 }
+  validates :title, presence: true, length: { maximum: TITLE_MAX_LENGTH }
+  validates :organization_name, presence: true, length: { maximum: ORGANIZATION_NAME_MAX_LENGTH }
   validates :status, presence: true
-  validates :description, length: { maximum: 5_000 }, allow_blank: true
+  validates :description, length: { maximum: DESCRIPTION_MAX_LENGTH }, allow_blank: true
 end
