@@ -1,10 +1,12 @@
 class JobsController < ApplicationController
+  SEARCH_QUERY_MAX_LENGTH = 100
+
   before_action :authenticate_user!
   before_action :set_job, only: %i[ show edit update destroy ]
 
   # GET /jobs or /jobs.json
   def index
-    @query = params[:query].to_s.strip
+    @query = params[:query].to_s.strip.first(SEARCH_QUERY_MAX_LENGTH)
     @status = params[:status]
     @jobs = current_user.jobs.order(deadline: :asc)
 

@@ -1,10 +1,12 @@
 class Resume < ApplicationRecord
+  NAME_MAX_LENGTH = 200
+
   belongs_to :user, optional: true
   has_many :jobs, dependent: :nullify
 
   has_one_attached :file, dependent: :purge_later
 
-  validates :name, presence: true
+  validates :name, presence: true, length: { maximum: NAME_MAX_LENGTH }
 
   validate :file_must_be_attached, on: :create
   validate :file_must_be_pdf

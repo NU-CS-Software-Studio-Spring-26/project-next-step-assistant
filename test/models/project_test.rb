@@ -21,6 +21,16 @@ class ProjectTest < ActiveSupport::TestCase
     assert_not project.valid?
   end
 
+  test "rejects skills longer than 255 characters" do
+    project = Project.new(name: "Ok", skills: "x" * 256)
+    assert_not project.valid?
+  end
+
+  test "rejects github_link longer than 2048 characters" do
+    project = Project.new(name: "Ok", github_link: "https://example.com/#{'a' * 2_040}")
+    assert_not project.valid?
+  end
+
   test "allows blank github_link" do
     assert Project.new(name: "Ok", github_link: "").valid?
     assert Project.new(name: "Ok", github_link: nil).valid?

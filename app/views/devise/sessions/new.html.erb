@@ -7,12 +7,12 @@
     <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
       <div class="auth-field">
         <%= f.label :email, class: "auth-label" %>
-        <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "auth-input" %>
+        <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "auth-input", maxlength: User::EMAIL_MAX_LENGTH %>
       </div>
 
       <div class="auth-field">
         <%= f.label :password, class: "auth-label" %>
-        <%= f.password_field :password, autocomplete: "current-password", class: "auth-input" %>
+        <%= f.password_field :password, autocomplete: "current-password", class: "auth-input", maxlength: User::PASSWORD_MAX_LENGTH %>
       </div>
 
       <% if devise_mapping.rememberable? %>

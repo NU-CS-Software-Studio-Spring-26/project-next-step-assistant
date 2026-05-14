@@ -14,7 +14,7 @@
     <%= form_with url: projects_path, method: :get, class: "row g-2 g-sm-3 align-items-end" do %>
       <div class="col-12 col-sm">
         <label for="projects_search_query" class="form-label small text-body-secondary mb-1">Search</label>
-        <%= text_field_tag :query, params[:query], class: "form-control", id: "projects_search_query", placeholder: "Name or skills…", autocomplete: "off" %>
+        <%= text_field_tag :query, params[:query], class: "form-control", id: "projects_search_query", placeholder: "Name or skills…", autocomplete: "off", maxlength: ProjectsController::SEARCH_QUERY_MAX_LENGTH %>
       </div>
       <div class="col-12 col-sm-auto">
         <label class="form-label small text-body-secondary mb-1 d-none d-sm-block">&nbsp;</label>
