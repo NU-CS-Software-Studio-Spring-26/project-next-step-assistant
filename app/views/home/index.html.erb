@@ -14,10 +14,10 @@
 		</div>
 	</header>
 
-	<section class="deadline-tracker mt-4 mb-4" aria-label="Upcoming job deadlines">
+	<section class="deadline-tracker mt-4 mb-4" aria-labelledby="deadline-tracker-heading">
 		<div class="card border-0 shadow-sm overflow-hidden">
 			<div class="card-header bg-white border-bottom py-3 px-3 px-md-4">
-				<h2 class="h5 mb-0 fw-semibold">Deadline tracker</h2>
+				<h2 id="deadline-tracker-heading" class="h5 mb-0 fw-semibold">Deadline tracker</h2>
 				<p class="text-body-secondary small mb-0 mt-1">Jobs and projects sorted by due date.</p>
 
 				<%= form_with url: root_path, method: :get, local: true, class: "row g-2 mt-3 align-items-end" do %>

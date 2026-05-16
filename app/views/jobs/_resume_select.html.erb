@@ -1,0 +1,7 @@
+<%= form.label :resume_id, "Resume", class: "form-label" %>
+<%= form.collection_select :resume_id,
+                           current_user.resumes.with_attached_file.order(created_at: :desc),
+                           :id,
+                           :display_name,
+                           { include_blank: "Select Resume" },
+                           class: "form-select" %>

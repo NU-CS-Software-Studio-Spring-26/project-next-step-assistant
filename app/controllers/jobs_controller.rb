@@ -26,7 +26,6 @@ class JobsController < ApplicationController
 
   # GET /jobs/1 or /jobs/1.json
   def show
-    @job_resumes = current_user.resumes.where(job_id: @job.id).order(created_at: :desc)
   end
 
   # GET /jobs/new
@@ -60,7 +59,7 @@ class JobsController < ApplicationController
         format.html { redirect_to job_path(@job), notice: "Job was successfully updated.", status: :see_other }
         format.json { render :show, status: :ok, location: @job }
       else
-        format.html { render :edit, status: :unprocessable_entity }
+        format.html { render(params[:from_show].present? ? :show : :edit, status: :unprocessable_entity) }
         format.json { render json: @job.errors, status: :unprocessable_entity }
       end
     end

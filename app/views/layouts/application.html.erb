@@ -35,8 +35,9 @@
       Skip to main content
     </a>
 
-    <nav class="navbar navbar-expand-lg bg-body-tertiary border-bottom">
-      <div class="container">
+    <header class="site-header">
+      <nav class="navbar navbar-expand-lg bg-body-tertiary border-bottom" aria-label="Main navigation">
+        <div class="container">
         <%= link_to "Next Step Assistant", root_path,
             class: "navbar-brand fw-semibold" %>
 
@@ -92,9 +93,10 @@
         </div>
       </div>
     </nav>
+    </header>
 
     <main id="main-content" tabindex="-1">
-      <div class="container mt-3" role="region" aria-label="Notifications">
+      <div class="container mt-3" role="status" aria-live="polite">
         <% if notice.present? %>
           <div class="alert alert-info alert-dismissible fade show" role="alert">
             <%= notice %>
