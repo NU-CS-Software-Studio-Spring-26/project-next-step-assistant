@@ -1,41 +1,4 @@
 /*
- * This is a manifest file that'll be compiled into application.css.
- *
- * With Propshaft, assets are served efficiently without preprocessing steps. You can still include
- * application-wide styles in this file, but keep in mind that CSS precedence will follow the standard
- * cascading order, meaning styles declared later in the document or manifest will override earlier ones,
- * depending on specificity.
- *
- * Consider organizing styles into separate files for maintainability.
+ * Deadline tracker styles live in app.css (loaded via stylesheet_link_tag :app).
+ * This file is kept as a pointer for older references; do not add styles here.
  */
-.deadline-list {
-  margin: 0;
-  padding: 0;
-}
-
-.deadline-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 14px 18px;
-  min-height: 72px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
-  position: relative;
-}
-
-.deadline-row:hover {
-  filter: brightness(0.95);
-  cursor: pointer;
-}
-
-.deadline-row-danger {
-  background-color: #f8d7da;
-}
-
-.deadline-row-warning {
-  background-color: #fff3cd;
-}
-
-.deadline-row-success {
-  background-color: #d1e7dd;
-}

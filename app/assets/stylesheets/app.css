@@ -316,65 +316,6 @@ a:not([class]):focus-visible {
 	}
 }
 
-/* ===== ACCESSIBILITY: Navbar Links with Enhanced Keyboard Navigation ===== */
-/* WCAG: navbar links & brand on bg-body-tertiary (Bootstrap default contrast is often borderline) */
-.navbar.bg-body-tertiary .navbar-brand {
-	color: #1a202c;
-	transition: color 180ms ease, outline 180ms ease;
-}
-
-.navbar.bg-body-tertiary .navbar-brand:hover,
-.navbar.bg-body-tertiary .navbar-brand:focus {
-	color: #0d1117;
-}
-
-.navbar.bg-body-tertiary .navbar-brand:focus-visible {
-	outline: 2px solid #126d6a;
-	outline-offset: 4px;
-	border-radius: 4px;
-}
-
-.navbar.bg-body-tertiary .navbar-nav .nav-link {
-	color: #2d3740;
-	transition: color 180ms ease, text-decoration 180ms ease, outline 180ms ease;
-	text-decoration: none;
-	position: relative;
-}
-
-.navbar.bg-body-tertiary .navbar-nav .nav-link:hover,
-.navbar.bg-body-tertiary .navbar-nav .nav-link:focus {
-	color: #111827;
-	text-decoration: underline;
-	text-decoration-thickness: 2px;
-	text-underline-offset: 0.35em;
-}
-
-.navbar.bg-body-tertiary .navbar-nav .nav-link:focus-visible {
-	outline: 2px solid #126d6a;
-	outline-offset: 4px;
-	border-radius: 4px;
-}
-
-.navbar.bg-body-tertiary .navbar-nav .btn-link.nav-link {
-	color: #2d3740;
-	text-decoration: none;
-	transition: color 180ms ease, text-decoration 180ms ease, outline 180ms ease;
-}
-
-.navbar.bg-body-tertiary .navbar-nav .btn-link.nav-link:hover,
-.navbar.bg-body-tertiary .navbar-nav .btn-link.nav-link:focus {
-	color: #111827;
-	text-decoration: underline;
-	text-decoration-thickness: 2px;
-	text-underline-offset: 0.35em;
-}
-
-.navbar.bg-body-tertiary .navbar-nav .btn-link.nav-link:focus-visible {
-	outline: 2px solid #126d6a;
-	outline-offset: 4px;
-	border-radius: 4px;
-}
-
 /* Auth pages (login / sign up) */
 .auth-wrap {
 	display: flex;
@@ -563,29 +504,45 @@ a:not([class]):focus-visible {
 	color: #1a202c !important;
 }
 
-/* Navbar links: stronger contrast on bg-body-tertiary (#f8f9fa) */
-.navbar.bg-body-tertiary .navbar-brand,
-.navbar.bg-body-tertiary .navbar-brand:hover,
-.navbar.bg-body-tertiary .navbar-brand:focus {
+/* Navbar: accessible contrast on bg-body-tertiary (#f8f9fa) */
+.navbar.bg-body-tertiary .navbar-brand {
 	color: #0d1117;
+	transition: color 180ms ease, outline 180ms ease;
 }
 
-.navbar.bg-body-tertiary .navbar-nav .nav-link {
+.navbar.bg-body-tertiary .navbar-brand:hover,
+.navbar.bg-body-tertiary .navbar-brand:focus {
+	color: #000;
+}
+
+.navbar.bg-body-tertiary .navbar-brand:focus-visible {
+	outline: 2px solid #126d6a;
+	outline-offset: 4px;
+	border-radius: 4px;
+}
+
+.navbar.bg-body-tertiary .navbar-nav .nav-link,
+.navbar.bg-body-tertiary .navbar-nav .btn-link.nav-link {
 	color: #1a202c;
+	text-decoration: none;
+	transition: color 180ms ease, text-decoration 180ms ease, outline 180ms ease;
 }
 
 .navbar.bg-body-tertiary .navbar-nav .nav-link:hover,
-.navbar.bg-body-tertiary .navbar-nav .nav-link:focus {
-	color: #000;
-}
-
-.navbar.bg-body-tertiary .navbar-nav .btn-link.nav-link {
-	color: #1a202c;
-}
-
+.navbar.bg-body-tertiary .navbar-nav .nav-link:focus,
 .navbar.bg-body-tertiary .navbar-nav .btn-link.nav-link:hover,
 .navbar.bg-body-tertiary .navbar-nav .btn-link.nav-link:focus {
-	color: #000;
+	color: #0d1117;
+	text-decoration: underline;
+	text-decoration-thickness: 2px;
+	text-underline-offset: 0.35em;
+}
+
+.navbar.bg-body-tertiary .navbar-nav .nav-link:focus-visible,
+.navbar.bg-body-tertiary .navbar-nav .btn-link.nav-link:focus-visible {
+	outline: 2px solid #126d6a;
+	outline-offset: 4px;
+	border-radius: 4px;
 }
 
 /* Outline secondary buttons: very dark text and stronger border (AAA) */
@@ -602,6 +559,25 @@ a:not([class]):focus-visible {
 }
 
 .btn-outline-secondary:focus-visible {
+	outline: 2px solid #126d6a;
+	outline-offset: 3px;
+	box-shadow: 0 0 0 3px rgba(18, 109, 106, 0.2);
+}
+
+/* Outline primary: match solid primary palette for AA contrast on light backgrounds */
+.btn-outline-primary {
+	--bs-btn-color: #07358a;
+	--bs-btn-border-color: #062c75;
+	--bs-btn-hover-color: #fff;
+	--bs-btn-hover-bg: #07358a;
+	--bs-btn-hover-border-color: #062c75;
+	--bs-btn-active-color: #fff;
+	--bs-btn-active-bg: #062c75;
+	--bs-btn-active-border-color: #052461;
+	transition: background-color 180ms ease, border-color 180ms ease, color 180ms ease, outline 180ms ease, box-shadow 180ms ease;
+}
+
+.btn-outline-primary:focus-visible {
 	outline: 2px solid #126d6a;
 	outline-offset: 3px;
 	box-shadow: 0 0 0 3px rgba(18, 109, 106, 0.2);
@@ -625,6 +601,81 @@ a:not([class]):focus-visible {
 	outline: 2px solid #0a5855;
 	outline-offset: 3px;
 	border-radius: 2px;
+}
+
+/* link-secondary: align with accessible ink/teal palette */
+.link-secondary {
+	--bs-link-color-rgb: 4, 35, 33;
+	--bs-link-hover-color-rgb: 2, 20, 19;
+	color: #042321 !important;
+}
+
+.link-secondary:hover,
+.link-secondary:focus {
+	color: #021413 !important;
+}
+
+/* Placeholder text: readable on white inputs while distinct from entered text */
+.form-control::placeholder {
+	color: #4b5563;
+	opacity: 1;
+}
+
+/* Job/status badges: stronger contrast while keeping semantic hues */
+.badge.text-bg-secondary,
+.text-bg-secondary {
+	color: #fff !important;
+	background-color: #495057 !important;
+}
+
+.badge.text-bg-info,
+.text-bg-info {
+	color: #055160 !important;
+	background-color: #cff4fc !important;
+}
+
+.badge.text-bg-light,
+.text-bg-light {
+	color: #1a202c !important;
+	background-color: #e9ecef !important;
+}
+
+.badge.text-bg-light.border,
+.text-bg-light.border {
+	border-color: #6c757d !important;
+}
+
+/* Home deadline tracker list (merged from application.css) */
+.deadline-list {
+	margin: 0;
+	padding: 0;
+}
+
+.deadline-row {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 14px 18px;
+	min-height: 72px;
+	border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+	position: relative;
+}
+
+.deadline-row:hover {
+	filter: brightness(0.95);
+	cursor: pointer;
+}
+
+.deadline-row-danger {
+	background-color: #f8d7da;
+}
+
+.deadline-row-warning {
+	background-color: #fff3cd;
+}
+
+.deadline-row-success {
+	background-color: #d1e7dd;
 }
 
 /* Small/muted text inside the pastel deadline-row backgrounds — pastel
