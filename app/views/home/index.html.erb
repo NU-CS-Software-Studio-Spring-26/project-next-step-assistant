@@ -44,9 +44,9 @@
 						<li class="deadline-row <%= deadline_row_class(item[:deadline]) %>">
 							<div>
 								<div class="small text-muted"><%= item[:kind] %></div>
-								<div class="fw-semibold">
+								<h3 class="h6 fw-semibold mb-0">
 									<%= link_to item[:title], item[:path], class: "text-decoration-none text-dark stretched-link" %>
-								</div>
+								</h3>
 								<div class="small text-muted"><%= item[:subtitle] %></div>
 							</div>
 
