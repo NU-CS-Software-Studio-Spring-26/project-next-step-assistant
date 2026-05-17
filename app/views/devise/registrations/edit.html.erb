@@ -1,10 +1,10 @@
 <div class="auth-wrap">
   <div class="auth-card">
     <p class="eyebrow">Next Step Assistant</p>
-    <h1 class="auth-heading">Create your account</h1>
-    <p class="auth-sub">Track applications, deadlines, and projects in one place.</p>
+    <h1 class="auth-heading">Edit your account</h1>
+    <p class="auth-sub">Update your email or password. Leave password fields blank to keep your current password.</p>
 
-    <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+    <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
       <% if resource.errors.any? %>
         <div class="auth-errors">
           <strong><%= pluralize(resource.errors.count, "error") %> prevented your account from being saved:</strong>
@@ -22,22 +22,27 @@
       </div>
 
       <div class="auth-field">
-        <%= f.label :password, class: "auth-label" %>
+        <%= f.label :password, "New password", class: "auth-label" %>
         <%= f.password_field :password, autocomplete: "new-password", class: "auth-input", maxlength: User::PASSWORD_MAX_LENGTH %>
         <%= render "devise/shared/password_requirements" %>
       </div>
 
       <div class="auth-field">
-        <%= f.label :password_confirmation, "Confirm password", class: "auth-label" %>
+        <%= f.label :password_confirmation, "Confirm new password", class: "auth-label" %>
         <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "auth-input", maxlength: User::PASSWORD_MAX_LENGTH %>
       </div>
 
-      <%= f.submit "Sign up", class: "auth-btn" %>
+      <div class="auth-field">
+        <%= f.label :current_password, class: "auth-label" %>
+        <%= f.password_field :current_password, autocomplete: "current-password", class: "auth-input", maxlength: User::PASSWORD_MAX_LENGTH %>
+        <p class="auth-hint">Required to confirm changes to your account.</p>
+      </div>
+
+      <%= f.submit "Update account", class: "auth-btn" %>
     <% end %>
 
     <div class="auth-links">
-      Already have an account?
-      <%= link_to "Log in", new_session_path(resource_name) %>
+      <%= link_to "Back", :back %>
     </div>
   </div>
 </div>
