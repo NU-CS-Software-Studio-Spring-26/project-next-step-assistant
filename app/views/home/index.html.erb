@@ -66,6 +66,11 @@
 						</li>
 					<% end %>
 				</ul>
+				<% if defined?(@pagy) && @pagy.pages > 1 %>
+					<div class="mt-4 d-flex justify-content-center">
+						<%== pagy_bootstrap_nav(@pagy) %>
+					</div>
+				<% end %>
 			<% else %>
 				<div class="card-body text-body-secondary small">
 					No jobs or projects in this date range.

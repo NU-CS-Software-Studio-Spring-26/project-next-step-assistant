@@ -17,6 +17,7 @@ class ProjectsController < ApplicationController
         term
       )
     end
+    @pagy, @projects = pagy(@projects)
   end
 
   # GET /projects/1 or /projects/1.json

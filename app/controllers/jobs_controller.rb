@@ -22,6 +22,7 @@ class JobsController < ApplicationController
     if @status.present?
       @jobs = @jobs.where(status: @status)
     end
+    @pagy, @jobs = pagy(@jobs)
   end
 
   # GET /jobs/1 or /jobs/1.json

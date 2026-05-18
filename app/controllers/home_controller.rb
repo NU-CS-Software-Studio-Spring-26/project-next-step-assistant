@@ -21,6 +21,7 @@ class HomeController < ApplicationController
         path: job_path(job)
       }
     end
+    @pagy, @deadline_items = pagy_array(@deadline_items)
   end
 
   private
