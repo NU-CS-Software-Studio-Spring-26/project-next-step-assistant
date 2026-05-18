@@ -1,0 +1,13 @@
+<% label = local_assigns.fetch(:label, "Sign in with GitHub") %>
+<% if github_oauth_configured? %>
+  <div class="auth-oauth">
+    <%= button_to omniauth_authorize_path(resource_name, :github),
+        method: :post,
+        data: { turbo: false },
+        class: "auth-btn-github" do %>
+      <%= label %>
+    <% end %>
+  </div>
+
+  <p class="auth-divider-row" role="presentation"><span>or continue with email</span></p>
+<% end %>

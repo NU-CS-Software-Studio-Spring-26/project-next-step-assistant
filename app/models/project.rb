@@ -13,7 +13,7 @@ class Project < ApplicationRecord
     bastard
   ].freeze
 
-  belongs_to :user, optional: true
+  belongs_to :user
 
   validates :name, presence: true, length: { maximum: NAME_MAX_LENGTH }
 

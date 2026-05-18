@@ -97,7 +97,12 @@
     <main id="main-content" tabindex="-1">
       <div class="container mt-3" role="status" aria-live="polite">
         <% if notice.present? %>
-          <div class="alert alert-info alert-dismissible fade show" role="alert">
+          <div
+            class="alert alert-info alert-dismissible fade show"
+            role="alert"
+            data-controller="flash"
+            data-flash-dismiss-after-value="5000"
+            data-action="mouseenter->flash#pause mouseleave->flash#resume focusin->flash#pause focusout->flash#resume">
             <%= notice %>
 
             <button
@@ -110,7 +115,12 @@
         <% end %>
 
         <% if alert.present? %>
-          <div class="alert alert-warning alert-dismissible fade show" role="alert">
+          <div
+            class="alert alert-warning alert-dismissible fade show"
+            role="alert"
+            data-controller="flash"
+            data-flash-dismiss-after-value="5000"
+            data-action="mouseenter->flash#pause mouseleave->flash#resume focusin->flash#pause focusout->flash#resume">
             <%= alert %>
 
             <button
@@ -137,7 +147,7 @@
           <a
             href="https://github.com/NU-CS-Software-Studio-Spring-26/project-next-step-assistant"
             target="_blank"
-            rel="noopener">
+            rel="noopener noreferrer">
             GitHub
           </a>
         </nav>

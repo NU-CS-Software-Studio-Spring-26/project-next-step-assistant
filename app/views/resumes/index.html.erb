@@ -18,12 +18,12 @@
               <h2 class="h6 fw-semibold mb-0"><%= link_to resume.name, resume_path(resume), class: "text-decoration-none" %></h2>
               <div class="small text-body-secondary"><%= resume.file.filename %></div>
               <div class="small text-body-secondary">Uploaded <%= l(resume.created_at.to_date, format: :long) %></div>
-              <div class="small text-body-secondary">Used by <%= pluralize(resume.jobs.count, "job") %></div>
+              <div class="small text-body-secondary">Used by <%= pluralize(resume.jobs.size, "job") %></div>
             <% else %>
               <h2 class="h6 fw-semibold mb-0 text-body-secondary"><%= link_to resume.name, resume_path(resume), class: "text-decoration-none link-secondary" %></h2>
               <div class="small text-body-secondary">Missing file</div>
               <div class="small text-body-secondary">Uploaded <%= l(resume.created_at.to_date, format: :long) %></div>
-              <div class="small text-body-secondary">Used by <%= pluralize(resume.jobs.count, "job") %></div>
+              <div class="small text-body-secondary">Used by <%= pluralize(resume.jobs.size, "job") %></div>
             <% end %>
           </div>
           <div class="d-flex gap-2">
@@ -42,6 +42,11 @@
         <p class="text-body-secondary mb-4">Upload a PDF resume to start using the reusable library.</p>
         <%= link_to "Upload Resume", new_resume_path, class: "btn btn-primary" %>
       </div>
+    </div>
+  <% end %>
+  <% if defined?(@pagy) && @pagy.pages > 1 %>
+    <div class="mt-4 d-flex justify-content-center">
+      <%== pagy_bootstrap_nav(@pagy) %>
     </div>
   <% end %>
 </div>

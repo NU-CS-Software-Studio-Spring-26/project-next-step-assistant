@@ -137,4 +137,53 @@ if demo_user.resumes.empty?
   resume.save!(validate: false)
 end
 
+# Extra records for pagination demos (Pagy default: 20 per page).
+extra_job_titles = [
+  "Platform Engineer Intern", "Security Engineer Intern", "QA Engineer Intern",
+  "Mobile Engineer Intern", "Cloud Engineer Intern", "Site Reliability Intern",
+  "Research Engineer Intern", "Robotics Software Intern", "AR/VR Engineer Intern",
+  "Blockchain Developer Intern", "Embedded Systems Intern", "Database Engineer Intern",
+  "Technical Program Manager Intern", "Solutions Engineer Intern", "Sales Engineer Intern",
+  "Growth Engineer Intern", "Analytics Engineer Intern", "Computer Vision Intern",
+  "NLP Engineer Intern", "Infrastructure Engineer Intern", "Frontend Engineer Intern",
+  "Backend Engineer Intern", "Full Stack Intern", "Product Designer Intern",
+  "UX Research Intern"
+]
+
+extra_job_titles.each_with_index do |title, index|
+  Job.find_or_create_by!(title: title, user: demo_user) do |job|
+    job.organization_name = "Seed Company #{index + 1}"
+    job.status = Job::STATUSES.values[index % Job::STATUSES.size]
+    job.deadline = Date.current + (index + 1).weeks
+    job.start_date = Date.current + (index + 10).weeks
+    job.description = "Seeded job for pagination and filter testing."
+  end
+end
+
+extra_project_names = [
+  "Budget Tracker", "Campus Events App", "Study Group Finder", "Recipe API",
+  "Fitness Logger", "Portfolio CMS", "Hackathon Scheduler", "Open Source Dashboard",
+  "Interview Prep Bot", "Course Review Site", "Parking Finder", "Club Management",
+  "Volunteer Matcher", "Language Flashcards", "Music Collaboration", "Photo Organizer",
+  "Task Automator", "Weather Widget", "Expense Splitter", "Reading List",
+  "Habit Tracker", "Code Snippet Vault", "API Mock Server", "Markdown Notes",
+  "Team Retro Tool"
+]
+
+extra_project_names.each_with_index do |name, index|
+  Project.find_or_create_by!(name: name, user: demo_user) do |project|
+    project.description = "Seeded project for list and search testing."
+    project.github_link = "https://github.com/example/#{name.parameterize}"
+    project.skills = "Ruby, Rails, PostgreSQL"
+  end
+end
+
+25.times do |index|
+  resume_name = "Demo Resume #{index + 1}"
+  next if demo_user.resumes.exists?(name: resume_name)
+
+  resume = demo_user.resumes.build(name: resume_name)
+  resume.save!(validate: false)
+end
+
 puts "Seed complete. Demo user: demo@example.com (#{demo_user.jobs.count} jobs, #{demo_user.projects.count} projects, #{demo_user.resumes.count} resumes)."

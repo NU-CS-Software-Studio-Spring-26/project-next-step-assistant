@@ -19,7 +19,7 @@
       <div class="col-12 col-sm-auto">
         <label class="form-label small text-body-secondary mb-1 d-none d-sm-block">&nbsp;</label>
         <div class="d-flex flex-wrap gap-2">
-          <%= submit_tag "Search", class: "btn btn-primary w-100 w-sm-auto" %>
+          <%= submit_tag "Search", class: "btn btn-primary w-100 w-sm-auto", data: { turbo_submits_with: "Searching…" } %>
           <% if @query.present? %>
             <%= link_to "Clear", projects_path, class: "btn btn-outline-secondary w-100 w-sm-auto" %>
           <% end %>
@@ -43,7 +43,12 @@
       </div>
     </div>
   <% else %>
-    <div id="projects" class="vstack gap-3">
+    <div class="card shadow-sm border-0">
+      <div class="card-body p-4 p-lg-5 text-center">
+        <h2 class="h5 fw-semibold mb-2">No projects yet</h2>
+        <p class="text-body-secondary mb-4">Add a portfolio project to showcase your work in applications.</p>
+        <%= link_to "New Project", new_project_path, class: "btn btn-primary" %>
+      </div>
     </div>
   <% end %>
   <% if defined?(@pagy) && @pagy.pages > 1 %>

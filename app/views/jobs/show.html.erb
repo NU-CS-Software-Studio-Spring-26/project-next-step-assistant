@@ -57,6 +57,8 @@
         </dd>
       </dl>
 
+      <%= render "jobs/match_assistant", match: @job_match %>
+
       <section class="mt-4 pt-4 border-top" aria-labelledby="job-resume-section-heading">
         <h2 id="job-resume-section-heading" class="h6 text-body-secondary text-uppercase fw-semibold mb-3">Resume</h2>
         <%= form_with model: @job, class: "card bg-body-tertiary border-0" do |form| %>
@@ -76,7 +78,7 @@
                 <%= render "resume_select", form: form %>
               </div>
               <div class="col-sm-4">
-                <%= form.submit "Update resume", class: "btn btn-primary w-100" %>
+                <%= form.submit "Update resume", class: "btn btn-primary w-100", data: { turbo_submits_with: "Updating…" } %>
               </div>
             </div>
             <p class="small text-body-secondary mb-0 mt-2">

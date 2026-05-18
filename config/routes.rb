@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   get "/about", to: "pages#about", as: :about
   get "/privacy", to: "pages#privacy", as: :privacy
-  devise_for :users
+  devise_for :users, controllers: { omniauth_callbacks: "users/omniauth_callbacks" }
   root "home#index"
   resources :resumes, only: [ :index, :show, :new, :create, :edit, :update, :destroy ]
   resources :jobs do

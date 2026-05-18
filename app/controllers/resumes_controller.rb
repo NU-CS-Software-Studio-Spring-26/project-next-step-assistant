@@ -4,7 +4,8 @@ class ResumesController < ApplicationController
   before_action :set_resume, only: %i[show edit update destroy]
 
   def index
-    @resumes = current_user.resumes.with_attached_file.order(created_at: :desc)
+    resumes = current_user.resumes.with_attached_file.includes(:jobs).order(created_at: :desc)
+    @pagy, @resumes = pagy(resumes)
   end
 
   def show
@@ -55,10 +56,11 @@ class ResumesController < ApplicationController
   end
 
   def set_resume
+    scope = current_user.resumes.includes(:jobs)
     @resume = if nested_job_request?
-      current_user.resumes.where(job_id: @job.id).find(params.expect(:id))
+      scope.where(job_id: @job.id).find(params.expect(:id))
     else
-      current_user.resumes.find(params.expect(:id))
+      scope.find(params.expect(:id))
     end
   end
 

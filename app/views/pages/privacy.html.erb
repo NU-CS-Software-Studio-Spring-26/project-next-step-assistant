@@ -1,19 +1,56 @@
 <div class="container py-5">
-  <h1>Privacy Policy</h1>
+  <h1 class="mb-4">Privacy Policy</h1>
+
+  <p class="text-body-secondary small">Last updated: <%= Date.current.to_fs(:long) %></p>
 
   <p>
-    Next Step Assistant stores account information,
-    uploaded resumes, projects, and job application data
-    to provide organization and tracking functionality.
+    Next Step Assistant (“the app”) stores information you provide so you can manage job applications, projects, and resumes.
+    This policy describes what we collect, how it is used, and how you can request deletion.
   </p>
 
+  <h2 class="h4 mt-4">Data we collect</h2>
+  <ul>
+    <li><strong>Account information</strong> — Email address and a bcrypt-hashed password. If you use GitHub sign-in, we store your GitHub provider identifier and UID; we may also receive your GitHub email address to create or link your account.</li>
+    <li><strong>Job records</strong> — Titles, organizations, deadlines, dates, descriptions, application status, and optional links to uploaded resumes.</li>
+    <li><strong>Project records</strong> — Names, descriptions, skills, and GitHub links you enter.</li>
+    <li><strong>Usage of app features</strong> — Standard server and session data needed to operate the service (for example, session cookies for signed-in users).</li>
+  </ul>
+
+  <h2 class="h4 mt-4">Resume uploads</h2>
   <p>
-    User data is only used for application features
-    and is not sold to third parties.
+    Resume files are PDFs you upload voluntarily. They are stored using Rails Active Storage and associated with your account.
+    We validate file type and size at upload. Resume PDF content is not sent to external AI services; the in-app Match assistant only uses resume <em>names</em> and filenames for keyword comparison, not the full document text.
   </p>
 
+  <h2 class="h4 mt-4">User accounts</h2>
   <p>
-    Users may request deletion of their data by contacting
-    the development team.
+    You must sign in to access jobs, projects, and resumes. Data is private to your account; other users cannot view your entries.
+    We do not sell your personal information to third parties.
+  </p>
+
+  <h2 class="h4 mt-4">How we use data</h2>
+  <p>
+    Data is used solely to provide app functionality: displaying and editing your records, authentication, and the local Match assistant on job pages.
+    GitHub OAuth, when enabled, is used only for sign-in through GitHub’s authorization flow.
+  </p>
+
+  <h2 class="h4 mt-4">Hosting</h2>
+  <p>
+    The production app is hosted on Heroku. Data is stored in the application database and file storage configured for that environment.
+  </p>
+
+  <h2 class="h4 mt-4">Requesting deletion</h2>
+  <p>
+    To request deletion of your account and associated data (including uploaded resumes), contact the development team by opening an issue on our
+    <a href="https://github.com/NU-CS-Software-Studio-Spring-26/project-next-step-assistant/issues" target="_blank" rel="noopener">GitHub repository</a>
+    or emailing a team member listed in the course project roster. Include the email address tied to your account so we can verify ownership.
+  </p>
+  <p>
+    We will delete or anonymize your account data within a reasonable timeframe after confirming your request. Some backups may persist briefly according to the hosting provider’s retention policies.
+  </p>
+
+  <p class="text-body-secondary small mt-4 mb-0">
+    <%= link_to "About this app", about_path %> ·
+    <a href="https://github.com/NU-CS-Software-Studio-Spring-26/project-next-step-assistant" target="_blank" rel="noopener">GitHub</a>
   </p>
 </div>

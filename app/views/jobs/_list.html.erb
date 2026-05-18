@@ -1,0 +1,29 @@
+<% if @jobs.any? %>
+  <div id="jobs" class="vstack gap-3">
+    <% @jobs.each do |job| %>
+      <%= render job %>
+    <% end %>
+  </div>
+<% elsif @query.present? || @status.present? %>
+  <div class="card shadow-sm border-0">
+    <div class="card-body p-4 p-lg-5 text-center">
+      <h2 class="h5 fw-semibold mb-2">No matching jobs</h2>
+      <p class="text-body-secondary mb-4">Nothing matched your current search or status filter. <%= link_to "Clear all filters", jobs_path, class: "link-primary" %></p>
+      <%= link_to "View all jobs", jobs_path, class: "btn btn-outline-primary" %>
+    </div>
+  </div>
+<% else %>
+  <div class="card shadow-sm border-0">
+    <div class="card-body p-4 p-lg-5 text-center">
+      <h2 class="h5 fw-semibold mb-2">No jobs yet</h2>
+      <p class="text-body-secondary mb-4">Add your first opening to start tracking applications and deadlines.</p>
+      <%= link_to "Add a Job", new_job_path, class: "btn btn-primary" %>
+    </div>
+  </div>
+<% end %>
+
+<% if defined?(@pagy) && @pagy.pages > 1 %>
+  <div class="mt-4 d-flex justify-content-center">
+    <%== pagy_bootstrap_nav(@pagy) %>
+  </div>
+<% end %>

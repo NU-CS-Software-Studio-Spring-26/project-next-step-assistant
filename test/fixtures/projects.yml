@@ -13,3 +13,10 @@ two:
   github_link: https://github.com/example/two
   description: Second example project for tests.
   skills: Python, Django
+
+other_users:
+  user: two
+  name: Other User Private Project
+  github_link: https://github.com/example/private
+  description: Belongs to user two only.
+  skills: Go

@@ -4,77 +4,101 @@ Supplementary documentation for the Next Step Assistant project.
 
 ## Problem
 
-Students applying to internships and full-time roles juggle dozens of opportunities at once. Spreadsheets work but force you to maintain your own structure; full ATS-style products (Huntr, Teal) are heavy and built for established job seekers. Notes apps are too unstructured to surface what's due next.
+Students applying to internships and full-time roles juggle dozens of opportunities at once. Spreadsheets work but force you to maintain your own structure; full ATS-style products are heavy and built for established job seekers.
 
-Next Step Assistant is the lightweight middle ground: a structured list of jobs and projects with just enough fields to stay organized, sortable by deadline so you always know what's next.
+Next Step Assistant is a lightweight middle ground: structured jobs and projects, resume storage, a deadline dashboard, and simple keyword-based fit hints—without external AI services.
 
 ## Users
 
 - **Primary:** undergraduate students in technical majors searching for summer internships.
-- **Secondary:** seniors and recent grads searching for full-time roles, who also need a place to point recruiters to portfolio projects.
+- **Secondary:** seniors and recent grads who also need a place to reference portfolio projects during applications.
 
-## Design
+## Data model
 
-### Object-oriented design
+| Model   | Key fields | Notes |
+| ------- | ---------- | ----- |
+| User    | `email`, Devise auth, optional `provider` / `uid` (GitHub) | Owns all records below |
+| Job     | `title`, `organization_name`, `deadline`, `start_date`, `description`, `status`, `resume_id` | Status enum; belongs to user |
+| Project | `name`, `github_link`, `skills`, `description` | Belongs to user |
+| Resume  | `name`, PDF via Active Storage | Belongs to user; optional on jobs |
 
-### Data model
+Database constraints include length limits and allowed job status values. Cross-user access returns 404.
 
-Two independent ActiveRecord models, no associations in the MVP:
+## Authentication
 
-| Model   | Fields                                                                                  |
-| ------- | --------------------------------------------------------------------------------------- |
-| Job     | `title`, `organization_name`, `deadline`, `start_date`, `description`, `status`         |
-| Project | `name`, `github_link`, `skills`, `description`                                          |
+- **Email/password** via Devise (password complexity validation on sign-up and password change).
+- **GitHub OAuth** optional when `GITHUB_CLIENT_ID` and `GITHUB_CLIENT_SECRET` are set; links to existing accounts by email when possible.
+- All resource controllers require sign-in; data is scoped with `current_user`.
 
-`status` on Job is a string field constrained at the form level by a dropdown of standard application stages (`Saved`, `Applied`, `Interviewing`, `Offer`, `Accepted`, `Rejected`, `Withdrawn`).
+## UI overview
 
-`skills` on Project is a comma-separated string rendered as pill badges in the UI.
+- **Home (`/`)** — Hero, job deadline tracker with date filter and pagination.
+- **Jobs** — Index with search, status filter (Turbo Frame), pagination; show/edit with resume picker and Match assistant.
+- **Projects** — Index with search and pagination; standard CRUD.
+- **Resumes** — PDF library with upload validation; paginated index.
+- **About / Privacy** — Static pages linked from the footer.
 
-### UI
+## Pagination
 
-- Home page (`/`): hero + cards summarizing the two areas.
-- Jobs index (`/jobs`): card list ordered by deadline (nulls last), then most recently created.
-- Projects index (`/projects`): card list of portfolio projects.
-- Each entity has standard `new`, `edit`, and `show` views built on Bootstrap 5 cards and forms.
+[List pagination](https://ddnexus.github.io/pagy/) via **Pagy** (default 20 items per page) on jobs, projects, resumes, and the home deadline list.
+
+## Accessibility
+
+Documented improvements in `app/assets/stylesheets/app.css`:
+
+- Skip-to-main-content link; main landmark focus target
+- Visible `:focus-visible` rings on links, buttons, and form controls
+- Links distinguished by underline, not color alone
+- ARIA on navigation, alerts, filter regions, and decorative icons where applicable
+
+## Match assistant (local “AI-style” feature)
+
+`app/services/job_match_service.rb` compares job description keywords to project text/skills and resume metadata (names, filenames). Outputs overlap terms, gap terms, and High / Medium / Low compatibility. No OpenAI or external ML; no PDF text extraction.
+
+## JavaScript UX
+
+- Stimulus `flash_controller` — auto-dismiss alerts (pauses on hover/focus)
+- `data-turbo-submits-with` on forms for submit feedback
+- Turbo Frame on jobs index for filter/search without full page reload
+
+## PWA
+
+- Manifest: `app/views/pwa/manifest.json.erb`, linked in the layout
+- Service worker: `app/views/pwa/service-worker.js.erb`, registered on load
+- Installable on supported browsers; offline functionality is minimal
 
 ## Tech stack
 
 - Ruby on Rails 8.1
-- Bootstrap 5.3 (loaded via CDN in `app/assets/stylesheets/app.css`)
-- SQLite (development), PostgreSQL (production on Heroku)
-- Hotwire (Turbo + Stimulus)
-- Importmap for JavaScript
-- Minitest + GitHub Actions for CI
-
-## Out of scope for MVP (future features)
-
-- User accounts and authentication — multi-user with private data per account.
-- Linking projects to specific job applications (many-to-many).
-- File attachments (resume versions, cover letters per application).
-- Calendar integration / deadline reminders via email.
-- Status-change history and analytics ("how many days at each stage").
-- Tags and full-text search across jobs and projects.
-- Public profile / sharable portfolio view of projects for recruiters.
-- Browser extension to clip job postings into the tracker.
-- Mobile-friendly PWA install flow (the manifest is scaffolded but disabled).
-
-## Similar products and inspiration
-
-- [Huntr](https://huntr.co) — visual board-based job tracker, freemium.
-- [Teal](https://www.tealhq.com) — job tracker + resume builder.
-- [Simplify](https://simplify.jobs) — autofill applications and tracker.
-- Generic spreadsheets — the baseline this product competes with.
-
-The differentiator is simplicity and the dual focus on portfolio projects, which the others largely ignore.
+- Bootstrap 5.3 (CDN in `app.css`)
+- SQLite (development), PostgreSQL (Heroku production)
+- Hotwire, Importmap, Active Storage, Pagy, Devise, OmniAuth GitHub
+- Minitest + GitHub Actions
 
 ## Project structure highlights
 
-- `app/controllers/jobs_controller.rb`, `app/controllers/projects_controller.rb` — standard Rails resource controllers.
-- `app/views/jobs/`, `app/views/projects/` — Bootstrap-card-styled CRUD views.
-- `app/helpers/jobs_helper.rb` — `JOB_STATUSES` constant and `job_status_badge_class` helper for status pill colors.
-- `app/assets/stylesheets/app.css` — custom home-page styling and Bootstrap import.
-- `db/seeds.rb` — 12 sample jobs and 10 sample projects for demos.
-- `.github/workflows/ci.yml` — CI pipeline (Brakeman, RuboCop, Minitest, system tests).
+- `app/controllers/` — `jobs`, `projects`, `resumes`, `home`, `pages`, Devise/OmniAuth callbacks
+- `app/services/job_match_service.rb` — keyword match logic
+- `app/javascript/controllers/` — Stimulus (e.g. flash)
+- `app/helpers/jobs_helper.rb` — status and match-level badges
+- `db/seeds.rb` — demo users, jobs, projects, resumes
+- `.github/workflows/ci.yml` — CI (Brakeman, RuboCop, tests)
+
+## Still out of scope / future
+
+- Parsing resume PDF body text for matching
+- Email deadline reminders or calendar sync
+- Status-change history and analytics dashboards
+- Public recruiter-facing portfolio pages
+- Browser extension to clip job postings
+- Many-to-many links between projects and specific applications
+
+## Similar products
+
+- [Huntr](https://huntr.co), [Teal](https://www.tealhq.com), [Simplify](https://simplify.jobs) — fuller-featured trackers and autofill
+- Spreadsheets — baseline competitor
+
+Differentiator: simplicity, portfolio + resume focus, and private per-user data without heavyweight ATS features.
 
 ## Repository
 

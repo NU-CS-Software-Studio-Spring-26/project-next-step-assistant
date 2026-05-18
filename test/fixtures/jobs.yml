@@ -17,3 +17,12 @@ two:
   start_date: 2026-07-01
   description: Second example job for tests.
   status: saved
+
+other_users:
+  user: two
+  title: Other User Private Job
+  organization_name: Private Corp
+  deadline: 2026-06-01
+  start_date: 2026-08-01
+  description: Belongs to user two only.
+  status: saved

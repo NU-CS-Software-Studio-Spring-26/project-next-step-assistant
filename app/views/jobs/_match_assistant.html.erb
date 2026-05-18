@@ -1,0 +1,81 @@
+<%# locals: (match:) %>
+<section class="mt-4 pt-4 border-top" aria-labelledby="job-match-assistant-heading">
+  <h2 id="job-match-assistant-heading" class="h6 text-body-secondary text-uppercase fw-semibold mb-3">Match assistant</h2>
+  <p class="small text-body-secondary mb-3">
+    Local keyword comparison between this job and your project descriptions, skills, and resume names.
+    Not a substitute for reading the full posting.
+  </p>
+
+  <div class="card bg-body-tertiary border-0">
+    <div class="card-body p-3 p-lg-4">
+      <% case match.state %>
+      <% when :no_job_description, :no_portfolio_data, :no_keywords %>
+        <p class="mb-0"><%= match.message %></p>
+        <% if match.state == :no_job_description %>
+          <p class="small text-body-secondary mb-0 mt-2">
+            <%= link_to "Edit this job", edit_job_path(@job), class: "link-primary" %> to add a description.
+          </p>
+        <% elsif match.state == :no_portfolio_data %>
+          <p class="small text-body-secondary mb-0 mt-2">
+            <%= link_to "Add a project", new_project_path, class: "link-primary" %>
+            or <%= link_to "upload a resume", new_resume_path, class: "link-primary" %>.
+          </p>
+        <% end %>
+      <% when :ready %>
+        <div class="d-flex flex-column flex-sm-row align-items-start align-items-sm-center gap-2 mb-3">
+          <span class="text-body-secondary small text-uppercase fw-semibold">Compatibility</span>
+          <span class="badge rounded-pill <%= job_match_level_badge_class(match.match_level) %>">
+            <%= job_match_level_label(match.match_level) %>
+          </span>
+        </div>
+
+        <p class="mb-3"><%= match.message %></p>
+
+        <% if match.overlap_keywords.any? %>
+          <h3 class="h6 fw-semibold mb-2">Matching keywords</h3>
+          <ul class="list-inline mb-3" aria-label="Keywords found in your portfolio">
+            <% match.overlap_keywords.each do |keyword| %>
+              <li class="list-inline-item mb-1">
+                <span class="badge text-bg-success"><%= keyword %></span>
+              </li>
+            <% end %>
+          </ul>
+        <% end %>
+
+        <% if match.missing_keywords.any? %>
+          <h3 class="h6 fw-semibold mb-2">Possible gaps</h3>
+          <ul class="list-inline mb-3" aria-label="Job keywords not found in your portfolio">
+            <% match.missing_keywords.each do |keyword| %>
+              <li class="list-inline-item mb-1">
+                <span class="badge text-bg-warning"><%= keyword %></span>
+              </li>
+            <% end %>
+          </ul>
+          <p class="small text-body-secondary mb-0">
+            These terms appear in the job description but not in your project or resume metadata. Consider emphasizing them if they apply to you.
+          </p>
+        <% end %>
+
+        <% if @job.resume.present? %>
+          <div class="mt-3 pt-3 border-top">
+            <h3 class="h6 fw-semibold mb-2">Selected resume</h3>
+            <% if match.selected_resume_overlap.any? %>
+              <p class="small mb-2">Keywords from this job that match <strong><%= @job.resume.name %></strong>:</p>
+              <ul class="list-inline mb-0" aria-label="Keywords matching selected resume">
+                <% match.selected_resume_overlap.each do |keyword| %>
+                  <li class="list-inline-item mb-1">
+                    <span class="badge text-bg-info"><%= keyword %></span>
+                  </li>
+                <% end %>
+              </ul>
+            <% else %>
+              <p class="small text-body-secondary mb-0">
+                No keyword overlap with <strong><%= @job.resume.name %></strong> yet. Try a resume name that reflects technologies in the posting, or pick a different resume below.
+              </p>
+            <% end %>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+</section>

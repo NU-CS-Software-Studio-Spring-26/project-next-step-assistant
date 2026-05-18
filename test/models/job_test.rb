@@ -3,7 +3,8 @@ require "test_helper"
 class JobTest < ActiveSupport::TestCase
   def valid_attrs(overrides = {})
     {
-      title: "Software Engineer Intern",
+      user: users(:one),
+      title: "Unique Validation Test Job",
       organization_name: "Acme Corp",
       status: "applied",
       # required deadline for validation tests

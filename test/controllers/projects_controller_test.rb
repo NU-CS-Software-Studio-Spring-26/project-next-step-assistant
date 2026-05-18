@@ -53,4 +53,28 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
 
     assert_redirected_to projects_url
   end
+
+  test "cannot show another users project" do
+    get project_url(projects(:other_users))
+    assert_response :not_found
+  end
+
+  test "cannot edit another users project" do
+    get edit_project_url(projects(:other_users))
+    assert_response :not_found
+  end
+
+  test "cannot update another users project" do
+    other = projects(:other_users)
+    patch project_url(other), params: { project: { name: "Hijacked" } }
+    assert_response :not_found
+    assert_equal "Other User Private Project", other.reload.name
+  end
+
+  test "cannot destroy another users project" do
+    assert_no_difference("Project.count") do
+      delete project_url(projects(:other_users))
+    end
+    assert_response :not_found
+  end
 end

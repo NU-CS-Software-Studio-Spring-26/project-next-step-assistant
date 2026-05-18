@@ -1,13 +1,45 @@
 <div class="container py-5">
-  <h1>About Next Step Assistant</h1>
+  <h1 class="mb-4">About Next Step Assistant</h1>
 
-  <p>
-    Next Step Assistant helps students and job seekers organize
-    applications, resumes, projects, and deadlines in one place.
+  <p class="lead">
+    Next Step Assistant helps students and job seekers organize applications, deadlines, portfolio projects, and resumes in one place.
   </p>
 
+  <h2 class="h4 mt-4">What you can do today</h2>
+  <ul>
+    <li><strong>Jobs</strong> — Track title, organization, deadline, start date, description, and application status. Search and filter by status, paginate long lists, and attach a resume to each job.</li>
+    <li><strong>Projects</strong> — Store portfolio work with name, GitHub link, skills, and description. Search and paginate your project library.</li>
+    <li><strong>Resumes</strong> — Upload PDF resumes (validated type and size), manage a personal library, and link resumes to jobs.</li>
+    <li><strong>Home dashboard</strong> — See upcoming job and project deadlines in one list, with optional date-range filtering.</li>
+  </ul>
+
+  <h2 class="h4 mt-4">Accounts and sign-in</h2>
   <p>
-    The platform is designed to simplify the application process
-    with tracking tools and AI-powered resume support.
+    Each user has a private account. Sign up or log in with email and password (minimum length and complexity rules apply).
+    GitHub sign-in is available when the app is configured with GitHub OAuth credentials; otherwise use email registration.
+    All job, project, and resume data is scoped to the signed-in user.
+  </p>
+
+  <h2 class="h4 mt-4">Accessibility</h2>
+  <p>
+    We have applied targeted WCAG-oriented improvements, including a skip-to-main-content link, visible keyboard focus styles on interactive elements, underlined links (not color-only), and appropriate ARIA labels on navigation and dynamic regions.
+    Flash messages can be dismissed manually and auto-hide after a short delay; the timer pauses while you hover or focus the alert.
+  </p>
+
+  <h2 class="h4 mt-4">Match assistant (local analysis)</h2>
+  <p>
+    On each job’s detail page, a <strong>Match assistant</strong> compares the job description to your project text, skills, and resume names using simple keyword overlap—entirely in Ruby, with no external AI APIs.
+    It highlights matching terms, possible gaps, and a High / Medium / Low compatibility label.
+    It is a planning aid, not a guarantee of fit; always review the full posting yourself.
+  </p>
+
+  <h2 class="h4 mt-4">Installable web app</h2>
+  <p>
+    The site includes a web app manifest and a minimal service worker so supported browsers can install Next Step Assistant to your home screen. Offline use is limited; core features require a network connection.
+  </p>
+
+  <p class="text-body-secondary small mt-4 mb-0">
+    Questions or feedback? See the <%= link_to "Privacy", privacy_path %> page for data practices, or visit our
+    <a href="https://github.com/NU-CS-Software-Studio-Spring-26/project-next-step-assistant" target="_blank" rel="noopener">GitHub repository</a>.
   </p>
 </div>

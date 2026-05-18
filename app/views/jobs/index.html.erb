@@ -16,70 +16,44 @@
     </div>
   </header>
 
-  <div class="mb-4">
-    <%= form_with url: jobs_path, method: :get, class: "row g-2 g-sm-3 align-items-end" do %>
-      <% if @status.present? %>
-        <%= hidden_field_tag :status, @status %>
-      <% end %>
-      <div class="col-12 col-sm">
-        <label for="jobs_search_query" class="form-label small text-body-secondary mb-1">Search</label>
-        <%= text_field_tag :query, params[:query], class: "form-control", id: "jobs_search_query", placeholder: "Title or organization…", autocomplete: "off", maxlength: JobsController::SEARCH_QUERY_MAX_LENGTH %>
-      </div>
-      <div class="col-12 col-sm-auto">
-        <label class="form-label small text-body-secondary mb-1 d-none d-sm-block">&nbsp;</label>
-        <div class="d-flex flex-wrap gap-2">
-          <%= submit_tag "Search", class: "btn btn-primary w-100 w-sm-auto" %>
-          <% if @query.present? %>
-            <%= link_to "Clear", jobs_path, class: "btn btn-outline-secondary w-100 w-sm-auto" %>
-          <% end %>
+  <%= turbo_frame_tag "jobs_list", aria: { label: "Job search and results" } do %>
+    <div class="mb-4">
+      <%= form_with url: jobs_path, method: :get, class: "row g-2 g-sm-3 align-items-end", data: { turbo_action: "advance" } do %>
+        <% if @status.present? %>
+          <%= hidden_field_tag :status, @status %>
+        <% end %>
+        <div class="col-12 col-sm">
+          <label for="jobs_search_query" class="form-label small text-body-secondary mb-1">Search</label>
+          <%= text_field_tag :query, params[:query], class: "form-control", id: "jobs_search_query", placeholder: "Title or organization…", autocomplete: "off", maxlength: JobsController::SEARCH_QUERY_MAX_LENGTH %>
         </div>
-      </div>
-    <% end %>
-  </div>
-
-  <% status_options = %w[Saved Applied Interviewing Offer Accepted Rejected Withdrawn] %>
-  <% jobs_filter_path = lambda do |status: nil|
-       p = {}
-       p[:query] = @query if @query.present?
-       p[:status] = status if status.present?
-       jobs_path(p)
-     end %>
-  <div class="mb-4">
-    <h2 class="h6 small text-body-secondary mb-2">Status</h2>
-    <nav class="d-flex flex-wrap gap-2 align-items-center" aria-label="Filter jobs by status">
-      <%= link_to "All", jobs_filter_path.call, class: "btn btn-sm #{@status.blank? ? "btn-primary" : "btn-outline-primary"}" %>
-      <% status_options.each do |st| %>
-        <%= link_to st, jobs_filter_path.call(status: st), class: "btn btn-sm #{@status == st ? "btn-primary" : "btn-outline-primary"}" %>
-      <% end %>
-    </nav>
-  </div>
-
-  <% if @jobs.any? %>
-    <div id="jobs" class="vstack gap-3">
-      <% @jobs.each do |job| %>
-        <%= render job %>
+        <div class="col-12 col-sm-auto">
+          <label class="form-label small text-body-secondary mb-1 d-none d-sm-block">&nbsp;</label>
+          <div class="d-flex flex-wrap gap-2">
+            <%= submit_tag "Search", class: "btn btn-primary w-100 w-sm-auto", data: { turbo_submits_with: "Searching…" } %>
+            <% if @query.present? %>
+              <%= link_to "Clear", jobs_path(status: @status.presence), class: "btn btn-outline-secondary w-100 w-sm-auto" %>
+            <% end %>
+          </div>
+        </div>
       <% end %>
     </div>
-  <% elsif @query.present? || @status.present? %>
-    <div class="card shadow-sm border-0">
-      <div class="card-body p-4 p-lg-5 text-center">
-        <h2 class="h5 fw-semibold mb-2">No matching jobs</h2>
-        <p class="text-body-secondary mb-4">Nothing matched your current search or status filter. <%= link_to "Clear all filters", jobs_path, class: "link-primary" %>.</p>
-        <%= link_to "View all jobs", jobs_path, class: "btn btn-outline-primary" %>
-      </div>
+
+    <% jobs_filter_path = lambda do |status: nil|
+         p = {}
+         p[:query] = @query if @query.present?
+         p[:status] = status if status.present?
+         jobs_path(p)
+       end %>
+    <div class="mb-4">
+      <h2 class="h6 small text-body-secondary mb-2">Status</h2>
+      <nav class="d-flex flex-wrap gap-2 align-items-center" aria-label="Filter jobs by status">
+        <%= link_to "All", jobs_filter_path.call, class: "btn btn-sm #{@status.blank? ? "btn-primary" : "btn-outline-primary"}", **(@status.blank? ? { aria: { current: "page" } } : {}), data: { turbo_action: "advance" } %>
+        <% Job.statuses.each_key do |status_key| %>
+          <%= link_to job_status_label(status_key), jobs_filter_path.call(status: status_key), class: "btn btn-sm #{@status == status_key.to_s ? "btn-primary" : "btn-outline-primary"}", **(@status == status_key.to_s ? { aria: { current: "page" } } : {}), data: { turbo_action: "advance" } %>
+        <% end %>
+      </nav>
     </div>
-  <% else %>
-    <div class="card shadow-sm border-0">
-      <div class="card-body p-4 p-lg-5 text-center">
-        <h2 class="h5 fw-semibold mb-2">No jobs yet</h2>
-        <p class="text-body-secondary mb-4">Add your first opening to start tracking applications and deadlines.</p>
-        <%= link_to "Add a Job", new_job_path, class: "btn btn-primary" %>
-      </div>
-    </div>
-  <% end %>
-  <% if defined?(@pagy) && @pagy.pages > 1 %>
-    <div class="mt-4 d-flex justify-content-center">
-      <%== pagy_bootstrap_nav(@pagy) %>
-    </div>
+
+    <%= render "jobs/list" %>
   <% end %>
 </div>

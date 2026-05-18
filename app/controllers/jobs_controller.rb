@@ -3,11 +3,12 @@ class JobsController < ApplicationController
 
   before_action :authenticate_user!
   before_action :set_job, only: %i[ show edit update destroy ]
+  before_action :set_job_match, only: %i[ show update ]
 
   # GET /jobs or /jobs.json
   def index
     @query = params[:query].to_s.strip.first(SEARCH_QUERY_MAX_LENGTH)
-    @status = params[:status]
+    @status = normalize_status_filter(params[:status])
     @jobs = current_user.jobs.order(deadline: :asc)
 
     if @query.present?
@@ -79,14 +80,38 @@ class JobsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_job
-      @job = current_user.jobs.find(params.expect(:id))
+      scope = current_user.jobs
+      if action_name.in?(%w[show update])
+        scope = scope.includes(resume: { file_attachment: :blob })
+      end
+      @job = scope.find(params.expect(:id))
+    end
+
+    def normalize_status_filter(raw)
+      return nil if raw.blank?
+
+      key = raw.to_s.strip.downcase
+      Job.statuses[key] ? key : nil
+    end
+
+    def set_job_match
+      return unless @job
+
+      @job_match = JobMatchService.new(
+        @job,
+        projects: current_user.projects,
+        resumes: current_user.resumes.includes(file_attachment: :blob)
+      ).call
     end
 
     # Only allow a list of trusted parameters through.
     def job_params
       permitted = params.expect(job: [ :title, :organization_name, :deadline, :start_date, :description, :status, :resume_id ])
+      if permitted[:status].present? && !Job.statuses.value?(permitted[:status].to_s)
+        permitted.delete(:status)
+      end
       if permitted[:resume_id].present?
-        rid = permitted[:resume_id].to_i
+        rid = permitted[:resume_id].to_s.to_i
         permitted[:resume_id] = current_user.resumes.exists?(rid) ? rid : nil
       end
       permitted

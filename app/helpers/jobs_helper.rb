@@ -7,6 +7,24 @@ module JobsHelper
     status.to_s.titleize
   end
 
+  def job_match_level_label(level)
+    case level.to_s
+    when "high" then "High"
+    when "medium" then "Medium"
+    when "low" then "Low"
+    else "Unknown"
+    end
+  end
+
+  def job_match_level_badge_class(level)
+    case level.to_s
+    when "high" then "text-bg-success"
+    when "medium" then "text-bg-warning"
+    when "low" then "text-bg-secondary"
+    else "text-bg-light border"
+    end
+  end
+
   def job_status_badge_class(status)
     case status.to_s.strip.downcase
     when "saved"        then "text-bg-secondary"

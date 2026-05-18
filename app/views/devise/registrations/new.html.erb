@@ -4,6 +4,8 @@
     <h1 class="auth-heading">Create your account</h1>
     <p class="auth-sub">Track applications, deadlines, and projects in one place.</p>
 
+    <%= render "devise/shared/github_oauth_button", label: "Sign up with GitHub" %>
+
     <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
       <% if resource.errors.any? %>
         <div class="auth-errors">
@@ -32,7 +34,7 @@
         <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "auth-input", maxlength: User::PASSWORD_MAX_LENGTH %>
       </div>
 
-      <%= f.submit "Sign up", class: "auth-btn" %>
+      <%= f.submit "Sign up", class: "auth-btn", data: { turbo_submits_with: "Creating account…" } %>
     <% end %>
 
     <div class="auth-links">

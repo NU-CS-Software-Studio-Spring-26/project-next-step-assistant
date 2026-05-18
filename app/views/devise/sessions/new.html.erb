@@ -4,6 +4,8 @@
     <h1 class="auth-heading">Welcome back</h1>
     <p class="auth-sub">Sign in to your account to continue.</p>
 
+    <%= render "devise/shared/github_oauth_button", label: "Sign in with GitHub" %>
+
     <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
       <div class="auth-field">
         <%= f.label :email, class: "auth-label" %>
@@ -22,7 +24,7 @@
         </div>
       <% end %>
 
-      <%= f.submit "Log in", class: "auth-btn" %>
+      <%= f.submit "Log in", class: "auth-btn", data: { turbo_submits_with: "Signing in…" } %>
     <% end %>
 
     <div class="auth-links">

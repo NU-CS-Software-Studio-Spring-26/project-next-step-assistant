@@ -12,7 +12,7 @@ class Job < ApplicationRecord
     bastard
   ].freeze
 
-  belongs_to :user, optional: true
+  belongs_to :user
   belongs_to :resume, optional: true
   STATUSES = {
     saved: "saved",

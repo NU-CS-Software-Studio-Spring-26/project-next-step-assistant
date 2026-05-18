@@ -11,7 +11,7 @@
       <h1 class="h3 fw-semibold mb-3"><%= @resume.name %></h1>
 
       <p class="text-body-secondary mb-4">
-        Used by <%= pluralize(@resume.jobs.count, "job") %>
+        Used by <%= pluralize(@resume.jobs.size, "job") %>
       </p>
 
       <dl class="row mb-4 gy-3">

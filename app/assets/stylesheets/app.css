@@ -480,6 +480,61 @@ a:not([class]):focus-visible {
 	margin: 0 0.5rem;
 }
 
+.auth-oauth {
+	margin-bottom: 0;
+}
+
+.auth-oauth form {
+	margin: 0;
+}
+
+.auth-btn-github {
+	width: 100%;
+	padding: 0.75rem;
+	background: #fff;
+	color: #1f2430;
+	border: 2px solid #1a202c;
+	border-radius: 999px;
+	font-family: inherit;
+	font-size: 1rem;
+	font-weight: 600;
+	cursor: pointer;
+	transition: background-color 180ms ease, border-color 180ms ease, transform 180ms ease, outline 180ms ease;
+	margin-bottom: 1.2rem;
+}
+
+.auth-btn-github:hover {
+	background: #f5f1e8;
+	border-color: #0d1117;
+	transform: translateY(-1px);
+}
+
+.auth-btn-github:focus-visible {
+	outline: var(--focus-ring-width) solid var(--focus-ring-color);
+	outline-offset: var(--focus-ring-offset);
+}
+
+.auth-divider-row {
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+	margin: 0 0 1.2rem;
+	font-size: 0.85rem;
+	color: var(--home-muted);
+}
+
+.auth-divider-row::before,
+.auth-divider-row::after {
+	content: "";
+	flex: 1;
+	height: 1px;
+	background: var(--home-border);
+}
+
+.auth-divider-row span {
+	white-space: nowrap;
+}
+
 /* Darker primary buttons for AAA contrast (white-on-bg well above 7:1) */
 .btn-primary {
 	--bs-btn-bg: #07358a;
@@ -817,4 +872,21 @@ main:focus {
 .footer-nav a:focus-visible {
 	outline: var(--focus-ring-width) solid var(--focus-ring-color-contrast);
 	outline-offset: var(--focus-ring-offset);
+}
+
+/* Turbo frame loading feedback (jobs filter/search) */
+turbo-frame#jobs_list[busy] {
+	opacity: 0.65;
+	transition: opacity 150ms ease;
+}
+
+turbo-frame#jobs_list[busy] .btn,
+turbo-frame#jobs_list[busy] .form-control {
+	pointer-events: none;
+}
+
+/* Turbo disables submit buttons while submitting; keep focus ring visible */
+button[type="submit"][disabled],
+input[type="submit"][disabled] {
+	cursor: wait;
 }

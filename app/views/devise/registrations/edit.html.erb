@@ -38,7 +38,7 @@
         <p class="auth-hint">Required to confirm changes to your account.</p>
       </div>
 
-      <%= f.submit "Update account", class: "auth-btn" %>
+      <%= f.submit "Update account", class: "auth-btn", data: { turbo_submits_with: "Updating…" } %>
     <% end %>
 
     <div class="auth-links">

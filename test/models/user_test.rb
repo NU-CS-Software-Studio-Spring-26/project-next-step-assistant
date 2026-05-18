@@ -72,4 +72,59 @@ class UserTest < ActiveSupport::TestCase
     assert_not user.valid?
     assert user.errors[:password].any?
   end
+
+  test "from_omniauth returns existing user by provider and uid" do
+    user = users(:one)
+    user.update!(provider: "github", uid: "gh-123")
+
+    auth = OmniAuth::AuthHash.new(
+      provider: "github",
+      uid: "gh-123",
+      info: OmniAuth::AuthHash::InfoHash.new(email: user.email)
+    )
+
+    assert_equal user, User.from_omniauth(auth)
+  end
+
+  test "from_omniauth links existing email account to github" do
+    user = users(:one)
+    assert_nil user.provider
+
+    auth = OmniAuth::AuthHash.new(
+      provider: "github",
+      uid: "gh-456",
+      info: OmniAuth::AuthHash::InfoHash.new(email: user.email)
+    )
+
+    linked = User.from_omniauth(auth)
+    assert_equal user.id, linked.id
+    assert_equal "github", linked.provider
+    assert_equal "gh-456", linked.uid
+  end
+
+  test "from_omniauth creates new user when email is new" do
+    auth = OmniAuth::AuthHash.new(
+      provider: "github",
+      uid: "gh-789",
+      info: OmniAuth::AuthHash::InfoHash.new(email: "github-new@example.com")
+    )
+
+    assert_difference("User.count", 1) do
+      user = User.from_omniauth(auth)
+      assert user.persisted?
+      assert_equal "github", user.provider
+    end
+  end
+
+  test "from_omniauth errors when github does not return email" do
+    auth = OmniAuth::AuthHash.new(
+      provider: "github",
+      uid: "gh-no-email",
+      info: OmniAuth::AuthHash::InfoHash.new(email: nil)
+    )
+
+    user = User.from_omniauth(auth)
+    assert_not user.persisted?
+    assert_includes user.errors[:email].join, "GitHub"
+  end
 end
