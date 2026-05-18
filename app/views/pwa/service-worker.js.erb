@@ -1,0 +1,15 @@
+// Minimal service worker for PWA install support.
+// This does not add offline caching yet, but it allows the browser to register
+// a service worker for installability checks.
+
+self.addEventListener("install", (event) => {
+  self.skipWaiting();
+});
+
+self.addEventListener("activate", (event) => {
+  event.waitUntil(clients.claim());
+});
+
+self.addEventListener("fetch", (event) => {
+  event.respondWith(fetch(event.request));
+});
