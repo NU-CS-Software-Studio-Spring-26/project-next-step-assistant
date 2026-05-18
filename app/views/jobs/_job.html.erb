@@ -8,7 +8,9 @@
         <% end %>
       </div>
       <% if job.status.present? %>
-        <span class="badge rounded-pill <%= job_status_badge_class(job.status) %>"><%= job_status_label(job.status) %></span>
+        <span class="badge rounded-pill <%= job_status_badge_class(job.status) %>">
+          <i class="bi <%= job_status_icon(job.status) %> me-1" aria-hidden="true"></i><%= job_status_label(job.status) %>
+        </span>
       <% end %>
     </div>
 

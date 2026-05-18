@@ -37,4 +37,17 @@ module JobsHelper
     else                     "text-bg-light border"
     end
   end
+
+  def job_status_icon(status)
+    case status.to_s.strip.downcase
+    when "saved"        then "bi-bookmark"
+    when "applied"      then "bi-send"
+    when "interviewing" then "bi-people"
+    when "offer"        then "bi-envelope-paper"
+    when "accepted"     then "bi-check-circle"
+    when "rejected"     then "bi-x-circle"
+    when "withdrawn"    then "bi-slash-circle"
+    else                     "bi-circle"
+    end
+  end
 end

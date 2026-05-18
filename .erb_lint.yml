@@ -1,0 +1,27 @@
+---
+EnableDefaultLinters: false
+
+linters:
+  ParserErrors:
+    enabled: true
+
+  FinalNewline:
+    enabled: true
+    present: true
+
+  SpaceAroundErbTag:
+    enabled: true
+
+  TrailingWhitespace:
+    enabled: true
+
+  ErbSafety:
+    enabled: true
+
+exclude:
+  - 'app/views/devise/**/*'
+  - 'app/views/pwa/**/*'
+  - 'app/views/layouts/mailer.*.erb'
+  - 'tmp/**/*'
+  - 'vendor/**/*'
+  - 'db/**/*'

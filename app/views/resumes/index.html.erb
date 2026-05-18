@@ -6,7 +6,9 @@
       <h1 class="h2 mb-1 fw-semibold">Resume Library</h1>
       <p class="text-body-secondary mb-0 small">Upload once, reuse across multiple jobs.</p>
     </div>
-    <%= link_to "Upload Resume", new_resume_path, class: "btn btn-primary" %>
+    <%= link_to new_resume_path, class: "btn btn-primary" do %>
+      <i class="bi bi-cloud-upload me-1" aria-hidden="true"></i>Upload Resume
+    <% end %>
   </header>
 
   <% if @resumes.any? %>
@@ -36,13 +38,13 @@
       <% end %>
     </ul>
   <% else %>
-    <div class="card shadow-sm border-0">
-      <div class="card-body p-4 p-lg-5 text-center">
-        <h2 class="h5 fw-semibold mb-2">No resumes uploaded yet</h2>
-        <p class="text-body-secondary mb-4">Upload a PDF resume to start using the reusable library.</p>
-        <%= link_to "Upload Resume", new_resume_path, class: "btn btn-primary" %>
-      </div>
-    </div>
+    <%= render "shared/empty_state",
+        icon: "bi-file-earmark-text",
+        heading: "No resumes uploaded yet",
+        body: "Upload a PDF resume to start using the reusable library.",
+        cta_text: "Upload Resume",
+        cta_path: new_resume_path,
+        cta_icon: "bi-cloud-upload" %>
   <% end %>
   <% if defined?(@pagy) && @pagy.pages > 1 %>
     <div class="mt-4 d-flex justify-content-center">

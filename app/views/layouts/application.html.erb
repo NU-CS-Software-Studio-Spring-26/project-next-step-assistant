@@ -19,6 +19,10 @@
     <link rel="icon" href="/icon-192.png" type="image/png">
     <link rel="apple-touch-icon" href="/icon-192.png">
 
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
     <%# Includes all stylesheet files in app/assets/stylesheets %>
     <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
@@ -56,35 +60,42 @@
           <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-lg-center">
 
             <li class="nav-item">
-              <%= link_to "Jobs", jobs_path, class: "nav-link" %>
+              <%= link_to jobs_path, class: "nav-link" do %>
+                <i class="bi bi-briefcase me-1" aria-hidden="true"></i>Jobs
+              <% end %>
             </li>
 
             <li class="nav-item">
-              <%= link_to "Projects", projects_path, class: "nav-link" %>
+              <%= link_to projects_path, class: "nav-link" do %>
+                <i class="bi bi-kanban me-1" aria-hidden="true"></i>Projects
+              <% end %>
             </li>
 
             <li class="nav-item">
-              <%= link_to "Resumes", resumes_path, class: "nav-link" %>
+              <%= link_to resumes_path, class: "nav-link" do %>
+                <i class="bi bi-file-earmark-text me-1" aria-hidden="true"></i>Resumes
+              <% end %>
             </li>
 
             <% if user_signed_in? %>
               <li class="nav-item">
-                <%= button_to "Log out",
-                    destroy_user_session_path,
+                <%= button_to destroy_user_session_path,
                     method: :delete,
-                    class: "btn btn-link nav-link" %>
+                    class: "btn btn-link nav-link" do %>
+                  <i class="bi bi-box-arrow-right me-1" aria-hidden="true"></i>Log out
+                <% end %>
               </li>
             <% else %>
               <li class="nav-item">
-                <%= link_to "Log in",
-                    new_user_session_path,
-                    class: "nav-link" %>
+                <%= link_to new_user_session_path, class: "nav-link" do %>
+                  <i class="bi bi-box-arrow-in-right me-1" aria-hidden="true"></i>Log in
+                <% end %>
               </li>
 
               <li class="nav-item">
-                <%= link_to "Sign up",
-                    new_user_registration_path,
-                    class: "nav-link" %>
+                <%= link_to new_user_registration_path, class: "nav-link" do %>
+                  <i class="bi bi-person-plus me-1" aria-hidden="true"></i>Sign up
+                <% end %>
               </li>
             <% end %>
 

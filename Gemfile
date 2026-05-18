@@ -60,6 +60,9 @@ group :development, :test do
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
 
+  # Lint ERB templates for style/safety issues
+  gem "erb_lint", require: false
+
   # Use SQLite for tests (no external database needed)
   gem "sqlite3", ">= 2.1"
 end

@@ -890,3 +890,52 @@ button[type="submit"][disabled],
 input[type="submit"][disabled] {
 	cursor: wait;
 }
+
+/* === Empty state component === */
+.empty-state {
+	border-radius: 18px;
+	background: linear-gradient(160deg, #fffaf2 0%, #f8efdc 100%);
+	border: 1px solid var(--home-border, #e8dcc8);
+}
+
+.empty-state__icon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 88px;
+	height: 88px;
+	margin-inline: auto;
+	border-radius: 50%;
+	background: rgba(13, 83, 80, 0.08);
+	color: #0a5855;
+}
+
+.empty-state__icon i {
+	font-size: 2.5rem;
+	line-height: 1;
+}
+
+.empty-state__body {
+	color: #2d3740;
+	max-width: 46ch;
+	margin-inline: auto;
+}
+
+/* === Live character counter === */
+.char-counter {
+	display: block;
+	margin-top: 0.35rem;
+	font-size: 0.8rem;
+	color: #2d3740;
+	font-variant-numeric: tabular-nums;
+}
+
+.char-counter--warning {
+	color: #8a4b00;
+	font-weight: 600;
+}
+
+.char-counter--danger {
+	color: #842029;
+	font-weight: 700;
+}

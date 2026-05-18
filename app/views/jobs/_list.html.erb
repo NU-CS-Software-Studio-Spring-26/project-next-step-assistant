@@ -5,21 +5,21 @@
     <% end %>
   </div>
 <% elsif @query.present? || @status.present? %>
-  <div class="card shadow-sm border-0">
-    <div class="card-body p-4 p-lg-5 text-center">
-      <h2 class="h5 fw-semibold mb-2">No matching jobs</h2>
-      <p class="text-body-secondary mb-4">Nothing matched your current search or status filter. <%= link_to "Clear all filters", jobs_path, class: "link-primary" %></p>
-      <%= link_to "View all jobs", jobs_path, class: "btn btn-outline-primary" %>
-    </div>
-  </div>
+  <%= render "shared/empty_state",
+      icon: "bi-search",
+      heading: "No matching jobs",
+      body: "Nothing matched your current search or status filter.",
+      cta_text: "Clear all filters",
+      cta_path: jobs_path,
+      cta_icon: "bi-arrow-counterclockwise" %>
 <% else %>
-  <div class="card shadow-sm border-0">
-    <div class="card-body p-4 p-lg-5 text-center">
-      <h2 class="h5 fw-semibold mb-2">No jobs yet</h2>
-      <p class="text-body-secondary mb-4">Add your first opening to start tracking applications and deadlines.</p>
-      <%= link_to "Add a Job", new_job_path, class: "btn btn-primary" %>
-    </div>
-  </div>
+  <%= render "shared/empty_state",
+      icon: "bi-briefcase",
+      heading: "No jobs yet",
+      body: "Add your first opening to start tracking applications and deadlines.",
+      cta_text: "Add a Job",
+      cta_path: new_job_path,
+      cta_icon: "bi-plus-lg" %>
 <% end %>
 
 <% if defined?(@pagy) && @pagy.pages > 1 %>

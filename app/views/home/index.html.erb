@@ -9,15 +9,15 @@
 		</p>
 
 		<div class="hero-actions">
-			<%= link_to "Add New Job", new_job_path, class: "btn-primary-home" %>
-			<%= link_to "Add New Project", new_project_path, class: "btn-secondary-home" %>
+			<%= link_to new_job_path, class: "btn-primary-home" do %><i class="bi bi-briefcase me-2" aria-hidden="true"></i>Add New Job<% end %>
+			<%= link_to new_project_path, class: "btn-secondary-home" do %><i class="bi bi-kanban me-2" aria-hidden="true"></i>Add New Project<% end %>
 		</div>
 	</header>
 
 	<section class="deadline-tracker mt-4 mb-4" aria-labelledby="deadline-tracker-heading">
 		<div class="card border-0 shadow-sm overflow-hidden">
 			<div class="card-header bg-white border-bottom py-3 px-3 px-md-4">
-				<h2 id="deadline-tracker-heading" class="h5 mb-0 fw-semibold">Deadline tracker</h2>
+				<h2 id="deadline-tracker-heading" class="h5 mb-0 fw-semibold"><i class="bi bi-calendar-check me-2" aria-hidden="true"></i>Deadline tracker</h2>
 				<p class="text-body-secondary small mb-0 mt-1">Job application deadlines in your selected date range.</p>
 
 				<%= form_with url: root_path, method: :get, local: true, class: "row g-2 mt-3 align-items-end" do %>
