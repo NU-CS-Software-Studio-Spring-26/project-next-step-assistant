@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get "/about", to: "pages#about", as: :about
+  get "/privacy", to: "pages#privacy", as: :privacy
   devise_for :users
   root "home#index"
   resources :resumes, only: [ :index, :show, :new, :create, :edit, :update, :destroy ]
