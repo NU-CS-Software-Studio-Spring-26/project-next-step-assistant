@@ -18,7 +18,16 @@ class JobsControllerTest < ActionDispatch::IntegrationTest
 
   test "should create job" do
     assert_difference("Job.count") do
-      post jobs_url, params: { job: { deadline: @job.deadline, description: @job.description, organization_name: @job.organization_name, start_date: @job.start_date, status: @job.status, title: @job.title } }
+      post jobs_url, params: {
+        job: {
+          deadline: Date.today + 7.days,
+          description: "New test job description",
+          organization_name: "New Test Company",
+          start_date: Date.today,
+          status: "saved",
+          title: "Unique Test Job"
+        }
+      }
     end
 
     assert_redirected_to job_url(Job.last)

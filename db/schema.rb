@@ -44,12 +44,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_04_170303) do
     t.date "deadline"
     t.text "description"
     t.string "organization_name"
-    t.bigint "resume_id"
+    t.integer "resume_id"
     t.date "start_date"
     t.string "status"
     t.string "title"
     t.datetime "updated_at", null: false
-    t.bigint "user_id"
+    t.integer "user_id"
     t.index ["resume_id"], name: "index_jobs_on_resume_id"
     t.index ["user_id"], name: "index_jobs_on_user_id"
   end
@@ -61,16 +61,16 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_04_170303) do
     t.string "name"
     t.string "skills"
     t.datetime "updated_at", null: false
-    t.bigint "user_id"
+    t.integer "user_id"
     t.index ["user_id"], name: "index_projects_on_user_id"
   end
 
   create_table "resumes", force: :cascade do |t|
     t.datetime "created_at", null: false
-    t.bigint "job_id"
+    t.integer "job_id"
     t.string "name", default: "Resume", null: false
     t.datetime "updated_at", null: false
-    t.bigint "user_id"
+    t.integer "user_id"
     t.index ["job_id"], name: "index_resumes_on_job_id"
     t.index ["user_id"], name: "index_resumes_on_user_id"
   end

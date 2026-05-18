@@ -5,7 +5,9 @@ class JobTest < ActiveSupport::TestCase
     {
       title: "Software Engineer Intern",
       organization_name: "Acme Corp",
-      status: "applied"
+      status: "applied",
+      # required deadline for validation tests
+      deadline: Date.today + 7.days
     }.merge(overrides)
   end
 
