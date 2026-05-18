@@ -18,7 +18,14 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
 
   test "should create project" do
     assert_difference("Project.count") do
-      post projects_url, params: { project: { description: @project.description, github_link: @project.github_link, name: @project.name, skills: @project.skills } }
+      post projects_url, params: {
+        project: {
+          description: "New test project description",
+          github_link: "https://github.com/example/new-project",
+          name: "Unique Test Project",
+          skills: "Ruby, Rails"
+        }
+      }
     end
 
     assert_redirected_to project_url(Project.last)

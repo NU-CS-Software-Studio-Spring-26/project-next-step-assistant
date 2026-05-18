@@ -5,8 +5,11 @@ class Job < ApplicationRecord
 
   # simple bad word filter list
   BAD_WORDS = %w[
-    badword1
-    badword2
+    fuck
+    shit
+    bitch
+    asshole
+    bastard
   ].freeze
 
   belongs_to :user, optional: true
