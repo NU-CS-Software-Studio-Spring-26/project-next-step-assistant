@@ -1,0 +1,128 @@
+<% content_for :title, "AI Project Ideas" %>
+
+<div class="container py-4 py-lg-5">
+  <div class="mb-4">
+    <%= link_to projects_path, class: "btn btn-outline-secondary btn-sm" do %>
+      <i class="bi bi-arrow-left me-1" aria-hidden="true"></i>Back to Projects
+    <% end %>
+  </div>
+
+  <header class="mb-4 pb-2 border-bottom">
+    <h1 class="h2 mb-1 fw-semibold">
+      <i class="bi bi-stars me-2" aria-hidden="true"></i>AI project ideas
+    </h1>
+    <p class="text-body-secondary mb-0">
+      Pick which jobs to draw inspiration from, optionally add a focus, then generate ideas tailored to those roles.
+    </p>
+  </header>
+
+  <% if @available_jobs.any? %>
+    <section class="card shadow-sm border-0 mb-4">
+      <div class="card-body p-4">
+        <%= form_with url: ai_suggestions_projects_path, method: :get, local: true, class: "vstack gap-3" do %>
+          <%= hidden_field_tag :generate, "1" %>
+
+          <div>
+            <h2 class="h6 fw-semibold mb-2">Jobs to consider</h2>
+            <div class="d-flex flex-wrap gap-2 mb-2">
+              <button type="button" class="btn btn-link btn-sm p-0" data-controller="select-all" data-action="click->select-all#all" data-select-all-checkbox-class-value="ai-job-pick">Select all</button>
+              <span class="text-body-secondary small">·</span>
+              <button type="button" class="btn btn-link btn-sm p-0" data-controller="select-all" data-action="click->select-all#none" data-select-all-checkbox-class-value="ai-job-pick">Clear</button>
+            </div>
+            <div class="row g-2">
+              <% @available_jobs.each do |job| %>
+                <div class="col-12 col-md-6">
+                  <div class="form-check">
+                    <%= check_box_tag "job_ids[]", job.id, @selected_job_ids.include?(job.id), id: "job_pick_#{job.id}", class: "form-check-input ai-job-pick" %>
+                    <%= label_tag "job_pick_#{job.id}", class: "form-check-label" do %>
+                      <span class="fw-semibold"><%= job.title.presence || "Untitled role" %></span>
+                      <% if job.organization_name.present? %>
+                        <span class="text-body-secondary">— <%= job.organization_name %></span>
+                      <% end %>
+                    <% end %>
+                  </div>
+                </div>
+              <% end %>
+            </div>
+          </div>
+
+          <div>
+            <%= label_tag :focus, "Optional focus (e.g. \"SWE roles only\", \"Python heavy\")", class: "form-label small fw-semibold" %>
+            <%= text_field_tag :focus, @focus, class: "form-control", maxlength: ProjectsController::FOCUS_MAX_LENGTH, placeholder: "Narrow the suggestions to a specific theme" %>
+          </div>
+
+          <div>
+            <%= submit_tag "Generate suggestions", class: "btn btn-primary", data: { turbo_submits_with: "Generating…" } %>
+          </div>
+        <% end %>
+      </div>
+    </section>
+  <% end %>
+
+  <% if @result.nil? && @available_jobs.empty? %>
+    <%= render "shared/empty_state",
+        icon: "bi-briefcase",
+        heading: "Add a job first",
+        body: "AI suggestions are tailored to the roles you're targeting. Add at least one job to get started.",
+        cta_text: "Add a job",
+        cta_path: new_job_path,
+        cta_icon: "bi-plus-lg" %>
+  <% elsif @result.present? %>
+    <% case @result.state %>
+    <% when :ready %>
+      <% if @result.suggestions.any? %>
+        <div class="vstack gap-3">
+          <% @result.suggestions.each do |suggestion| %>
+            <article class="card shadow-sm border-0">
+              <div class="card-body p-4">
+                <h2 class="h5 fw-semibold mb-2"><%= suggestion["name"] %></h2>
+                <p class="mb-2"><%= suggestion["description"] %></p>
+
+                <% if suggestion["skills"].present? %>
+                  <p class="mb-2">
+                    <span class="fw-semibold small">Skills:</span>
+                    <span class="small"><%= suggestion["skills"] %></span>
+                  </p>
+                <% end %>
+
+                <% if suggestion["reason"].present? %>
+                  <p class="small mb-3">
+                    <span class="fw-semibold">Why it helps:</span>
+                    <%= suggestion["reason"] %>
+                  </p>
+                <% end %>
+
+                <%= link_to new_project_path(name: suggestion["name"], description: suggestion["description"], skills: suggestion["skills"]), class: "btn btn-primary btn-sm" do %>
+                  <i class="bi bi-plus-lg me-1" aria-hidden="true"></i>Create this project
+                <% end %>
+              </div>
+            </article>
+          <% end %>
+        </div>
+      <% else %>
+        <%= render "shared/empty_state",
+            icon: "bi-stars",
+            heading: "No suggestions returned",
+            body: "The AI service returned an empty response. Try again, or adjust your selection." %>
+      <% end %>
+
+    <% when :not_configured %>
+      <%= render "shared/empty_state",
+          icon: "bi-key",
+          heading: "AI suggestions are currently offline",
+          body: @result.message %>
+
+    <% when :no_jobs %>
+      <%= render "shared/empty_state",
+          icon: "bi-check2-square",
+          heading: "Select at least one job",
+          body: "Tick at least one job above so the AI knows what roles to tailor suggestions for." %>
+
+    <% when :error %>
+      <%= render "shared/empty_state",
+          icon: "bi-exclamation-triangle",
+          heading: "Couldn't reach the AI service",
+          body: @result.message %>
+    <% end %>
+  <% end %>
+</div>

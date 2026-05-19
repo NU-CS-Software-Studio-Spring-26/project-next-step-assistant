@@ -4,4 +4,8 @@ module ApplicationHelper
   def github_oauth_configured?
     ENV["GITHUB_CLIENT_ID"].present? && ENV["GITHUB_CLIENT_SECRET"].present?
   end
+
+  def openai_configured?
+    ENV["OPENAI_API_KEY"].present?
+  end
 end

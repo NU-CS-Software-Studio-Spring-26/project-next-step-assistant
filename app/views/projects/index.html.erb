@@ -7,9 +7,16 @@
 
   <header class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-3 mb-4 pb-2 border-bottom">
     <h1 class="h2 mb-0 fw-semibold">Projects</h1>
-    <%= link_to new_project_path, class: "btn btn-primary" do %>
-      <i class="bi bi-plus-lg me-1" aria-hidden="true"></i>New Project
-    <% end %>
+    <div class="d-flex flex-wrap gap-2">
+      <% if openai_configured? %>
+        <%= link_to ai_suggestions_projects_path, class: "btn btn-outline-secondary" do %>
+          <i class="bi bi-stars me-1" aria-hidden="true"></i>Get AI project ideas
+        <% end %>
+      <% end %>
+      <%= link_to new_project_path, class: "btn btn-primary" do %>
+        <i class="bi bi-plus-lg me-1" aria-hidden="true"></i>New Project
+      <% end %>
+    </div>
   </header>
 
   <div class="mb-4">

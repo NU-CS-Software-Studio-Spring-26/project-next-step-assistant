@@ -1,5 +1,6 @@
 class ProjectsController < ApplicationController
   SEARCH_QUERY_MAX_LENGTH = 100
+  FOCUS_MAX_LENGTH = 200
 
   before_action :authenticate_user!
   before_action :set_project, only: %i[ show edit update destroy ]
@@ -26,7 +27,26 @@ class ProjectsController < ApplicationController
 
   # GET /projects/new
   def new
-    @project = current_user.projects.build
+    @project = current_user.projects.build(prefill_params)
+  end
+
+  # GET /projects/ai_suggestions
+  def ai_suggestions
+    @available_jobs = current_user.jobs.order(:created_at)
+    @focus = params[:focus].to_s.strip.first(FOCUS_MAX_LENGTH)
+    submitted_job_ids = Array(params[:job_ids]).map(&:to_i).reject(&:zero?)
+
+    if filter_submitted?
+      @selected_job_ids = submitted_job_ids
+      @result = AiProjectSuggestionsService.new(
+        current_user,
+        job_ids: submitted_job_ids,
+        focus: @focus
+      ).call
+    else
+      @selected_job_ids = @available_jobs.pluck(:id)
+      @result = nil
+    end
   end
 
   # GET /projects/1/edit
@@ -80,5 +100,13 @@ class ProjectsController < ApplicationController
     # Only allow a list of trusted parameters through.
     def project_params
       params.expect(project: [ :name, :github_link, :description, :skills ])
+    end
+
+    def prefill_params
+      params.permit(:name, :description, :skills).to_h.symbolize_keys
+    end
+
+    def filter_submitted?
+      params[:generate].present? || params[:job_ids].present? || params[:focus].present?
     end
 end
