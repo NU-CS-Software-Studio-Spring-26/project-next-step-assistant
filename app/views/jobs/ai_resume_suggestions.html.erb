@@ -1,0 +1,133 @@
+<% content_for :title, "AI Resume Suggestions" %>
+
+<div class="container py-4 py-lg-5">
+  <div class="mb-4">
+    <%= link_to job_path(@job), class: "btn btn-outline-secondary btn-sm" do %>
+      <i class="bi bi-arrow-left me-1" aria-hidden="true"></i>Back to job
+    <% end %>
+  </div>
+
+  <header class="mb-4 pb-2 border-bottom">
+    <h1 class="h2 mb-1 fw-semibold">
+      <i class="bi bi-stars me-2" aria-hidden="true"></i>Resume tailoring suggestions
+    </h1>
+    <p class="text-body-secondary mb-0">
+      Tailored for
+      <span class="fw-semibold"><%= @job.title.presence || "this role" %></span>
+      <% if @job.organization_name.present? %>
+        at <span class="fw-semibold"><%= @job.organization_name %></span>
+      <% end %>
+      <% if @job.resume&.file&.attached? %>
+        — using
+        <%= link_to @job.resume.name, resume_path(@job.resume), class: "link-primary" %>
+      <% end %>
+    </p>
+  </header>
+
+  <% case @result.state %>
+  <% when :ready %>
+    <% if @result.improvements.any? %>
+      <ol class="vstack gap-3 list-unstyled ps-0">
+        <% @result.improvements.each_with_index do |improvement, index| %>
+          <% type = improvement["type"] %>
+          <li class="card shadow-sm border-0">
+            <div class="card-body p-4">
+              <div class="d-flex gap-3 align-items-start">
+                <span class="badge bg-primary rounded-pill fs-6"><%= index + 1 %></span>
+                <div class="flex-grow-1">
+                  <% if type == "big_picture" %>
+                    <div class="resume-diff resume-diff--strategy">
+                      <div class="resume-diff__label">
+                        <i class="bi bi-lightbulb me-1" aria-hidden="true"></i>Big-picture suggestion
+                      </div>
+                      <div class="resume-diff__text"><%= improvement["suggestion"] %></div>
+                    </div>
+                  <% else %>
+                    <% original = improvement["original"].to_s.strip %>
+                    <% is_addition = original.blank? || original.casecmp?("(new addition)") %>
+
+                    <% unless is_addition %>
+                      <div class="resume-diff resume-diff--before mb-2">
+                        <div class="resume-diff__label">
+                          <i class="bi bi-dash-circle me-1" aria-hidden="true"></i>From your resume
+                        </div>
+                        <div class="resume-diff__text"><%= original %></div>
+                      </div>
+                    <% end %>
+
+                    <div class="resume-diff resume-diff--after">
+                      <div class="resume-diff__label">
+                        <i class="bi bi-<%= is_addition ? "plus-circle" : "arrow-right-circle" %> me-1" aria-hidden="true"></i>
+                        <%= is_addition ? "Add this bullet" : "Replace with" %>
+                      </div>
+                      <div class="resume-diff__text"><%= improvement["suggested"] %></div>
+                    </div>
+                  <% end %>
+
+                  <% if improvement["reason"].present? %>
+                    <p class="small text-body-secondary mb-0 mt-2">
+                      <span class="fw-semibold">Why:</span> <%= improvement["reason"] %>
+                    </p>
+                  <% end %>
+                </div>
+              </div>
+            </div>
+          </li>
+        <% end %>
+      </ol>
+      <div class="mt-4 d-flex flex-wrap gap-2">
+        <%= link_to ai_resume_suggestions_job_path(@job), class: "btn btn-outline-primary" do %>
+          <i class="bi bi-arrow-clockwise me-1" aria-hidden="true"></i>Regenerate suggestions
+        <% end %>
+        <%= link_to "Edit job", edit_job_path(@job), class: "btn btn-outline-secondary" %>
+      </div>
+    <% else %>
+      <%= render "shared/empty_state",
+          icon: "bi-stars",
+          heading: "No suggestions returned",
+          body: "The AI service returned an empty response. Try regenerating.",
+          cta_text: "Try again",
+          cta_path: ai_resume_suggestions_job_path(@job),
+          cta_icon: "bi-arrow-clockwise" %>
+    <% end %>
+
+  <% when :not_configured %>
+    <%= render "shared/empty_state",
+        icon: "bi-key",
+        heading: "AI suggestions are currently offline",
+        body: @result.message %>
+
+  <% when :no_job_description %>
+    <%= render "shared/empty_state",
+        icon: "bi-file-text",
+        heading: "Job description missing",
+        body: @result.message,
+        cta_text: "Edit job",
+        cta_path: edit_job_path(@job),
+        cta_icon: "bi-pencil" %>
+
+  <% when :no_resume %>
+    <%= render "shared/empty_state",
+        icon: "bi-file-earmark-text",
+        heading: "No resume assigned",
+        body: @result.message,
+        cta_text: "Edit job",
+        cta_path: edit_job_path(@job),
+        cta_icon: "bi-pencil" %>
+
+  <% when :resume_unreadable %>
+    <%= render "shared/empty_state",
+        icon: "bi-exclamation-triangle",
+        heading: "Could not read the resume PDF",
+        body: @result.message %>
+
+  <% when :error %>
+    <%= render "shared/empty_state",
+        icon: "bi-exclamation-triangle",
+        heading: "Couldn't reach the AI service",
+        body: @result.message,
+        cta_text: "Try again",
+        cta_path: ai_resume_suggestions_job_path(@job),
+        cta_icon: "bi-arrow-clockwise" %>
+  <% end %>
+</div>

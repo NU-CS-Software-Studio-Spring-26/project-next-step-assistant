@@ -41,7 +41,24 @@
         <dt class="col-sm-3 text-body-secondary small text-uppercase fw-semibold">Description</dt>
         <dd class="col-sm-9 mb-0">
           <% if @job.description.present? %>
-            <div class="text-body lh-base"><%= simple_format(@job.description) %></div>
+            <div class="collapsible" data-controller="collapsible">
+              <div class="collapsible__content text-body lh-base" data-collapsible-target="content">
+                <%= simple_format(@job.description) %>
+              </div>
+              <button
+                type="button"
+                class="btn btn-link btn-sm collapsible__toggle mt-2"
+                data-action="click->collapsible#toggle"
+                data-collapsible-target="toggle"
+                aria-expanded="false">
+                <span data-collapsible-target="moreLabel">
+                  <i class="bi bi-chevron-down me-1" aria-hidden="true"></i>Show more
+                </span>
+                <span data-collapsible-target="lessLabel" hidden>
+                  <i class="bi bi-chevron-up me-1" aria-hidden="true"></i>Show less
+                </span>
+              </button>
+            </div>
           <% else %>
             <span class="text-body-secondary">—</span>
           <% end %>
@@ -94,6 +111,11 @@
         <% if openai_configured? %>
           <%= link_to ai_suggestions_projects_path(job_ids: [ @job.id ], generate: "1"), class: "btn btn-outline-primary" do %>
             <i class="bi bi-stars me-1" aria-hidden="true"></i>Get project ideas for this job
+          <% end %>
+          <% if @job.description.present? && @job.resume&.file&.attached? %>
+            <%= link_to ai_resume_suggestions_job_path(@job), class: "btn btn-outline-primary" do %>
+              <i class="bi bi-file-earmark-text me-1" aria-hidden="true"></i>Get resume suggestions
+            <% end %>
           <% end %>
         <% end %>
         <%= link_to "Back to Jobs", jobs_path, class: "btn btn-outline-secondary" %>

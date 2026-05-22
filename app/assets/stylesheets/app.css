@@ -921,6 +921,111 @@ input[type="submit"][disabled] {
 	margin-inline: auto;
 }
 
+/* === Collapsible content (long descriptions, etc.) === */
+.collapsible {
+	position: relative;
+}
+
+.collapsible__content {
+	position: relative;
+	max-height: 220px;
+	overflow: hidden;
+	transition: max-height 220ms ease;
+}
+
+.collapsible__content::after {
+	content: "";
+	position: absolute;
+	inset: auto 0 0 0;
+	height: 70px;
+	background: linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.95) 70%, #fff 100%);
+	pointer-events: none;
+	transition: opacity 200ms ease;
+}
+
+.collapsible--expanded .collapsible__content {
+	max-height: none;
+}
+
+.collapsible--expanded .collapsible__content::after,
+.collapsible--no-overflow .collapsible__content::after {
+	opacity: 0;
+}
+
+.collapsible--no-overflow .collapsible__content {
+	max-height: none;
+}
+
+.collapsible__toggle {
+	font-weight: 600;
+	color: var(--home-primary-deep, #0d5350);
+	text-decoration: none;
+	padding: 0;
+}
+
+.collapsible__toggle:hover,
+.collapsible__toggle:focus {
+	color: #062e2c;
+	text-decoration: underline;
+}
+
+/* === Resume diff blocks (AI tailoring suggestions) === */
+.resume-diff {
+	border-radius: 10px;
+	padding: 0.75rem 0.9rem;
+	border-left: 3px solid;
+}
+
+.resume-diff__label {
+	font-size: 0.72rem;
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 0.04em;
+	margin-bottom: 0.25rem;
+	display: flex;
+	align-items: center;
+}
+
+.resume-diff__text {
+	color: #1a202c;
+	line-height: 1.5;
+	white-space: pre-wrap;
+	word-break: break-word;
+}
+
+.resume-diff--before {
+	background: #fdecea;
+	border-left-color: #c0392b;
+}
+
+.resume-diff--before .resume-diff__label {
+	color: #842029;
+}
+
+.resume-diff--before .resume-diff__text {
+	text-decoration: line-through;
+	text-decoration-thickness: 1px;
+	text-decoration-color: rgba(132, 32, 41, 0.5);
+}
+
+.resume-diff--after {
+	background: #e3f1ea;
+	border-left-color: #198754;
+}
+
+.resume-diff--after .resume-diff__label {
+	color: #0f5132;
+}
+
+.resume-diff--strategy {
+	background: #eef4fb;
+	border-left-color: #0a5855;
+}
+
+.resume-diff--strategy .resume-diff__label {
+	color: #073d3a;
+}
+
 /* === Live character counter === */
 .char-counter {
 	display: block;

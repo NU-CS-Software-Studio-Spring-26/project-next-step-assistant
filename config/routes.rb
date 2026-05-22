@@ -6,6 +6,9 @@ Rails.application.routes.draw do
   resources :resumes, only: [ :index, :show, :new, :create, :edit, :update, :destroy ]
   resources :jobs do
     resources :resumes, only: %i[ new create destroy ]
+    member do
+      get :ai_resume_suggestions
+    end
   end
   resources :projects do
     collection do

@@ -30,6 +30,12 @@ class JobsController < ApplicationController
   def show
   end
 
+  # GET /jobs/1/ai_resume_suggestions
+  def ai_resume_suggestions
+    @job = current_user.jobs.find(params.expect(:id))
+    @result = AiResumeSuggestionsService.new(@job).call
+  end
+
   # GET /jobs/new
   def new
     @job = current_user.jobs.build
