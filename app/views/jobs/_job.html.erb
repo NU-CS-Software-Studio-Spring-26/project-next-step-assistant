@@ -30,9 +30,9 @@
     <% end %>
 
     <div class="d-flex flex-wrap gap-2 pt-3 border-top">
-      <%= link_to "Show", job, class: "btn btn-primary btn-sm" %>
-      <%= link_to "Edit", edit_job_path(job), class: "btn btn-outline-secondary btn-sm" %>
-      <%= button_to "Delete", job, method: :delete, class: "btn btn-outline-danger btn-sm", form: { class: "d-inline", data: { turbo_confirm: "Delete this job? This cannot be undone." } } %>
+      <%= link_to "Show", job, class: "btn btn-primary btn-sm", data: { turbo_frame: "_top" } %>
+      <%= link_to "Edit", edit_job_path(job), class: "btn btn-outline-secondary btn-sm", data: { turbo_frame: "_top" } %>
+      <%= button_to "Delete", job, method: :delete, class: "btn btn-outline-danger btn-sm", form: { class: "d-inline", data: { turbo_frame: "_top", turbo_confirm: "Delete this job? This cannot be undone." } } %>
     </div>
   </div>
 </div>
