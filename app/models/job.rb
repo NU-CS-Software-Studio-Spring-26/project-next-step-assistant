@@ -30,8 +30,10 @@ class Job < ApplicationRecord
   validates :organization_name, presence: true, length: { maximum: ORGANIZATION_NAME_MAX_LENGTH }
   validates :status, presence: true
   validates :description, length: { maximum: DESCRIPTION_MAX_LENGTH }, allow_blank: true
-  # require jobs to have deadlines
-  validates :deadline, presence: true
+  # Deadline is required while the job is in an active pipeline status, but
+  # not once the offer has been accepted — at that point start_date is what
+  # matters and a deadline no longer applies.
+  validates :deadline, presence: true, unless: :accepted?
   # custom validation for inappropriate language
   validate :no_bad_words
 

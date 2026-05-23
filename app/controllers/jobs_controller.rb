@@ -47,10 +47,14 @@ class JobsController < ApplicationController
 
   # POST /jobs or /jobs.json
   def create
-    @job = current_user.jobs.build(job_params)
+    attrs = job_params
+    new_resume_file = attrs.delete(:new_resume_file)
+    new_resume_name = attrs.delete(:new_resume_name)
+    @job = current_user.jobs.build(attrs)
+    attach_new_resume(new_resume_file, new_resume_name) if new_resume_file.present?
 
     respond_to do |format|
-      if @job.save
+      if @job.errors.empty? && @job.save
         format.html { redirect_to job_path(@job), notice: "Job was successfully created." }
         format.json { render :show, status: :created, location: @job }
       else
@@ -62,8 +66,14 @@ class JobsController < ApplicationController
 
   # PATCH/PUT /jobs/1 or /jobs/1.json
   def update
+    attrs = job_params
+    new_resume_file = attrs.delete(:new_resume_file)
+    new_resume_name = attrs.delete(:new_resume_name)
+    @job.assign_attributes(attrs)
+    attach_new_resume(new_resume_file, new_resume_name) if new_resume_file.present?
+
     respond_to do |format|
-      if @job.update(job_params)
+      if @job.errors.empty? && @job.save
         format.html { redirect_to job_path(@job), notice: "Job was successfully updated.", status: :see_other }
         format.json { render :show, status: :ok, location: @job }
       else
@@ -112,7 +122,7 @@ class JobsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def job_params
-      permitted = params.expect(job: [ :title, :organization_name, :deadline, :start_date, :description, :status, :resume_id ])
+      permitted = params.expect(job: [ :title, :organization_name, :deadline, :start_date, :description, :status, :resume_id, :new_resume_file, :new_resume_name ])
       if permitted[:status].present? && !Job.statuses.value?(permitted[:status].to_s)
         permitted.delete(:status)
       end
@@ -121,5 +131,18 @@ class JobsController < ApplicationController
         permitted[:resume_id] = current_user.resumes.exists?(rid) ? rid : nil
       end
       permitted
+    end
+
+    # Creates a new Resume from the inline upload fields on the job form and
+    # links it to @job. Resume validation errors are surfaced on @job so the
+    # form re-renders with the issue.
+    def attach_new_resume(file, name)
+      resume_name = name.presence || file.original_filename.to_s.sub(/\.pdf\z/i, "").presence || "Resume"
+      resume = current_user.resumes.build(name: resume_name, file: file)
+      if resume.save
+        @job.resume = resume
+      else
+        resume.errors.full_messages.each { |msg| @job.errors.add(:base, "New resume: #{msg}") }
+      end
     end
 end

@@ -1,4 +1,4 @@
-<%= form_with(model: job) do |form| %>
+<%= form_with(model: job, multipart: true, data: { controller: "job-form-fields" }) do |form| %>
   <div class="card shadow-sm border-0">
     <div class="card-body p-4 p-lg-5">
       <% if job.errors.any? %>
@@ -25,10 +25,10 @@
 
         <div class="col-12 col-md-4">
           <%= form.label :status, class: "form-label" %>
-          <%= form.select :status, job_status_options, { include_blank: "Select status" }, class: "form-select" %>
+          <%= form.select :status, job_status_options, { include_blank: "Select status" }, { class: "form-select", data: { job_form_fields_target: "status", action: "change->job-form-fields#toggle" } } %>
         </div>
 
-        <div class="col-6 col-md-4">
+        <div class="col-6 col-md-4" data-job-form-fields-target="deadline">
           <%= form.label :deadline, class: "form-label" %>
           <%= form.date_field :deadline, class: "form-control" %>
         </div>
@@ -40,6 +40,24 @@
 
         <div class="col-12 col-md-8">
           <%= render "resume_select", form: form %>
+          <details class="mt-2">
+            <summary class="small link-primary" style="cursor: pointer;">
+              <i class="bi bi-plus-circle me-1" aria-hidden="true"></i>Upload a new resume
+            </summary>
+            <div class="row g-2 mt-1 p-3 bg-body-tertiary rounded">
+              <div class="col-12 col-md-6">
+                <%= form.label :new_resume_name, "Resume name", class: "form-label small" %>
+                <%= form.text_field :new_resume_name, class: "form-control form-control-sm", placeholder: "e.g. SWE-focused", maxlength: Resume::NAME_MAX_LENGTH %>
+              </div>
+              <div class="col-12 col-md-6">
+                <%= form.label :new_resume_file, "PDF file", class: "form-label small" %>
+                <%= form.file_field :new_resume_file, class: "form-control form-control-sm", accept: "application/pdf" %>
+              </div>
+              <div class="col-12">
+                <p class="small text-body-secondary mb-0">PDF only, max <%= Resume::FILE_MAX_SIZE / 1.megabyte %> MB. Uploading here saves the resume to your library and selects it for this job.</p>
+              </div>
+            </div>
+          </details>
         </div>
 
         <div class="col-12" data-controller="character-counter">
