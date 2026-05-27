@@ -1,3 +1,5 @@
+require "cgi"
+
 # Fetches a public Greenhouse board job via the official API and returns
 # attributes for pre-filling the New Job form (review-before-save flow).
 class GreenhouseJobImportService
@@ -13,7 +15,7 @@ class GreenhouseJobImportService
   OPEN_TIMEOUT = 5
   READ_TIMEOUT = 10
 
-  PREFILL_KEYS = %w[title organization_name description source].freeze
+  PREFILL_KEYS = %w[title organization_name description source deadline].freeze
 
   def initialize(url, http: nil)
     @url = url.to_s.strip
@@ -100,12 +102,14 @@ class GreenhouseJobImportService
     title = payload["title"].to_s.strip.first(Job::TITLE_MAX_LENGTH)
     organization_name = organization_from(payload, board_token)
     description = build_description(payload, listing_url)
+    deadline = extract_deadline(payload) || 30.days.from_now.to_date
 
     {
       "title" => title,
       "organization_name" => organization_name,
       "description" => description,
-      "source" => "Company website"
+      "source" => "Company website",
+      "deadline" => deadline
     }.slice(*PREFILL_KEYS)
   end
 
@@ -134,7 +138,22 @@ class GreenhouseJobImportService
     parts << "Job Description:"
     parts << body.presence || "See the Greenhouse listing for full details."
 
-    parts.join("\n").strip.first(Job::DESCRIPTION_MAX_LENGTH)
+    truncate_description(parts.join("\n").strip)
+  end
+
+  def truncate_description(text)
+    text.to_s.first(Job::DESCRIPTION_MAX_LENGTH)
+  end
+
+  def extract_deadline(payload)
+    # Only use a structured deadline field from Greenhouse payload.
+    # Do not infer deadlines from freeform description text.
+    raw = payload["deadline"].presence
+    return nil if raw.blank?
+
+    Date.parse(raw.to_s)
+  rescue ArgumentError
+    nil
   end
 
   def extract_location(payload)
@@ -151,12 +170,21 @@ class GreenhouseJobImportService
   end
 
   def plain_text(html)
-    text = html.to_s
+    text = CGI.unescapeHTML(html.to_s)
       .gsub(/<br\s*\/?>/i, "\n")
       .gsub(/<\/p>/i, "\n\n")
       .gsub(/<\/li>/i, "\n")
+      .gsub(/<\/div>/i, "\n\n")
       .gsub(/<\/h[1-6]>/i, "\n\n")
-    Rails::HTML5::FullSanitizer.new.sanitize(text).gsub(/\n{3,}/, "\n\n").strip
+    stripped = Rails::HTML5::FullSanitizer.new.sanitize(text)
+    stripped = CGI.unescapeHTML(stripped)
+
+    stripped
+      .gsub(/\r\n?/, "\n")
+      .gsub(/[ \t\f\v]+/, " ")
+      .gsub(/[ \t]*\n[ \t]*/, "\n")
+      .gsub(/\n{3,}/, "\n\n")
+      .strip
   end
 
   def invalid_url

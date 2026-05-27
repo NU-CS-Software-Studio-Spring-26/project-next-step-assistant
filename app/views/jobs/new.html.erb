@@ -7,6 +7,12 @@
 
   <h1 class="h2 fw-semibold mb-4">New Job</h1>
 
+  <% if params[:greenhouse_imported].to_s == "1" %>
+    <div class="alert alert-info" role="alert">
+      Imported from Greenhouse. Please review the details before saving.
+    </div>
+  <% end %>
+
   <div class="row justify-content-center mb-2">
     <div class="col-12 col-lg-9 col-xl-8">
       <%= render "form", job: @job %>

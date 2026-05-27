@@ -56,7 +56,7 @@ class JobsController < ApplicationController
     @result = GreenhouseJobImportService.new(@greenhouse_url).call
 
     if @result.state == :ready
-      redirect_to new_job_path(job: @result.attributes), notice: "Review imported job details."
+      redirect_to new_job_path(job: @result.attributes, greenhouse_imported: "1"), notice: "Review imported job details."
     else
       redirect_to import_jobs_path, alert: @result.message.presence || "Unable to import Greenhouse listing."
     end

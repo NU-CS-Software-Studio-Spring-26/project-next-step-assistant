@@ -158,11 +158,13 @@ class JobsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "import_greenhouse redirects to new job with prefilled params" do
+    default_deadline = 30.days.from_now.to_date
     attrs = {
       "title" => "Imported Role",
       "organization_name" => "Acme Corp",
       "description" => "Location: Remote\n\nApply:\nhttps://boards.greenhouse.io/acme/jobs/123",
-      "source" => "Company website"
+      "source" => "Company website",
+      "deadline" => default_deadline
     }
     fake_importer = build_fake_greenhouse_importer(
       GreenhouseJobImportService::Result.new(state: :ready, attributes: attrs, message: nil)
@@ -176,7 +178,7 @@ class JobsControllerTest < ActionDispatch::IntegrationTest
       end
     end
 
-    assert_redirected_to new_job_path(job: attrs)
+    assert_redirected_to new_job_path(job: attrs, greenhouse_imported: "1")
     assert_equal "Review imported job details.", flash[:notice]
   end
 
@@ -204,6 +206,16 @@ class JobsControllerTest < ActionDispatch::IntegrationTest
       assert_match(/Import from Greenhouse/i, response.body)
       assert_match(/greenhouse_url/i, response.body)
     end
+  end
+
+  test "new job page shows greenhouse import notice only when flagged" do
+    get new_job_url, params: { greenhouse_imported: "1" }
+    assert_response :success
+    assert_match(/Imported from Greenhouse\. Please review the details before saving\./, response.body)
+
+    get new_job_url
+    assert_response :success
+    assert_no_match(/Imported from Greenhouse\. Please review the details before saving\./, response.body)
   end
 
   test "create job rejects another users resume_id" do

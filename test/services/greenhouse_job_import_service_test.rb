@@ -26,6 +26,7 @@ class GreenhouseJobImportServiceTest < ActiveSupport::TestCase
     assert_equal "Software Engineer", result.attributes["title"]
     assert_equal "Acme Corp", result.attributes["organization_name"]
     assert_equal "Company website", result.attributes["source"]
+    assert_equal 30.days.from_now.to_date, result.attributes["deadline"]
     assert_includes result.attributes["description"], "Location: San Francisco, CA"
     assert_includes result.attributes["description"], BOARDS_URL
     assert_includes result.attributes["description"], "Build APIs with Ruby."
@@ -86,6 +87,59 @@ class GreenhouseJobImportServiceTest < ActiveSupport::TestCase
 
     assert_equal :ready, result.state
     assert_equal "Openai", result.attributes["organization_name"]
+  end
+
+  test "truncates very long imported descriptions to job max length" do
+    payload = sample_job_payload.merge(
+      "content" => "<p>#{'A' * (Job::DESCRIPTION_MAX_LENGTH + 1000)}</p>"
+    )
+    http = ->(_board, _id) { payload }
+
+    result = GreenhouseJobImportService.new(BOARDS_URL, http: http).call
+
+    assert_equal :ready, result.state
+    assert_operator result.attributes["description"].length, :<=, Job::DESCRIPTION_MAX_LENGTH
+  end
+
+  test "uses deadline from payload when present" do
+    payload = sample_job_payload.merge("deadline" => "2026-09-15")
+    http = ->(_board, _id) { payload }
+
+    result = GreenhouseJobImportService.new(BOARDS_URL, http: http).call
+
+    assert_equal :ready, result.state
+    assert_equal Date.new(2026, 9, 15), result.attributes["deadline"]
+  end
+
+  test "decodes entities and strips html tags from imported description" do
+    payload = sample_job_payload.merge(
+      "content" => "&lt;div&gt;Our mission at Greenhouse is &amp; always has been.&lt;/div&gt;<p>Build <strong>safe</strong> software.</p>"
+    )
+    http = ->(_board, _id) { payload }
+
+    result = GreenhouseJobImportService.new(BOARDS_URL, http: http).call
+    description = result.attributes["description"]
+
+    assert_equal :ready, result.state
+    assert_includes description, "Our mission at Greenhouse is & always has been."
+    assert_includes description, "Build safe software."
+    assert_not_includes description, "&lt;div&gt;"
+    assert_not_includes description, "<div>"
+    assert_not_includes description, "<strong>"
+  end
+
+  test "does not infer deadline from random description dates" do
+    payload = sample_job_payload.merge(
+      "content" => "<p>Compensation review date: 06/26/26. This is not an application deadline.</p>",
+      "deadline" => nil,
+      "metadata" => { "deadline" => "2026-06-26" }
+    )
+    http = ->(_board, _id) { payload }
+
+    result = GreenhouseJobImportService.new(BOARDS_URL, http: http).call
+
+    assert_equal :ready, result.state
+    assert_equal 30.days.from_now.to_date, result.attributes["deadline"]
   end
 
   private
