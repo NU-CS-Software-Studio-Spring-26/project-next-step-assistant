@@ -1,0 +1,25 @@
+<%# Renders the job's current status as a Bootstrap dropdown badge.
+    Clicking opens a menu of all statuses; selecting one PATCHes update_status. %>
+<div class="dropdown d-inline-block">
+  <button type="button"
+          class="badge rounded-pill <%= job_status_badge_class(job.status) %> <%= extra_classes %> border-0 dropdown-toggle"
+          data-bs-toggle="dropdown"
+          aria-expanded="false"
+          aria-label="Change job status"
+          style="cursor: pointer;">
+    <i class="bi <%= job_status_icon(job.status) %> me-1" aria-hidden="true"></i><%= job_status_label(job.status) %>
+  </button>
+  <ul class="dropdown-menu shadow-sm">
+    <% Job.statuses.each_key do |status_key| %>
+      <li>
+        <%= button_to update_status_job_path(job, status: status_key),
+                      method: :patch,
+                      class: "dropdown-item d-flex align-items-center gap-2 #{"active" if job.status == status_key}",
+                      form: { class: "d-block m-0" } do %>
+          <i class="bi <%= job_status_icon(status_key) %>" aria-hidden="true"></i>
+          <span><%= job_status_label(status_key) %></span>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+</div>

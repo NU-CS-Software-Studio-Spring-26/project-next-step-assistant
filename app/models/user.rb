@@ -59,6 +59,17 @@ class User < ApplicationRecord
     "#{SecureRandom.alphanumeric(16)}A1!"
   end
 
+  # Generates a calendar feed token lazily the first time the user views the
+  # subscribe page. Tokens are high-entropy and URL-safe.
+  def ensure_calendar_token!
+    update!(calendar_token: SecureRandom.urlsafe_base64(24)) if calendar_token.blank?
+    calendar_token
+  end
+
+  def regenerate_calendar_token!
+    update!(calendar_token: SecureRandom.urlsafe_base64(24))
+  end
+
   private
 
   def password_complexity

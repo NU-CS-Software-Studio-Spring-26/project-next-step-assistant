@@ -168,6 +168,12 @@ GEM
       logger
     i18n (1.14.8)
       concurrent-ruby (~> 1.0)
+    icalendar (2.12.3)
+      base64
+      ice_cube (~> 0.16)
+      logger
+      ostruct
+    ice_cube (0.17.0)
     image_processing (1.14.0)
       mini_magick (>= 4.9.5, < 6)
       ruby-vips (>= 2.0.17, < 3)
@@ -509,6 +515,7 @@ DEPENDENCIES
   devise
   dotenv-rails
   erb_lint
+  icalendar
   image_processing (~> 1.2)
   importmap-rails
   jbuilder
@@ -595,6 +602,8 @@ CHECKSUMS
   hashery (2.1.2) sha256=d239cc2310401903f6b79d458c2bbef5bf74c46f3f974ae9c1061fb74a404862
   hashie (5.1.0) sha256=c266471896f323c446ea8207f8ffac985d2718df0a0ba98651a3057096ca3870
   i18n (1.14.8) sha256=285778639134865c5e0f6269e0b818256017e8cde89993fdfcbfb64d088824a5
+  icalendar (2.12.3) sha256=37dea76c36f5b21dd745bcd3cb53e7bacfbb4ad0a8d9c2a1c0aa9d39af83c850
+  ice_cube (0.17.0) sha256=32deb45dda4b4acc53505c2f581f6d32b5afc04d29b9004769944a0df5a5fcbe
   image_processing (1.14.0) sha256=754cc169c9c262980889bec6bfd325ed1dafad34f85242b5a07b60af004742fb
   importmap-rails (2.2.3) sha256=7101be2a4dc97cf1558fb8f573a718404c5f6bcfe94f304bf1f39e444feeb16a
   io-console (0.8.2) sha256=d6e3ae7a7cc7574f4b8893b4fca2162e57a825b223a177b7afa236c5ef9814cc

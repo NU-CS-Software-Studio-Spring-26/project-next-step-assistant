@@ -2,7 +2,7 @@ class JobsController < ApplicationController
   SEARCH_QUERY_MAX_LENGTH = 100
 
   before_action :authenticate_user!
-  before_action :set_job, only: %i[ show edit update destroy ]
+  before_action :set_job, only: %i[ show edit update destroy update_status ]
   before_action :set_job_match, only: %i[ show update ]
 
   # GET /jobs or /jobs.json
@@ -36,9 +36,22 @@ class JobsController < ApplicationController
     @result = AiResumeSuggestionsService.new(@job).call
   end
 
+  # GET/POST /jobs/import
+  def import
+    @job_text = params[:job_text].to_s
+    return unless request.post?
+
+    @result = JobImportService.new(@job_text).call
+    if @result.state == :ready
+      redirect_to new_job_path(job: @result.attributes), notice: "Review the imported fields and save."
+    else
+      render :import, status: :unprocessable_entity
+    end
+  end
+
   # GET /jobs/new
   def new
-    @job = current_user.jobs.build
+    @job = current_user.jobs.build(prefill_params)
   end
 
   # GET /jobs/1/edit
@@ -83,6 +96,16 @@ class JobsController < ApplicationController
     end
   end
 
+  # PATCH /jobs/1/update_status — quick status change from the badge dropdown.
+  def update_status
+    new_status = params[:status].to_s
+    if Job.statuses.key?(new_status) && @job.update(status: new_status)
+      redirect_back fallback_location: job_path(@job), notice: "Status updated to \"#{new_status.titleize}\".", status: :see_other
+    else
+      redirect_back fallback_location: job_path(@job), alert: @job.errors.full_messages.to_sentence.presence || "Could not update status.", status: :see_other
+    end
+  end
+
   # DELETE /jobs/1 or /jobs/1.json
   def destroy
     @job.destroy!
@@ -122,7 +145,7 @@ class JobsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def job_params
-      permitted = params.expect(job: [ :title, :organization_name, :deadline, :start_date, :description, :status, :resume_id, :new_resume_file, :new_resume_name ])
+      permitted = params.expect(job: [ :title, :organization_name, :deadline, :start_date, :description, :status, :source, :resume_id, :new_resume_file, :new_resume_name ])
       if permitted[:status].present? && !Job.statuses.value?(permitted[:status].to_s)
         permitted.delete(:status)
       end
@@ -131,6 +154,12 @@ class JobsController < ApplicationController
         permitted[:resume_id] = current_user.resumes.exists?(rid) ? rid : nil
       end
       permitted
+    end
+
+    # Whitelisted query-string pre-fills for /jobs/new (used by Quick Import).
+    def prefill_params
+      return {} unless params[:job].is_a?(ActionController::Parameters) || params[:job].is_a?(Hash)
+      params.require(:job).permit(:title, :organization_name, :deadline, :start_date, :description, :source)
     end
 
     # Creates a new Resume from the inline upload fields on the job form and

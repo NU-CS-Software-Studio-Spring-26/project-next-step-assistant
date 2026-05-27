@@ -8,6 +8,11 @@ Rails.application.routes.draw do
     resources :resumes, only: %i[ new create destroy ]
     member do
       get :ai_resume_suggestions
+      patch :update_status
+    end
+    collection do
+      get :import
+      post :import
     end
   end
   resources :projects do
@@ -15,6 +20,12 @@ Rails.application.routes.draw do
       get :ai_suggestions
     end
   end
+
+  # Personal iCal feed that users subscribe to from Google / Apple / Outlook
+  get "/calendar/:token.ics", to: "calendar#show", as: :calendar_feed
+
+  # Authenticated subscribe-URL management page
+  resource :calendar_subscription, only: [ :show, :create, :destroy ]
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.

@@ -2,6 +2,18 @@ class Job < ApplicationRecord
   TITLE_MAX_LENGTH = 200
   ORGANIZATION_NAME_MAX_LENGTH = 200
   DESCRIPTION_MAX_LENGTH = 5_000
+  SOURCE_MAX_LENGTH = 100
+
+  SOURCES = [
+    "LinkedIn",
+    "Indeed",
+    "Glassdoor",
+    "Handshake",
+    "Referral",
+    "Career fair",
+    "Company website",
+    "Other"
+  ].freeze
 
   # simple bad word filter list
   BAD_WORDS = %w[
@@ -30,6 +42,7 @@ class Job < ApplicationRecord
   validates :organization_name, presence: true, length: { maximum: ORGANIZATION_NAME_MAX_LENGTH }
   validates :status, presence: true
   validates :description, length: { maximum: DESCRIPTION_MAX_LENGTH }, allow_blank: true
+  validates :source, length: { maximum: SOURCE_MAX_LENGTH }, allow_blank: true
   # Deadline is required while the job is in an active pipeline status, but
   # not once the offer has been accepted — at that point start_date is what
   # matters and a deadline no longer applies.

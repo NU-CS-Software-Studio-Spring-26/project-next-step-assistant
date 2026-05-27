@@ -17,8 +17,17 @@
 	<section class="deadline-tracker mt-4 mb-4" aria-labelledby="deadline-tracker-heading">
 		<div class="card border-0 shadow-sm overflow-hidden">
 			<div class="card-header bg-white border-bottom py-3 px-3 px-md-4">
-				<h2 id="deadline-tracker-heading" class="h5 mb-0 fw-semibold"><i class="bi bi-calendar-check me-2" aria-hidden="true"></i>Deadline tracker</h2>
-				<p class="text-body-secondary small mb-0 mt-1">Job application deadlines in your selected date range.</p>
+				<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2">
+					<div>
+						<h2 id="deadline-tracker-heading" class="h5 mb-0 fw-semibold"><i class="bi bi-calendar-check me-2" aria-hidden="true"></i>Deadline tracker</h2>
+						<p class="text-body-secondary small mb-0 mt-1">Job application deadlines in your selected date range.</p>
+					</div>
+					<% if user_signed_in? %>
+						<%= link_to calendar_subscription_path, class: "btn btn-sm btn-outline-primary" do %>
+							<i class="bi bi-calendar-plus me-1" aria-hidden="true"></i>Subscribe in your calendar
+						<% end %>
+					<% end %>
+				</div>
 
 				<%= form_with url: root_path, method: :get, local: true, class: "row g-2 mt-3 align-items-end" do %>
 					<div class="col-md-4">

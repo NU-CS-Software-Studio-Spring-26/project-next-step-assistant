@@ -53,6 +53,9 @@ gem "ruby-openai"
 # Extract text from uploaded PDF resumes for AI tailoring suggestions
 gem "pdf-reader"
 
+# Build iCalendar feed of job deadlines so users can subscribe in their calendar app
+gem "icalendar"
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"

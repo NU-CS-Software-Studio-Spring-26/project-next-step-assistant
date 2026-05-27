@@ -1,0 +1,93 @@
+<% content_for :title, "Calendar subscription" %>
+
+<div class="container py-4 py-lg-5">
+  <div class="mb-4">
+    <%= link_to "Home", root_path, class: "btn btn-outline-secondary btn-sm" %>
+  </div>
+
+  <header class="mb-4 pb-2 border-bottom">
+    <h1 class="h2 mb-1 fw-semibold">
+      <i class="bi bi-calendar-event me-2" aria-hidden="true"></i>Subscribe to your job deadlines
+    </h1>
+    <p class="text-body-secondary mb-0 small">
+      Add this URL to Google Calendar, Apple Calendar, or Outlook. Your job
+      deadlines and start dates will appear there automatically and update
+      whenever you edit a job.
+    </p>
+  </header>
+
+  <div class="card shadow-sm border-0 mb-4">
+    <div class="card-body p-3 p-md-4">
+      <label for="calendar_feed_url" class="form-label fw-semibold">Your private subscribe URL</label>
+      <div class="input-group">
+        <input type="text"
+               id="calendar_feed_url"
+               class="form-control font-monospace"
+               value="<%= @feed_url %>"
+               readonly
+               data-controller="copy-text"
+               data-copy-text-target="source">
+        <button type="button"
+                class="btn btn-outline-primary"
+                data-action="click->copy-text#copy"
+                data-copy-text-target="button">
+          <i class="bi bi-clipboard me-1" aria-hidden="true"></i>Copy
+        </button>
+      </div>
+      <p class="small text-body-secondary mt-2 mb-0">
+        Keep this URL private — anyone with it can see your deadlines and start
+        dates (but not descriptions, resumes, or other details).
+      </p>
+    </div>
+  </div>
+
+  <div class="row g-3 mb-4">
+    <div class="col-md-4">
+      <div class="card shadow-sm border-0 h-100">
+        <div class="card-body p-3">
+          <h2 class="h6 fw-semibold"><i class="bi bi-google me-1" aria-hidden="true"></i>Google Calendar</h2>
+          <ol class="small text-body-secondary mb-0 ps-3">
+            <li>Open Google Calendar on the web.</li>
+            <li>In the left sidebar, click the <strong>+</strong> next to "Other calendars" → <em>From URL</em>.</li>
+            <li>Paste the URL above and click <em>Add calendar</em>.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card shadow-sm border-0 h-100">
+        <div class="card-body p-3">
+          <h2 class="h6 fw-semibold"><i class="bi bi-apple me-1" aria-hidden="true"></i>Apple Calendar</h2>
+          <ol class="small text-body-secondary mb-0 ps-3">
+            <li>Open the Calendar app on Mac.</li>
+            <li>Menu: <em>File → New Calendar Subscription…</em></li>
+            <li>Paste the URL and click <em>Subscribe</em>.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card shadow-sm border-0 h-100">
+        <div class="card-body p-3">
+          <h2 class="h6 fw-semibold"><i class="bi bi-microsoft me-1" aria-hidden="true"></i>Outlook</h2>
+          <ol class="small text-body-secondary mb-0 ps-3">
+            <li>Open Outlook calendar.</li>
+            <li><em>Add calendar → Subscribe from web</em>.</li>
+            <li>Paste the URL and confirm.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="d-flex flex-wrap gap-2">
+    <%= button_to calendar_subscription_path, method: :post, class: "btn btn-outline-warning", form: { data: { turbo_confirm: "Generate a new URL? The old one will stop working." } } do %>
+      <i class="bi bi-arrow-clockwise me-1" aria-hidden="true"></i>Regenerate URL
+    <% end %>
+    <%= button_to calendar_subscription_path, method: :delete, class: "btn btn-outline-danger", form: { data: { turbo_confirm: "Disable the calendar subscription? You can re-enable it later." } } do %>
+      <i class="bi bi-x-circle me-1" aria-hidden="true"></i>Disable
+    <% end %>
+  </div>
+</div>

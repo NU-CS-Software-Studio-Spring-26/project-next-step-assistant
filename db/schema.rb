@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_16_140000) do
+ActiveRecord::Schema[8.1].define(version: 2026_05_27_014105) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
@@ -44,12 +44,13 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_16_140000) do
     t.date "deadline"
     t.text "description"
     t.string "organization_name"
-    t.bigint "resume_id"
+    t.integer "resume_id"
+    t.string "source"
     t.date "start_date"
     t.string "status"
     t.string "title"
     t.datetime "updated_at", null: false
-    t.bigint "user_id", null: false
+    t.integer "user_id", null: false
     t.index ["resume_id"], name: "index_jobs_on_resume_id"
     t.index ["user_id", "deadline"], name: "index_jobs_on_user_id_and_deadline"
     t.index ["user_id", "status"], name: "index_jobs_on_user_id_and_status"
@@ -67,7 +68,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_16_140000) do
     t.string "name"
     t.string "skills"
     t.datetime "updated_at", null: false
-    t.bigint "user_id", null: false
+    t.integer "user_id", null: false
     t.index ["user_id"], name: "index_projects_on_user_id"
     t.check_constraint "description IS NULL OR length(description) <= 5000", name: "projects_description_max_length"
     t.check_constraint "github_link IS NULL OR length(github_link) <= 2048", name: "projects_github_link_max_length"
@@ -77,16 +78,17 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_16_140000) do
 
   create_table "resumes", force: :cascade do |t|
     t.datetime "created_at", null: false
-    t.bigint "job_id"
+    t.integer "job_id"
     t.string "name", default: "Resume", null: false
     t.datetime "updated_at", null: false
-    t.bigint "user_id", null: false
+    t.integer "user_id", null: false
     t.index ["job_id"], name: "index_resumes_on_job_id"
     t.index ["user_id"], name: "index_resumes_on_user_id"
     t.check_constraint "length(name) <= 200", name: "resumes_name_max_length"
   end
 
   create_table "users", force: :cascade do |t|
+    t.string "calendar_token"
     t.datetime "created_at", null: false
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -96,6 +98,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_16_140000) do
     t.string "reset_password_token"
     t.string "uid"
     t.datetime "updated_at", null: false
+    t.index ["calendar_token"], name: "index_users_on_calendar_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["provider", "uid"], name: "index_users_on_provider_and_uid", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true

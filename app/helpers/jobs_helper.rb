@@ -50,4 +50,12 @@ module JobsHelper
     else                     "bi-circle"
     end
   end
+
+  # Renders the job's status as a Bootstrap dropdown. Clicking the badge opens
+  # a menu of all statuses; selecting one PATCHes update_status and redirects
+  # back to wherever the click came from. `extra_classes` (e.g. "fs-6") lets
+  # callers match the show-page sizing.
+  def job_status_badge_dropdown(job, extra_classes: "")
+    render partial: "jobs/status_badge_dropdown", locals: { job: job, extra_classes: extra_classes }
+  end
 end
