@@ -29,6 +29,12 @@
 					<% end %>
 				</div>
 
+				<% if user_signed_in? %>
+					<p class="text-body-secondary small mb-0 mt-2">
+						Deadline reminder emails are sent daily when you have applications due within the next <%= UpcomingDeadlineJobsService::REMINDER_WINDOW_DAYS %> days.
+					</p>
+				<% end %>
+
 				<%= form_with url: root_path, method: :get, local: true, class: "row g-2 mt-3 align-items-end" do %>
 					<div class="col-md-4">
 						<%= label_tag :start_date, "From", class: "form-label small fw-semibold" %>
