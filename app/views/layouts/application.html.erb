@@ -79,6 +79,11 @@
 
             <% if user_signed_in? %>
               <li class="nav-item">
+                <%= link_to dashboard_path, class: ["nav-link", ("active" if current_page?(dashboard_path))].compact.join(" ") do %>
+                  <i class="bi bi-bar-chart me-1" aria-hidden="true"></i>Dashboard
+                <% end %>
+              </li>
+              <li class="nav-item">
                 <%= button_to destroy_user_session_path,
                     method: :delete,
                     class: "btn btn-link nav-link" do %>

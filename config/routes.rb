@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   get "/privacy", to: "pages#privacy", as: :privacy
   devise_for :users, controllers: { omniauth_callbacks: "users/omniauth_callbacks" }
   root "home#index"
+  get "dashboard", to: "dashboard#index", as: :dashboard
   resources :resumes, only: [ :index, :show, :new, :create, :edit, :update, :destroy ]
   resources :jobs do
     resources :resumes, only: %i[ new create destroy ]

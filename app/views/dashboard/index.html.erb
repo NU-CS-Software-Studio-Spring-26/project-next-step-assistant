@@ -1,0 +1,75 @@
+<% content_for :title, "Dashboard — Next Step Assistant" %>
+
+<% content_for :head do %>
+  <%= javascript_import_module_tag "dashboard_charts" %>
+<% end %>
+
+<div class="container py-4 py-lg-5">
+  <div class="mb-4">
+    <%= link_to "Home", root_path, class: "btn btn-outline-secondary btn-sm" %>
+  </div>
+
+  <header class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-3 mb-4 pb-2 border-bottom">
+    <div>
+      <h1 class="h2 mb-1 fw-semibold">Dashboard</h1>
+      <p class="text-body-secondary mb-0 small">
+        Your application pipeline at a glance — <%= pluralize(@total_jobs, "job") %> tracked.
+      </p>
+    </div>
+    <div class="d-flex flex-wrap gap-2">
+      <%= link_to jobs_path, class: "btn btn-outline-secondary" do %>
+        <i class="bi bi-briefcase me-1" aria-hidden="true"></i>View jobs
+      <% end %>
+      <%= link_to new_job_path, class: "btn btn-primary" do %>
+        <i class="bi bi-plus-lg me-1" aria-hidden="true"></i>New job
+      <% end %>
+    </div>
+  </header>
+
+  <% if @total_jobs.zero? %>
+    <%= render "shared/empty_state",
+        icon: "bi-bar-chart",
+        heading: "No applications to chart yet",
+        body: "Add your first job to see pipeline breakdowns and monthly activity.",
+        cta_text: "Add a job",
+        cta_path: new_job_path,
+        cta_icon: "bi-plus-lg" %>
+  <% else %>
+    <section class="mb-5" aria-labelledby="status-chart-heading">
+      <h2 id="status-chart-heading" class="h5 fw-semibold mb-3">Jobs by status</h2>
+      <%= column_chart @jobs_by_status_chart,
+          height: "320px",
+          library: { plugins: { legend: { display: false } } } %>
+
+      <div class="table-responsive mt-4">
+        <table class="table table-sm table-striped mb-0" aria-label="Job counts by application status">
+          <caption class="visually-hidden">Summary of your jobs grouped by pipeline status</caption>
+          <thead>
+            <tr>
+              <th scope="col">Status</th>
+              <th scope="col" class="text-end">Count</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @jobs_by_status.each do |status, count| %>
+              <tr>
+                <td>
+                  <span class="badge rounded-pill <%= job_status_badge_class(status) %>">
+                    <%= job_status_label(status) %>
+                  </span>
+                </td>
+                <td class="text-end"><%= count %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section aria-labelledby="monthly-chart-heading">
+      <h2 id="monthly-chart-heading" class="h5 fw-semibold mb-3">Applications added per month</h2>
+      <p class="text-body-secondary small mb-3">Jobs you created in the last 12 months.</p>
+      <%= line_chart @jobs_by_month, height: "280px" %>
+    </section>
+  <% end %>
+</div>
