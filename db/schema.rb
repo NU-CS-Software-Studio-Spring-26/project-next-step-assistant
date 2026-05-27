@@ -44,13 +44,13 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_27_014105) do
     t.date "deadline"
     t.text "description"
     t.string "organization_name"
-    t.integer "resume_id"
+    t.bigint "resume_id"
     t.string "source"
     t.date "start_date"
     t.string "status"
     t.string "title"
     t.datetime "updated_at", null: false
-    t.integer "user_id", null: false
+    t.bigint "user_id", null: false
     t.index ["resume_id"], name: "index_jobs_on_resume_id"
     t.index ["user_id", "deadline"], name: "index_jobs_on_user_id_and_deadline"
     t.index ["user_id", "status"], name: "index_jobs_on_user_id_and_status"
@@ -68,7 +68,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_27_014105) do
     t.string "name"
     t.string "skills"
     t.datetime "updated_at", null: false
-    t.integer "user_id", null: false
+    t.bigint "user_id", null: false
     t.index ["user_id"], name: "index_projects_on_user_id"
     t.check_constraint "description IS NULL OR length(description) <= 5000", name: "projects_description_max_length"
     t.check_constraint "github_link IS NULL OR length(github_link) <= 2048", name: "projects_github_link_max_length"
@@ -78,10 +78,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_27_014105) do
 
   create_table "resumes", force: :cascade do |t|
     t.datetime "created_at", null: false
-    t.integer "job_id"
+    t.bigint "job_id"
     t.string "name", default: "Resume", null: false
     t.datetime "updated_at", null: false
-    t.integer "user_id", null: false
+    t.bigint "user_id", null: false
     t.index ["job_id"], name: "index_resumes_on_job_id"
     t.index ["user_id"], name: "index_resumes_on_user_id"
     t.check_constraint "length(name) <= 200", name: "resumes_name_max_length"

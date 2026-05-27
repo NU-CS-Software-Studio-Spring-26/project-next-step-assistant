@@ -157,6 +157,55 @@ class JobsControllerTest < ActionDispatch::IntegrationTest
     assert_match(/Pagy Test Job/, response.body)
   end
 
+  test "import_greenhouse redirects to new job with prefilled params" do
+    attrs = {
+      "title" => "Imported Role",
+      "organization_name" => "Acme Corp",
+      "description" => "Location: Remote\n\nApply:\nhttps://boards.greenhouse.io/acme/jobs/123",
+      "source" => "Company website"
+    }
+    fake_importer = build_fake_greenhouse_importer(
+      GreenhouseJobImportService::Result.new(state: :ready, attributes: attrs, message: nil)
+    )
+
+    with_greenhouse_importer_stub(fake_importer) do
+      assert_no_difference("Job.count") do
+        post import_greenhouse_jobs_url, params: {
+          greenhouse_url: "https://boards.greenhouse.io/acme/jobs/123456"
+        }
+      end
+    end
+
+    assert_redirected_to new_job_path(job: attrs)
+    assert_equal "Review imported job details.", flash[:notice]
+  end
+
+  test "import_greenhouse redirects to import with alert on failure" do
+    fake_importer = build_fake_greenhouse_importer(
+      GreenhouseJobImportService::Result.new(
+        state: :invalid_url,
+        attributes: {},
+        message: "Enter a valid Greenhouse job URL"
+      )
+    )
+
+    with_greenhouse_importer_stub(fake_importer) do
+      post import_greenhouse_jobs_url, params: { greenhouse_url: "https://evil.example/jobs/1" }
+    end
+
+    assert_redirected_to import_jobs_path
+    assert_match(/valid Greenhouse/i, flash[:alert])
+  end
+
+  test "import page shows greenhouse section without openai" do
+    with_env("OPENAI_API_KEY" => nil) do
+      get import_jobs_path
+      assert_response :success
+      assert_match(/Import from Greenhouse/i, response.body)
+      assert_match(/greenhouse_url/i, response.body)
+    end
+  end
+
   test "create job rejects another users resume_id" do
     other_resume = resumes(:two)
     assert_difference("Job.count", 1) do
@@ -171,5 +220,34 @@ class JobsControllerTest < ActionDispatch::IntegrationTest
     end
 
     assert_nil Job.last.resume_id
+  end
+
+  private
+
+  def build_fake_greenhouse_importer(result)
+    Class.new do
+      define_method(:initialize) { |*_args, **_kwargs| }
+      define_method(:call) { result }
+    end.new
+  end
+
+  def with_greenhouse_importer_stub(fake_importer)
+    singleton = GreenhouseJobImportService.singleton_class
+    singleton.alias_method(:greenhouse_import_new_without_stub, :new)
+    singleton.define_method(:new) { |*_args, **_kwargs| fake_importer }
+    yield
+  ensure
+    singleton.alias_method(:new, :greenhouse_import_new_without_stub)
+    singleton.remove_method(:greenhouse_import_new_without_stub)
+  end
+
+  def with_env(vars)
+    previous = vars.keys.index_with { |key| ENV[key] }
+    vars.each { |key, value| value.nil? ? ENV.delete(key) : ENV[key] = value }
+    yield
+  ensure
+    previous.each do |key, value|
+      value.nil? ? ENV.delete(key) : ENV[key] = value
+    end
   end
 end

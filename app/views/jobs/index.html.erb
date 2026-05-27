@@ -14,10 +14,8 @@
       <%= link_to resumes_path, class: "btn btn-outline-secondary" do %>
         <i class="bi bi-file-earmark-text me-1" aria-hidden="true"></i>Manage Resumes
       <% end %>
-      <% if openai_configured? %>
-        <%= link_to import_jobs_path, class: "btn btn-outline-primary" do %>
-          <i class="bi bi-clipboard-plus me-1" aria-hidden="true"></i>Quick import
-        <% end %>
+      <%= link_to import_jobs_path, class: "btn btn-outline-primary" do %>
+        <i class="bi bi-box-arrow-in-down me-1" aria-hidden="true"></i>Import
       <% end %>
       <%= link_to new_job_path, class: "btn btn-primary" do %>
         <i class="bi bi-plus-lg me-1" aria-hidden="true"></i>New Job

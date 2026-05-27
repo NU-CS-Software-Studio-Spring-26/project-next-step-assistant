@@ -39,13 +39,26 @@ class JobsController < ApplicationController
   # GET/POST /jobs/import
   def import
     @job_text = params[:job_text].to_s
-    return unless request.post?
+    @greenhouse_url = params[:greenhouse_url].to_s
+    return unless request.post? && params[:job_text].present?
 
     @result = JobImportService.new(@job_text).call
     if @result.state == :ready
       redirect_to new_job_path(job: @result.attributes), notice: "Review the imported fields and save."
     else
       render :import, status: :unprocessable_entity
+    end
+  end
+
+  # POST /jobs/import_greenhouse
+  def import_greenhouse
+    @greenhouse_url = params[:greenhouse_url].to_s
+    @result = GreenhouseJobImportService.new(@greenhouse_url).call
+
+    if @result.state == :ready
+      redirect_to new_job_path(job: @result.attributes), notice: "Review imported job details."
+    else
+      redirect_to import_jobs_path, alert: @result.message.presence || "Unable to import Greenhouse listing."
     end
   end
 

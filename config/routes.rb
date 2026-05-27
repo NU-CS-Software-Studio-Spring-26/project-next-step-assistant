@@ -14,6 +14,7 @@ Rails.application.routes.draw do
     collection do
       get :import
       post :import
+      post :import_greenhouse
     end
   end
   resources :projects do
