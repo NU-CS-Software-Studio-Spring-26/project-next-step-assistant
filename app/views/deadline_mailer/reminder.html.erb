@@ -1,0 +1,24 @@
+<p>Hi,</p>
+
+<p>
+  Here are your job application deadlines in the next
+  <%= UpcomingDeadlineJobsService::REMINDER_WINDOW_DAYS %> days:
+</p>
+
+<ul>
+  <% @jobs.each do |job| %>
+    <li>
+      <strong><%= job.title %></strong>
+      at <%= job.organization_name %>
+      — deadline <%= job.deadline.to_fs(:long) %>
+      (<%= job.status.titleize %>)
+      — <%= link_to "View job", job_url(job) %>
+    </li>
+  <% end %>
+</ul>
+
+<p>
+  <%= link_to "View all jobs", jobs_url %>
+  ·
+  <%= link_to "Go to Next Step Assistant", root_url %>
+</p>

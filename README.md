@@ -11,7 +11,7 @@ Supplementary docs: [wiki.md](wiki.md)
 - **Jobs** — CRUD, status workflow, search, status filter (Turbo partial updates), Pagy pagination, resume attachment
 - **Projects** — CRUD, search, pagination
 - **Resumes** — PDF upload library (validated), link to jobs
-- **Home** — Combined deadline tracker with date-range filter
+- **Home** — Combined deadline tracker with date-range filter; daily email reminders for jobs due within 3 days
 - **Accounts** — Devise authentication (email/password); optional GitHub OAuth when `GITHUB_CLIENT_ID` and `GITHUB_CLIENT_SECRET` are set
 - **Match assistant** — Local Ruby keyword overlap on job show pages (no external AI APIs)
 - **Accessibility** — Skip link, visible focus styles, link underlines, ARIA on key UI
@@ -57,11 +57,19 @@ Health check: `/up`
 
 ```bash
 bundle install
-bin/rails db:create db:migrate db:seed
+bin/rails db:create db:migrate db:schema:load:queue db:seed
 bin/rails server
 ```
 
 Open <http://localhost:3000>. Demo seed user password is documented in `db/seeds.rb`.
+
+**Deadline reminder emails** run daily via Solid Queue (8am). In development, start a job worker in a second terminal so scheduled and enqueued mail runs:
+
+```bash
+bin/jobs
+```
+
+Alternatively run the web server with `SOLID_QUEUE_IN_PUMA=1 bin/rails server`. Emails are written to `tmp/mail/`. Trigger a run manually with `bin/rails runner "DeadlineRemindersDispatchJob.perform_now"`.
 
 Optional GitHub sign-in (development):
 

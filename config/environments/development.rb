@@ -31,8 +31,11 @@ Rails.application.configure do
   # Store uploaded files on the local file system (see config/storage.yml for options).
   config.active_storage.service = :local
 
-  # Don't care if the mailer can't send.
-  config.action_mailer.raise_delivery_errors = false
+  # Write emails to tmp/mail for local inspection (no external provider).
+  config.action_mailer.delivery_method = :file
+  config.action_mailer.perform_deliveries = true
+  config.action_mailer.raise_delivery_errors = true
+  config.action_mailer.file_settings = { location: Rails.root.join("tmp/mail") }
 
   # Make template changes take effect immediately.
   config.action_mailer.perform_caching = false
@@ -53,6 +56,10 @@ Rails.application.configure do
 
   # Append comments with runtime information tags to SQL queries in logs.
   config.active_record.query_log_tags_enabled = true
+
+  # Use Solid Queue so recurring deadline reminders run in development (requires bin/jobs or SOLID_QUEUE_IN_PUMA=1).
+  config.active_job.queue_adapter = :solid_queue
+  config.solid_queue.connects_to = { database: { writing: :queue } }
 
   # Highlight code that enqueued background job in logs.
   config.active_job.verbose_enqueue_logs = true
