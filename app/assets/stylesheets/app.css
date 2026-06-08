@@ -450,6 +450,28 @@ a:not([class]):focus-visible {
 	outline-offset: var(--focus-ring-offset);
 }
 
+.auth-danger-zone {
+	margin-top: 1.5rem;
+	padding-top: 1.5rem;
+	border-top: 1px solid #f2c9c9;
+}
+
+.auth-danger-heading {
+	font-size: 1rem;
+	font-weight: 600;
+	color: #9b1c1c;
+	margin-bottom: 0.5rem;
+}
+
+.auth-btn-danger {
+	background: #b42318;
+	box-shadow: 0 8px 20px rgba(180, 35, 24, 0.28);
+}
+
+.auth-btn-danger:hover {
+	background: #912018;
+}
+
 .auth-links {
 	text-align: center;
 	font-size: 0.9rem;

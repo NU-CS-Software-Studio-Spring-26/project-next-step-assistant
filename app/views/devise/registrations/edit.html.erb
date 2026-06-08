@@ -41,6 +41,18 @@
       <%= f.submit "Update account", class: "auth-btn", data: { turbo_submits_with: "Updating…" } %>
     <% end %>
 
+    <section class="auth-danger-zone" aria-labelledby="delete-account-heading">
+      <h2 id="delete-account-heading" class="auth-danger-heading">Delete account</h2>
+      <p class="auth-hint">
+        Permanently remove your account and all associated jobs, projects, and resumes. This cannot be undone.
+      </p>
+      <%= button_to "Delete my account",
+          registration_path(resource_name),
+          method: :delete,
+          class: "auth-btn auth-btn-danger",
+          form: { data: { turbo_confirm: "Delete your account and all your data? This cannot be undone." } } %>
+    </section>
+
     <div class="auth-links">
       <%= link_to "Back", :back %>
     </div>

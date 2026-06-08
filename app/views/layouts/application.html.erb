@@ -84,6 +84,11 @@
                 <% end %>
               </li>
               <li class="nav-item">
+                <%= link_to edit_user_registration_path, class: ["nav-link", ("active" if current_page?(edit_user_registration_path))].compact.join(" ") do %>
+                  <i class="bi bi-person-gear me-1" aria-hidden="true"></i>Account
+                <% end %>
+              </li>
+              <li class="nav-item">
                 <%= button_to destroy_user_session_path,
                     method: :delete,
                     class: "btn btn-link nav-link" do %>
