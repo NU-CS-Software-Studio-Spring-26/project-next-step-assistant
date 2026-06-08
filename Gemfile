@@ -55,6 +55,9 @@ gem "ruby-openai"
 # Extract text from uploaded PDF resumes for AI tailoring suggestions
 gem "pdf-reader"
 
+# Generate presenter demo resume PDF during db:seed
+gem "prawn", require: false
+
 # Build iCalendar feed of job deadlines so users can subscribe in their calendar app
 gem "icalendar"
 

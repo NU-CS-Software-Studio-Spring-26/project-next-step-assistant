@@ -32,7 +32,17 @@ class Resume < ApplicationRecord
     blob = file.blob
     return if blob.blank? || blob.service.exist?(blob.key)
 
-    attachment_changes["file"]&.upload
+    change = attachment_changes["file"]
+    return if change.blank?
+
+    change.upload
+    rewind_attachment_io!(change)
+  end
+
+  def rewind_attachment_io!(change)
+    attachable = change.attachable
+    io = attachable.is_a?(Hash) ? attachable[:io] : attachable
+    io.rewind if io.respond_to?(:rewind)
   end
 
   def file_must_be_attached

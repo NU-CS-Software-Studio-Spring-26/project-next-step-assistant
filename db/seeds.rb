@@ -6,6 +6,7 @@
 #   Password: Password1!
 
 require_relative "seeds/real_users"
+require_relative "seeds/presenter_resume_pdf"
 
 # Avoid Solid Queue on hosts (e.g. Heroku) where queue tables are not provisioned.
 ActiveJob::Base.queue_adapter = :inline

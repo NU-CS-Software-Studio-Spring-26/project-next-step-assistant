@@ -219,19 +219,14 @@ module Seeds
     end
 
     def seed_presenter_resume(user)
-      resume = user.resumes.find_by(name: "Software Engineering Resume")
-      return resume if resume&.file&.attached?
+      user.resumes.where(name: "Software Engineering Resume").destroy_all
 
-      # Drop partial records from failed seeds so Active Storage does not purge stale blobs mid-attach.
-      resume&.destroy
-
-      fixture = Rails.root.join("db/fixtures/files/presenter_resume.pdf")
-      pdf_data = File.binread(fixture)
+      pdf_data = Seeds::PresenterResumePdf.render
 
       resume = user.resumes.build(name: "Software Engineering Resume")
       resume.file.attach(
         io: StringIO.new(pdf_data),
-        filename: "software_engineering_resume.pdf",
+        filename: "jinxi_zhang_software_engineering_resume.pdf",
         content_type: "application/pdf",
         identify: false
       )
