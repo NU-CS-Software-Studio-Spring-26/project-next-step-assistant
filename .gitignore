@@ -39,3 +39,7 @@
 /db/*.sqlite3
 db/*.sqlite3
 db/*.sqlite3_*
+
+# Generated real-user credentials (created by db:seed)
+/db/real_user_credentials.txt
+db/real_user_credentials.txt
