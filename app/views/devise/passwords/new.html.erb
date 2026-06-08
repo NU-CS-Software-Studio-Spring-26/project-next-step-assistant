@@ -1,0 +1,31 @@
+<div class="auth-wrap">
+  <div class="auth-card">
+    <p class="eyebrow">Next Step Assistant</p>
+    <h1 class="auth-heading">Forgot your password?</h1>
+    <p class="auth-sub">Enter your account email and we will send reset instructions.</p>
+
+    <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f| %>
+      <% if resource.errors.any? %>
+        <div class="auth-errors">
+          <strong><%= pluralize(resource.errors.count, "error") %> prevented your request:</strong>
+          <ul>
+            <% resource.errors.full_messages.each do |msg| %>
+              <li><%= msg %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <div class="auth-field">
+        <%= f.label :email, class: "auth-label" %>
+        <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "auth-input", maxlength: User::EMAIL_MAX_LENGTH, required: true %>
+      </div>
+
+      <%= f.submit "Send reset instructions", class: "auth-btn", data: { turbo_submits_with: "Sending…" } %>
+    <% end %>
+
+    <div class="auth-links">
+      <%= link_to "Back to sign in", new_session_path(resource_name) %>
+    </div>
+  </div>
+</div>

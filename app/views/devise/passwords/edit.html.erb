@@ -1,0 +1,39 @@
+<div class="auth-wrap">
+  <div class="auth-card">
+    <p class="eyebrow">Next Step Assistant</p>
+    <h1 class="auth-heading">Choose a new password</h1>
+    <p class="auth-sub">Enter a new password for your account.</p>
+
+    <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :put }) do |f| %>
+      <%= f.hidden_field :reset_password_token %>
+
+      <% if resource.errors.any? %>
+        <div class="auth-errors">
+          <strong><%= pluralize(resource.errors.count, "error") %> prevented your password from being saved:</strong>
+          <ul>
+            <% resource.errors.full_messages.each do |msg| %>
+              <li><%= msg %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <div class="auth-field">
+        <%= f.label :password, "New password", class: "auth-label" %>
+        <%= f.password_field :password, autofocus: true, autocomplete: "new-password", class: "auth-input", maxlength: User::PASSWORD_MAX_LENGTH, required: true %>
+        <%= render "devise/shared/password_requirements" %>
+      </div>
+
+      <div class="auth-field">
+        <%= f.label :password_confirmation, "Confirm new password", class: "auth-label" %>
+        <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "auth-input", maxlength: User::PASSWORD_MAX_LENGTH, required: true %>
+      </div>
+
+      <%= f.submit "Update password", class: "auth-btn", data: { turbo_submits_with: "Updating…" } %>
+    <% end %>
+
+    <div class="auth-links">
+      <%= link_to "Back to sign in", new_session_path(resource_name) %>
+    </div>
+  </div>
+</div>
