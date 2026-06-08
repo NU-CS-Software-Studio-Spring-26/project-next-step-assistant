@@ -157,6 +157,56 @@ class JobsControllerTest < ActionDispatch::IntegrationTest
     assert_match(/Pagy Test Job/, response.body)
   end
 
+  test "greenhouse import end to end creates job from imported data" do
+    default_deadline = 30.days.from_now.to_date
+    attrs = {
+      "title" => "Greenhouse E2E Role",
+      "organization_name" => "Imported Corp",
+      "description" => "Location: Remote\n\nApply:\nhttps://boards.greenhouse.io/acme/jobs/123",
+      "source" => "Company website",
+      "deadline" => default_deadline
+    }
+    fake_importer = build_fake_greenhouse_importer(
+      GreenhouseJobImportService::Result.new(state: :ready, attributes: attrs, message: nil)
+    )
+
+    with_greenhouse_importer_stub(fake_importer) do
+      post import_greenhouse_jobs_url, params: {
+        greenhouse_url: "https://boards.greenhouse.io/acme/jobs/123456"
+      }
+    end
+
+    assert_redirected_to new_job_path(job: attrs, greenhouse_imported: "1")
+    follow_redirect!
+
+    assert_response :success
+    assert_match(/Imported from Greenhouse/, response.body)
+    assert_select "input[name='job[title]'][value=?]", attrs["title"]
+    assert_select "input[name='job[organization_name]'][value=?]", attrs["organization_name"]
+
+    assert_difference("Job.count", 1) do
+      post jobs_url, params: {
+        job: {
+          title: attrs["title"],
+          organization_name: attrs["organization_name"],
+          description: attrs["description"],
+          source: attrs["source"],
+          deadline: attrs["deadline"],
+          status: "saved"
+        }
+      }
+    end
+
+    created = Job.last
+    assert_redirected_to job_url(created)
+    assert_equal attrs["title"], created.title
+    assert_equal attrs["organization_name"], created.organization_name
+    assert_equal attrs["description"], created.description
+    assert_equal attrs["source"], created.source
+    assert_equal attrs["deadline"], created.deadline
+    assert_equal users(:one), created.user
+  end
+
   test "import_greenhouse redirects to new job with prefilled params" do
     default_deadline = 30.days.from_now.to_date
     attrs = {

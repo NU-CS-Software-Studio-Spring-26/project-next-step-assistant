@@ -17,6 +17,27 @@ class ResumesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "show page renders resume details" do
+    resume = create_resume_via_upload(name: "Show Page Resume")
+
+    get resume_url(resume)
+
+    assert_response :success
+    assert_select "h1", text: "Show Page Resume"
+    assert_select "dd", text: "resume.pdf"
+  end
+
+  test "show page includes download link when file is attached" do
+    resume = create_resume_via_upload(name: "Download Link Resume")
+
+    get resume_url(resume)
+
+    assert_response :success
+    assert_select "a.btn-primary", text: "Download Resume" do |links|
+      assert links.first[:href].present?
+    end
+  end
+
   test "should get edit" do
     get edit_resume_url(@resume)
     assert_response :success
@@ -43,5 +64,49 @@ class ResumesControllerTest < ActionDispatch::IntegrationTest
       delete resume_url(@other_resume)
     end
     assert_response :not_found
+  end
+
+  test "destroys unused resume" do
+    resume = create_resume_via_upload(name: "Unused Resume")
+
+    assert_difference("Resume.count", -1) do
+      delete resume_url(resume)
+    end
+
+    assert_redirected_to resumes_path
+    assert_equal "Resume deleted.", flash[:notice]
+    assert_nil Resume.find_by(id: resume.id)
+  end
+
+  test "blocks delete when resume is attached to a job" do
+    resume = create_resume_via_upload(name: "Attached Resume")
+    jobs(:two).update!(resume: resume)
+
+    assert_no_difference("Resume.count") do
+      delete resume_url(resume)
+    end
+
+    assert_redirected_to resumes_path
+    assert_match(/used by jobs/i, flash[:alert])
+    assert Resume.exists?(resume.id)
+  end
+
+  private
+
+  def pdf_upload
+    Rack::Test::UploadedFile.new(
+      StringIO.new("%PDF-1.4\n%EOF"),
+      "application/pdf",
+      original_filename: "resume.pdf"
+    )
+  end
+
+  def create_resume_via_upload(name:)
+    assert_difference("Resume.count", 1) do
+      post resumes_url, params: { resume: { name: name, file: pdf_upload } }
+    end
+
+    assert_redirected_to resumes_path
+    Resume.order(:id).last
   end
 end
