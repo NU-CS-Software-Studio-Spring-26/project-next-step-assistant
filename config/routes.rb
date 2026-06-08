@@ -2,6 +2,8 @@ Rails.application.routes.draw do
   get "/about", to: "pages#about", as: :about
   get "/privacy", to: "pages#privacy", as: :privacy
   devise_for :users, controllers: { omniauth_callbacks: "users/omniauth_callbacks" }
+  delete "users/auth/github/disconnect", to: "users/omniauth_disconnects#destroy", as: :github_disconnect
+  resource :password_setup, only: %i[ new create ], controller: "users/password_setups"
   root "home#index"
   get "dashboard", to: "dashboard#index", as: :dashboard
   resources :resumes, only: [ :index, :show, :new, :create, :edit, :update, :destroy ]

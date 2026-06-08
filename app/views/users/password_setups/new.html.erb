@@ -1,0 +1,36 @@
+<div class="auth-wrap">
+  <div class="auth-card">
+    <p class="eyebrow">Next Step Assistant</p>
+    <h1 class="auth-heading">Set your account password</h1>
+    <p class="auth-sub">
+      You signed in with GitHub. Choose a password for <strong>this website</strong> so you can also sign in with email.
+      This is not your GitHub password.
+    </p>
+
+    <%= form_with url: password_setup_path, method: :post, scope: :user, class: "auth-form" do |f| %>
+      <% if current_user.errors.any? %>
+        <div class="auth-errors">
+          <strong><%= pluralize(current_user.errors.count, "error") %> prevented your password from being saved:</strong>
+          <ul>
+            <% current_user.errors.full_messages.each do |msg| %>
+              <li><%= msg %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <div class="auth-field">
+        <%= f.label :password, "Choose a password", class: "auth-label" %>
+        <%= f.password_field :password, autocomplete: "new-password", class: "auth-input", maxlength: User::PASSWORD_MAX_LENGTH, required: true %>
+        <%= render "devise/shared/password_requirements" %>
+      </div>
+
+      <div class="auth-field">
+        <%= f.label :password_confirmation, "Confirm password", class: "auth-label" %>
+        <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "auth-input", maxlength: User::PASSWORD_MAX_LENGTH, required: true %>
+      </div>
+
+      <%= f.submit "Save password", class: "auth-btn", data: { turbo_submits_with: "Saving…" } %>
+    <% end %>
+  </div>
+</div>

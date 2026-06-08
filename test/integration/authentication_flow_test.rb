@@ -27,6 +27,17 @@ class AuthenticationFlowTest < ActionDispatch::IntegrationTest
     end
   end
 
+  test "account page shows github connect option when oauth is configured" do
+    sign_in users(:one)
+
+    with_env("GITHUB_CLIENT_ID" => "test-id", "GITHUB_CLIENT_SECRET" => "test-secret") do
+      get edit_user_registration_path
+      assert_response :success
+      assert_match(/Connect GitHub/i, response.body)
+      assert_match(/Sign-in methods/i, response.body)
+    end
+  end
+
   test "signed in user sees account settings link in navigation" do
     sign_in users(:one)
 

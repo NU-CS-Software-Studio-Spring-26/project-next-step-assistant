@@ -19,22 +19,44 @@ class User < ApplicationRecord
   has_many :resumes, dependent: :destroy
   has_many :projects, dependent: :destroy
 
-  def self.from_omniauth(auth)
+  after_create :mark_password_as_set, unless: :github_connected?
+
+  def self.from_omniauth(auth, current_user: nil)
     provider = auth.provider.to_s
     uid = auth.uid.to_s
-    email = auth.info.email&.strip&.downcase
+    email = GithubOauthEmailResolver.call(auth)
 
-    user = find_by(provider: provider, uid: uid)
-    return user if user
+    existing_github_user = find_by(provider: provider, uid: uid)
+    if existing_github_user
+      if current_user && current_user.id != existing_github_user.id
+        return current_user.tap { |u| u.errors.add(:base, "This GitHub account is already linked to another user.") }
+      end
+
+      return existing_github_user
+    end
+
+    if current_user
+      return link_github_to_user(current_user, provider:, uid:, email:)
+    end
 
     if email.blank?
-      return new.tap { |u| u.errors.add(:email, "was not provided by GitHub. Use a public email or sign in with email and password.") }
+      return new.tap do |u|
+        u.errors.add(
+          :email,
+          "was not provided by GitHub. Add a verified email in your GitHub account settings or sign in with email and password."
+        )
+      end
     end
 
     existing = find_by(email: email)
     if existing
       if existing.provider.present? && existing.provider != provider
         existing.errors.add(:base, "is already linked to another sign-in method.")
+        return existing
+      end
+
+      if existing.github_connected? && existing.uid != uid
+        existing.errors.add(:base, "is already linked to a different GitHub account.")
         return existing
       end
 
@@ -54,6 +76,41 @@ class User < ApplicationRecord
     )
   end
 
+  def self.link_github_to_user(user, provider:, uid:, email:)
+    other = find_by(provider: provider, uid: uid)
+    if other && other.id != user.id
+      user.errors.add(:base, "This GitHub account is already linked to another user.")
+      return user
+    end
+
+    if user.github_connected? && user.uid != uid
+      user.errors.add(:base, "Your account is already linked to a different GitHub account.")
+      return user
+    end
+
+    if user.provider.present? && user.provider != provider
+      user.errors.add(:base, "Your account is already linked to another sign-in method.")
+      return user
+    end
+
+    user.provider = provider
+    user.uid = uid
+    user.save
+    user
+  end
+
+  def github_connected?
+    provider == "github" && uid.present?
+  end
+
+  def needs_password_setup?
+    password_set_at.nil?
+  end
+
+  def mark_password_as_set!
+    update!(password_set_at: Time.current)
+  end
+
   def self.oauth_password
     # Meets password_complexity for Devise create; not used for GitHub sign-in afterward.
     "#{SecureRandom.alphanumeric(16)}A1!"
@@ -71,6 +128,10 @@ class User < ApplicationRecord
   end
 
   private
+
+  def mark_password_as_set
+    update_column(:password_set_at, Time.current)
+  end
 
   def password_complexity
     return if password.blank?

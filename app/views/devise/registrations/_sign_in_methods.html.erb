@@ -1,0 +1,50 @@
+<section class="auth-sign-in-methods" aria-labelledby="sign-in-methods-heading">
+  <h2 id="sign-in-methods-heading" class="auth-section-heading">Sign-in methods</h2>
+
+  <ul class="auth-method-list">
+    <li class="auth-method-item">
+      <i class="bi bi-envelope me-2" aria-hidden="true"></i>
+      <span>Email and password</span>
+      <% if resource.github_connected? %>
+        <span class="auth-method-status">Enabled</span>
+      <% else %>
+        <span class="auth-method-status">Primary</span>
+      <% end %>
+    </li>
+
+    <li class="auth-method-item">
+      <i class="bi bi-github me-2" aria-hidden="true"></i>
+      <span>GitHub</span>
+      <% if resource.github_connected? %>
+        <span class="auth-method-status auth-method-status--connected">Connected</span>
+      <% elsif github_oauth_configured? %>
+        <span class="auth-method-status">Not connected</span>
+      <% else %>
+        <span class="auth-method-status">Unavailable</span>
+      <% end %>
+    </li>
+  </ul>
+
+  <% if resource.github_connected? %>
+    <% if resource.needs_password_setup? %>
+      <p class="auth-hint">Set a website password so you can sign in without GitHub.</p>
+      <%= link_to "Set your password", new_password_setup_path, class: "auth-links" %>
+    <% else %>
+      <p class="auth-hint">You can sign in with GitHub or your email and password.</p>
+    <% end %>
+
+    <%= form_with url: github_disconnect_path, method: :delete, class: "auth-disconnect-form" do %>
+      <div class="auth-field">
+        <%= label_tag :disconnect_current_password, "Current password", class: "auth-label" %>
+        <%= password_field_tag :current_password, nil, autocomplete: "current-password", class: "auth-input", maxlength: User::PASSWORD_MAX_LENGTH, required: true %>
+        <p class="auth-hint">Required to disconnect GitHub. If you only use GitHub sign-in, use Forgot password first to set one.</p>
+      </div>
+      <%= submit_tag "Disconnect GitHub", class: "auth-btn auth-btn-secondary", data: { turbo_confirm: "Disconnect GitHub from this account?" } %>
+    <% end %>
+  <% elsif github_oauth_configured? %>
+    <p class="auth-hint">Link GitHub to sign in faster. Your existing jobs and projects stay on this account.</p>
+    <%= render "devise/shared/github_oauth_button", label: "Connect GitHub" %>
+  <% else %>
+    <p class="auth-hint">GitHub sign-in is not configured for this environment.</p>
+  <% end %>
+</section>

@@ -3,7 +3,9 @@
 one:
   email: user_one@example.com
   encrypted_password: <%= Devise::Encryptor.digest(User, "password123") %>
+  password_set_at: <%= Time.zone.parse("2026-01-01 12:00:00") %>
 
 two:
   email: user_two@example.com
   encrypted_password: <%= Devise::Encryptor.digest(User, "password456") %>
+  password_set_at: <%= Time.zone.parse("2026-01-01 12:00:00") %>

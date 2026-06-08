@@ -4,6 +4,8 @@
     <h1 class="auth-heading">Edit your account</h1>
     <p class="auth-sub">Update your email or password. Leave password fields blank to keep your current password.</p>
 
+    <%= render "devise/registrations/sign_in_methods" %>
+
     <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
       <% if resource.errors.any? %>
         <div class="auth-errors">

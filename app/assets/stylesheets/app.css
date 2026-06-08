@@ -450,6 +450,66 @@ a:not([class]):focus-visible {
 	outline-offset: var(--focus-ring-offset);
 }
 
+.auth-section-heading {
+	font-size: 1rem;
+	font-weight: 600;
+	color: var(--home-primary-deep);
+	margin-bottom: 0.75rem;
+}
+
+.auth-sign-in-methods {
+	margin-bottom: 1.5rem;
+	padding-bottom: 1.5rem;
+	border-bottom: 1px solid #d9e8e7;
+}
+
+.auth-method-list {
+	list-style: none;
+	padding: 0;
+	margin: 0 0 1rem;
+	display: grid;
+	gap: 0.5rem;
+}
+
+.auth-method-item {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	padding: 0.65rem 0.85rem;
+	border: 1px solid #d9e8e7;
+	border-radius: 0.75rem;
+	background: #f8fcfb;
+}
+
+.auth-method-item span:nth-child(2) {
+	flex: 1;
+}
+
+.auth-method-status {
+	font-size: 0.85rem;
+	font-weight: 600;
+	color: var(--home-muted);
+}
+
+.auth-method-status--connected {
+	color: #0d6e4f;
+}
+
+.auth-disconnect-form {
+	margin-top: 0.75rem;
+}
+
+.auth-btn-secondary {
+	background: #fff;
+	color: var(--home-primary-deep);
+	border: 1px solid #b7d5d3;
+	box-shadow: none;
+}
+
+.auth-btn-secondary:hover {
+	background: #f3faf9;
+}
+
 .auth-danger-zone {
 	margin-top: 1.5rem;
 	padding-top: 1.5rem;
