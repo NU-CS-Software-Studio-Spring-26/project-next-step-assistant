@@ -6,7 +6,11 @@ Rails.application.routes.draw do
   resource :password_setup, only: %i[ new create ], controller: "users/password_setups"
   root "home#index"
   get "dashboard", to: "dashboard#index", as: :dashboard
-  resources :resumes, only: [ :index, :show, :new, :create, :edit, :update, :destroy ]
+  resources :resumes, only: [ :index, :show, :new, :create, :edit, :update, :destroy ] do
+    member do
+      get :download
+    end
+  end
   resources :jobs do
     resources :resumes, only: %i[ new create destroy ]
     member do

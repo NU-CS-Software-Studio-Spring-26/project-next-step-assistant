@@ -34,8 +34,24 @@ class ResumesControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :success
     assert_select "a.btn-primary", text: "Download Resume" do |links|
-      assert links.first[:href].present?
+      assert_equal download_resume_path(resume), links.first[:href]
     end
+  end
+
+  test "download sends attached pdf" do
+    resume = create_resume_via_upload(name: "Downloadable Resume")
+
+    get download_resume_url(resume)
+
+    assert_response :success
+    assert_equal "application/pdf", response.media_type
+    assert_match(/attachment/, response.headers["Content-Disposition"])
+    assert response.body.start_with?("%PDF")
+  end
+
+  test "cannot download another users resume" do
+    get download_resume_url(@other_resume)
+    assert_response :not_found
   end
 
   test "should get edit" do

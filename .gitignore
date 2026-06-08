@@ -7,6 +7,9 @@
 # Ignore bundler config.
 /.bundle
 
+# Local Heroku CLI install (not part of the app)
+/.heroku-cli/
+
 # Ignore all environment files.
 /.env*
 .env

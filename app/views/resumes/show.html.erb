@@ -31,7 +31,7 @@
       </dl>
 
       <% if @resume.file.attached? %>
-        <%= link_to @resume.file, class: "btn btn-primary" do %>
+        <%= link_to download_resume_path(@resume), class: "btn btn-primary", data: { turbo: false } do %>
           <i class="bi bi-download me-1" aria-hidden="true"></i>Download Resume
         <% end %>
       <% end %>

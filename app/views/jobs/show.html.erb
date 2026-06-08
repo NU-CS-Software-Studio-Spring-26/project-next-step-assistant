@@ -67,7 +67,7 @@
         <dt class="col-sm-3 text-body-secondary small text-uppercase fw-semibold">Selected resume</dt>
         <dd class="col-sm-9 mb-0">
           <% if @job.resume&.file&.attached? %>
-            <%= link_to @job.resume.file, class: "btn btn-sm btn-outline-primary" do %>
+            <%= link_to download_resume_path(@job.resume), class: "btn btn-sm btn-outline-primary", data: { turbo: false } do %>
               <i class="bi bi-download me-1" aria-hidden="true"></i>Download Resume
             <% end %>
           <% else %>

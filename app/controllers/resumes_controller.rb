@@ -1,7 +1,7 @@
 class ResumesController < ApplicationController
   before_action :authenticate_user!
   before_action :set_job, if: :nested_job_request?
-  before_action :set_resume, only: %i[show edit update destroy]
+  before_action :set_resume, only: %i[show edit update destroy download]
 
   def index
     resumes = current_user.resumes.with_attached_file.includes(:jobs).order(created_at: :desc)
@@ -9,6 +9,20 @@ class ResumesController < ApplicationController
   end
 
   def show
+  end
+
+  def download
+    unless @resume.file.attached?
+      redirect_to resume_path(@resume), alert: "No resume file is attached."
+      return
+    end
+
+    send_data @resume.file.download,
+      filename: @resume.file.filename.to_s,
+      type: @resume.file.content_type,
+      disposition: "attachment"
+  rescue ActiveStorage::FileNotFoundError
+    redirect_to resume_path(@resume), alert: "Resume file could not be found. Try re-uploading it."
   end
 
   def new
