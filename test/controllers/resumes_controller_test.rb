@@ -38,6 +38,33 @@ class ResumesControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
+  test "show page includes pdf preview when file is attached" do
+    resume = create_resume_via_upload(name: "Preview Resume")
+
+    get resume_url(resume)
+
+    assert_response :success
+    assert_select "iframe[title=?]", "PDF preview of Preview Resume" do |iframes|
+      assert_equal preview_resume_path(resume), iframes.first[:src]
+    end
+  end
+
+  test "preview sends attached pdf inline" do
+    resume = create_resume_via_upload(name: "Previewable Resume")
+
+    get preview_resume_url(resume)
+
+    assert_response :success
+    assert_equal "application/pdf", response.media_type
+    assert_match(/inline/, response.headers["Content-Disposition"])
+    assert response.body.start_with?("%PDF")
+  end
+
+  test "cannot preview another users resume" do
+    get preview_resume_url(@other_resume)
+    assert_response :not_found
+  end
+
   test "download sends attached pdf" do
     resume = create_resume_via_upload(name: "Downloadable Resume")
 

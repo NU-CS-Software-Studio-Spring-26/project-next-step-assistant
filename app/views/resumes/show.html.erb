@@ -8,7 +8,7 @@
     <% end %>
   </div>
 
-  <div class="card shadow-sm border-0" style="max-width: 46rem;">
+  <div class="card shadow-sm border-0">
     <div class="card-body p-4 p-lg-5">
       <h1 class="h3 fw-semibold mb-3"><%= @resume.name %></h1>
 
@@ -31,6 +31,18 @@
       </dl>
 
       <% if @resume.file.attached? %>
+        <section class="mb-4" aria-labelledby="resume-preview-heading">
+          <h2 id="resume-preview-heading" class="h6 text-body-secondary text-uppercase fw-semibold mb-3">Preview</h2>
+          <div class="border rounded overflow-hidden bg-body-tertiary">
+            <iframe
+              src="<%= preview_resume_path(@resume) %>"
+              title="PDF preview of <%= @resume.name %>"
+              class="w-100 border-0"
+              style="min-height: 70vh;"
+            ></iframe>
+          </div>
+        </section>
+
         <%= link_to download_resume_path(@resume), class: "btn btn-primary", data: { turbo: false } do %>
           <i class="bi bi-download me-1" aria-hidden="true"></i>Download Resume
         <% end %>

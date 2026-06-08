@@ -9,6 +9,7 @@ Rails.application.routes.draw do
   resources :resumes, only: [ :index, :show, :new, :create, :edit, :update, :destroy ] do
     member do
       get :download
+      get :preview
     end
   end
   resources :jobs do
