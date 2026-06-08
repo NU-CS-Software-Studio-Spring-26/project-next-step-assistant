@@ -67,9 +67,14 @@
         <dt class="col-sm-3 text-body-secondary small text-uppercase fw-semibold">Selected resume</dt>
         <dd class="col-sm-9 mb-0">
           <% if @job.resume&.file&.attached? %>
-            <%= link_to download_resume_path(@job.resume), class: "btn btn-sm btn-outline-primary", data: { turbo: false } do %>
-              <i class="bi bi-download me-1" aria-hidden="true"></i>Download Resume
-            <% end %>
+            <div class="d-flex flex-column flex-sm-row align-items-start align-items-sm-center gap-2">
+              <span class="fw-semibold text-break">
+                <i class="bi bi-file-earmark-pdf me-1 text-body-secondary" aria-hidden="true"></i><%= @job.resume.name %>
+              </span>
+              <%= link_to download_resume_path(@job.resume), class: "btn btn-sm btn-outline-primary", data: { turbo: false } do %>
+                <i class="bi bi-download me-1" aria-hidden="true"></i>Download Resume
+              <% end %>
+            </div>
           <% else %>
             <span class="text-body-secondary">—</span>
           <% end %>
@@ -115,7 +120,7 @@
           <i class="bi bi-pencil me-1" aria-hidden="true"></i>Edit Job
         <% end %>
         <% if openai_configured? %>
-          <%= link_to ai_suggestions_projects_path(job_ids: [ @job.id ], generate: "1"), class: "btn btn-outline-primary" do %>
+          <%= link_to ai_suggestions_projects_path(job_ids: [ @job.id ]), class: "btn btn-outline-primary" do %>
             <i class="bi bi-stars me-1" aria-hidden="true"></i>Get project ideas for this job
           <% end %>
           <% if @job.description.present? && @job.resume&.file&.attached? %>

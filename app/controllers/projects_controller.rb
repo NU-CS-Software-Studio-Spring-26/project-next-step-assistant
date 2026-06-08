@@ -36,7 +36,7 @@ class ProjectsController < ApplicationController
     @focus = params[:focus].to_s.strip.first(FOCUS_MAX_LENGTH)
     submitted_job_ids = Array(params[:job_ids]).map(&:to_i).reject(&:zero?)
 
-    if filter_submitted?
+    if params[:generate].present?
       @selected_job_ids = submitted_job_ids
       @result = AiProjectSuggestionsService.new(
         current_user,
@@ -44,7 +44,10 @@ class ProjectsController < ApplicationController
         focus: @focus
       ).call
     else
-      @selected_job_ids = @available_jobs.pluck(:id)
+      # Landing on the page (e.g. from a job's "Get project ideas" button) only
+      # preselects jobs so the user can adjust the focus before generating.
+      # Default to every job ticked when none were passed in.
+      @selected_job_ids = submitted_job_ids.presence || @available_jobs.pluck(:id)
       @result = nil
     end
   end
@@ -104,9 +107,5 @@ class ProjectsController < ApplicationController
 
     def prefill_params
       params.permit(:name, :description, :skills).to_h.symbolize_keys
-    end
-
-    def filter_submitted?
-      params[:generate].present? || params[:job_ids].present? || params[:focus].present?
     end
 end
