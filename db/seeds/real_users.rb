@@ -198,6 +198,8 @@ module Seeds
         user = User.find_or_initialize_by(email: attrs[:email])
         user.password = PASSWORD
         user.password_confirmation = PASSWORD
+        # Ensure seeded accounts skip the post-GitHub password-setup gate on re-seed.
+        user.password_set_at = Time.current
         user.save!
 
         if attrs[:presenter]
@@ -240,11 +242,19 @@ module Seeds
     def seed_presenter_jobs(user, resume)
       PRESENTER_JOBS.each_with_index do |attrs, index|
         job = Job.find_or_initialize_by(title: attrs[:title], user: user)
+        deadline = Date.parse(attrs[:deadline])
+        start_date = Date.parse(attrs[:start_date])
+        # Keep home deadline tracker useful after the original fixed dates pass.
+        if deadline < Date.current
+          deadline = Date.current + (index + 1).weeks
+          start_date = Date.current + (index + 10).weeks
+        end
+
         job.assign_attributes(
           organization_name: attrs[:organization_name],
           status: attrs[:status],
-          deadline: Date.parse(attrs[:deadline]),
-          start_date: Date.parse(attrs[:start_date]),
+          deadline: deadline,
+          start_date: start_date,
           description: attrs[:description],
           source: attrs[:source],
           resume: index.zero? ? resume : job.resume
@@ -255,33 +265,39 @@ module Seeds
 
     def seed_presenter_projects(user)
       PRESENTER_PROJECTS.each do |attrs|
-        Project.find_or_create_by!(name: attrs[:name], user: user) do |project|
-          project.description = attrs[:description]
-          project.github_link = attrs[:github_link]
-          project.skills = attrs[:skills]
-        end
+        project = Project.find_or_initialize_by(name: attrs[:name], user: user)
+        project.assign_attributes(
+          description: attrs[:description],
+          github_link: attrs[:github_link],
+          skills: attrs[:skills]
+        )
+        project.save!
       end
     end
 
     def seed_other_users(users)
       users.each_with_index do |user, index|
         OTHER_USER_JOBS.each_with_index do |attrs, job_index|
-          Job.find_or_create_by!(title: "#{attrs[:title]} #{job_index + 1}", user: user) do |job|
-            job.organization_name = attrs[:organization_name]
-            job.status = attrs[:status]
-            job.deadline = Date.current + (index + job_index + 2).weeks
-            job.start_date = Date.current + (index + job_index + 10).weeks
-            job.description = "Application tracked in Next Step Assistant."
-            job.source = "Handshake"
-          end
+          job = Job.find_or_initialize_by(title: "#{attrs[:title]} #{job_index + 1}", user: user)
+          job.assign_attributes(
+            organization_name: attrs[:organization_name],
+            status: attrs[:status],
+            deadline: Date.current + (index + job_index + 2).weeks,
+            start_date: Date.current + (index + job_index + 10).weeks,
+            description: "Application tracked in Next Step Assistant.",
+            source: "Handshake"
+          )
+          job.save!
         end
 
         OTHER_USER_PROJECTS.each do |attrs|
-          Project.find_or_create_by!(name: "#{attrs[:name]} (#{user.email.split('@').first})", user: user) do |project|
-            project.description = "Portfolio project for internship applications."
-            project.github_link = "https://github.com/#{user.email.split('@').first}/#{attrs[:name].parameterize}"
-            project.skills = attrs[:skills]
-          end
+          project = Project.find_or_initialize_by(name: "#{attrs[:name]} (#{user.email.split('@').first})", user: user)
+          project.assign_attributes(
+            description: "Portfolio project for internship applications.",
+            github_link: "https://github.com/#{user.email.split('@').first}/#{attrs[:name].parameterize}",
+            skills: attrs[:skills]
+          )
+          project.save!
         end
       end
     end
