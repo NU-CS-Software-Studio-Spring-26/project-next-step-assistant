@@ -7,6 +7,9 @@
 
 require_relative "seeds/real_users"
 
+# Avoid Solid Queue on hosts (e.g. Heroku) where queue tables are not provisioned.
+ActiveJob::Base.queue_adapter = :inline
+
 Seeds::RealUsers.seed!
 
 presenter = User.find_by!(email: "jinxi.zhang@u.northwestern.edu")
