@@ -221,7 +221,7 @@ module Seeds
     def seed_presenter_resume(user)
       user.resumes.where(name: "Software Engineering Resume").destroy_all
 
-      pdf_data = Seeds::PresenterResumePdf.render
+      pdf_data = presenter_resume_pdf_data
 
       resume = user.resumes.build(name: "Software Engineering Resume")
       resume.file.attach(
@@ -232,6 +232,14 @@ module Seeds
       )
       resume.save!
       resume
+    end
+
+    def presenter_resume_pdf_data
+      fixture = Rails.root.join("db/fixtures/files/presenter_resume.pdf")
+      return File.binread(fixture) if File.exist?(fixture)
+
+      require Rails.root.join("db/seeds/presenter_resume_pdf")
+      Seeds::PresenterResumePdf.render
     end
 
     def seed_presenter_jobs(user, resume)
