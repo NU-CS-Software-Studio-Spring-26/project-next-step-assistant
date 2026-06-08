@@ -3,7 +3,9 @@
 <div class="container py-4 py-lg-5">
   <div class="mb-4 d-flex flex-wrap gap-2">
     <%= link_to "Back to Resume Library", resumes_path, class: "btn btn-outline-secondary btn-sm" %>
-    <%= link_to "Edit", edit_resume_path(@resume), class: "btn btn-outline-primary btn-sm" %>
+    <%= link_to edit_resume_path(@resume), class: "btn btn-outline-primary btn-sm" do %>
+      <i class="bi bi-pencil me-1" aria-hidden="true"></i>Edit
+    <% end %>
   </div>
 
   <div class="card shadow-sm border-0" style="max-width: 46rem;">
@@ -29,7 +31,9 @@
       </dl>
 
       <% if @resume.file.attached? %>
-        <%= link_to "Download Resume", @resume.file, class: "btn btn-primary" %>
+        <%= link_to @resume.file, class: "btn btn-primary" do %>
+          <i class="bi bi-download me-1" aria-hidden="true"></i>Download Resume
+        <% end %>
       <% end %>
     </div>
   </div>

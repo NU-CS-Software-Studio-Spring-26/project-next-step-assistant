@@ -79,7 +79,9 @@
         <%= link_to ai_resume_suggestions_job_path(@job), class: "btn btn-outline-primary" do %>
           <i class="bi bi-arrow-clockwise me-1" aria-hidden="true"></i>Regenerate suggestions
         <% end %>
-        <%= link_to "Edit job", edit_job_path(@job), class: "btn btn-outline-secondary" %>
+        <%= link_to edit_job_path(@job), class: "btn btn-outline-secondary" do %>
+          <i class="bi bi-pencil me-1" aria-hidden="true"></i>Edit job
+        <% end %>
       </div>
     <% else %>
       <%= render "shared/empty_state",

@@ -67,7 +67,9 @@
         <dt class="col-sm-3 text-body-secondary small text-uppercase fw-semibold">Selected resume</dt>
         <dd class="col-sm-9 mb-0">
           <% if @job.resume&.file&.attached? %>
-            <%= link_to "Download Resume", @job.resume.file, class: "btn btn-sm btn-outline-primary" %>
+            <%= link_to @job.resume.file, class: "btn btn-sm btn-outline-primary" do %>
+              <i class="bi bi-download me-1" aria-hidden="true"></i>Download Resume
+            <% end %>
           <% else %>
             <span class="text-body-secondary">—</span>
           <% end %>
@@ -95,7 +97,9 @@
                 <%= render "resume_select", form: form %>
               </div>
               <div class="col-sm-4">
-                <%= form.submit "Update resume", class: "btn btn-primary w-100", data: { turbo_submits_with: "Updating…" } %>
+                <%= form.button type: "submit", class: "btn btn-primary w-100", data: { turbo_submits_with: "Updating…" } do %>
+                  <i class="bi bi-check-lg me-1" aria-hidden="true"></i>Update resume
+                <% end %>
               </div>
             </div>
             <p class="small text-body-secondary mb-0 mt-2">
@@ -107,7 +111,9 @@
       </section>
 
       <div class="d-flex flex-column flex-sm-row flex-wrap gap-2 mt-4 pt-4 border-top">
-        <%= link_to "Edit Job", edit_job_path(@job), class: "btn btn-primary" %>
+        <%= link_to edit_job_path(@job), class: "btn btn-primary" do %>
+          <i class="bi bi-pencil me-1" aria-hidden="true"></i>Edit Job
+        <% end %>
         <% if openai_configured? %>
           <%= link_to ai_suggestions_projects_path(job_ids: [ @job.id ], generate: "1"), class: "btn btn-outline-primary" do %>
             <i class="bi bi-stars me-1" aria-hidden="true"></i>Get project ideas for this job
@@ -119,7 +125,9 @@
           <% end %>
         <% end %>
         <%= link_to "Back to Jobs", jobs_path, class: "btn btn-outline-secondary" %>
-        <%= button_to "Delete Job", @job, method: :delete, class: "btn btn-outline-danger", form: { class: "d-inline", data: { turbo_confirm: "Delete this job? This cannot be undone." } } %>
+        <%= button_to @job, method: :delete, class: "btn btn-outline-danger", form: { class: "d-inline", data: { turbo_confirm: "Delete this job? This cannot be undone." } } do %>
+          <i class="bi bi-trash me-1" aria-hidden="true"></i>Delete Job
+        <% end %>
       </div>
     </div>
   </div>
