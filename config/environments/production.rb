@@ -74,6 +74,7 @@ Rails.application.configure do
     {
       address: ENV["SMTP_ADDRESS"],
       port: ENV.fetch("SMTP_PORT", 587).to_i,
+      domain: ENV.fetch("SMTP_DOMAIN") { ENV["SMTP_USERNAME"]&.split("@")&.last },
       user_name: ENV["SMTP_USERNAME"],
       password: ENV["SMTP_PASSWORD"],
       authentication: ENV.fetch("SMTP_AUTHENTICATION", "plain").to_sym,
