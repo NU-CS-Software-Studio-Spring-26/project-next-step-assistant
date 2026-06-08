@@ -30,9 +30,13 @@
           </div>
           <div class="d-flex gap-2">
             <% if resume.file.attached? %>
-              <%= link_to "Download", resume.file, class: "btn btn-sm btn-outline-primary" %>
+              <%= link_to resume.file, class: "btn btn-sm btn-outline-primary" do %>
+                <i class="bi bi-download me-1" aria-hidden="true"></i>Download
+              <% end %>
             <% end %>
-            <%= button_to "Delete", resume_path(resume), method: :delete, class: "btn btn-sm btn-outline-danger", form: { data: { turbo_confirm: "Delete this resume?" } } %>
+            <%= button_to resume_path(resume), method: :delete, class: "btn btn-sm btn-outline-danger", form: { data: { turbo_confirm: "Delete this resume?" } } do %>
+              <i class="bi bi-trash me-1" aria-hidden="true"></i>Delete
+            <% end %>
           </div>
         </li>
       <% end %>

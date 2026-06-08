@@ -7,7 +7,9 @@
 
   <div class="d-flex flex-column flex-md-row justify-content-between align-items-start gap-3 mb-4">
     <h1 class="h2 fw-semibold mb-0">Edit Project</h1>
-    <%= link_to "View this project", @project, class: "btn btn-outline-primary btn-sm" %>
+    <%= link_to @project, class: "btn btn-outline-primary btn-sm" do %>
+      <i class="bi bi-eye me-1" aria-hidden="true"></i>View this project
+    <% end %>
   </div>
 
   <div class="row justify-content-center mb-2">
