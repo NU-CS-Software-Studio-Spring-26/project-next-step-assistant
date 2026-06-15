@@ -18,7 +18,7 @@ gem "stimulus-rails"
 gem "jbuilder"
 gem "net-imap", ">= 0.6.4"
 
-gem "pagy", "~> 9.3"
+gem "pagy", "~> 43.5"
 gem "chartkick"
 gem "groupdate"
 
